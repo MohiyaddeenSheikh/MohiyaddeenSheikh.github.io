@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+  <style>
+    h5{color:yellow}
+  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body style="background-color: rgb(214, 207, 207)">
 <p style="color:red" title="moin"> this is first paragraph</p>
@@ -8,10 +12,11 @@
 <img src="https://cdn.pixabay.com/photo/2015/04/19/08/32/rose-729509_960_720.jpg" alt="flower" width="100" height="100">
 <hr>
 this <br> this <br>
-<pre>
+<pre id="poem">
 poem poem     poem 
 Pre contain space as it is ...
 </pre>
+<a href="#button1">Jump to button</a>
 
 <del> deleted text</del> <ins>new inserted text </ins>
 <b> bold text </b> <strong> strong text</strong>
@@ -42,6 +47,30 @@ Pre contain space as it is ...
 <p style="color:rgb(134,176,213,0.8)">this is alpha color </p>
 color<br>
 rgb->rgb , rgba ->rgb(r,g,b,alpha), hex color-> rrggbb #12fa11
+
+<p style ="color: hsl(240,20%,50%)">hsl color</p>
+
+<h5> this is for internal css</h5><br>
+<h4> this is for external css</h4>
+<a href = "https://mohiyaddeen.me/" target = "_self">_self=> same window</a><br>
+<a href = "https://mohiyaddeen.me/" target = "_blank">_blank=> new window</a><br>
+<a href = "https://mohiyaddeen.me/" target = "_parent">_parentf=> parent frame</a><br>
+<a href = "https://mohiyaddeen.me/" target = "_top">self=> full body</a><br>
+<br>
+<a href="https://mohiyaddeen.me">
+  <img src="https://cdn.pixabay.com/photo/2015/04/19/08/32/rose-729509_960_720.jpg" alt="flower" width="100" height="100" style="float:right">>
+</a><br>
+<a href="mailto:moinsheikhmt@gmail.com">
+  send mail to me 
+</a><br>
+<button id="button1" onclick ="document.location='https://mohiyaddeen.me'">
+  click link button
+</button>
+
+<a href="#poem"> jump to poem</a>
+
+
+
 </body>
 
 </html>
