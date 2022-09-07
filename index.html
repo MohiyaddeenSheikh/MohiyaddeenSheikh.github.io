@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+  <meta name="viewport" content="width=700", initial-scale="1.0">
+  <title>Portfolio</title>
+  <link rel="icon" type="image/x-icon" href="Images/favicon1.ico">
   <style>
     h5{color:yellow}
     body{
@@ -8,8 +11,25 @@
       background-repeat:no-repeat;
       background-size:100% 100%; /*cover*/
       background-attachment: fixed;
-
-
+    }
+    thead{
+      background-color: orange;
+    }
+    tbody{
+      background-color: white;
+    }
+    tfoot{
+      background-color: green;
+    }
+    table, th,td{
+      border:1px solid black;
+      border-collapse: collapse;
+      border-radius:10px;
+      border-style:dotted;
+      border-color: blue
+    }
+    th,td{
+      padding:15px
     }
   </style>
   <link rel="stylesheet" href="styles.css">
@@ -79,7 +99,7 @@ rgb->rgb , rgba ->rgb(r,g,b,alpha), hex color-> rrggbb #12fa11
 
 <img src="images/image1.jpg" usemap="#image-map" >
 <map name="image-map">
-  <area target="" alt="" title="" href="images/1.jpg" coords="209,4,0,189" shape="rect">
+  <area target="my_iframe" alt="" title="" href="images/1.jpg" coords="209,4,0,189" shape="rect">
   <area target="" alt="" title="" href="images/2.jpg" coords="413,5,214,196" shape="rect">
   <area target="" alt="" title="" href="images/3.jpg" coords="582,4,420,199" shape="rect">
   <area target="" alt="" title="" href="images/4.jpg" coords="778,7,589,187" shape="rect">
@@ -100,6 +120,81 @@ rgb->rgb , rgba ->rgb(r,g,b,alpha), hex color-> rrggbb #12fa11
   <img src="Images\1.jpg>"
 </picture>
 
-</body>
+<table style="width:100%">
+  <caption> Details </caption>
+  <colgroup>
+    <col span="1" style="background-color:rgb(177, 102, 154)">
+    <col style="background-color:yellow">
+  </colgroup>
+ <thead>
+  <tr>
+    <th colspan="2" style="width:75%">my Table</th>
+  </tr>
+  <tr>
+    <th style="width:75%">name</th>
+    <th>course</th>
+  </tr>
+</thead> 
+<tbody>
+  <tr style="height:70px">
+    <td>moin</td>
+    <td> M.tech</td>
+  </tr>
+  <tr>
+    <td>soya</td>
+    <td>B.tech</td>
+  </tr>
+  <tr>
+    <td>Amit</td>
+    <td>B.tech</td>
+  </tr>
+  <tr>
+    <td>kat</td>
+    <td>B.tech</td>
+  </tr>
+</tbody>
+<tfoot>
+  <tr>
+    <td>names</td>
+    <td>courses</td>
+  </tr>
+</tfoot>
+</table>
 
+<ul>
+  <li><a href="">one</a></li>
+  <li><a href="">two</a></li>
+  <li><a href="">three</a></li>
+  <li><a href="">four</a></li>
+</ul>
+<iframe name="my_iframe" src="index.html" height="200" width="200" style="border:2px solid red">
+
+</iframe>
+<p id=moin > </p>
+
+</body>
+<script>
+  document.getElementById("moin").innerHTML="djkfkfj"
+</script>
+<style>
+  ul{
+    list-style-type:none;
+    overflow:hidden;
+    background-color: #333333;
+  }
+  li{
+    float:left;
+  }
+  li a{
+    display:block;
+    padding:15px;
+    text-decoration:none;
+    text-align: center;
+  }
+  li a:hover{
+    background-color: #111111;
+  }
+ 
+
+</style>
 </html>
