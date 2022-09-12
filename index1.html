@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta name="viewport" content="width=480px", initial-scale="1.0">
+  <base href="https://mohiyaddeen.me/" target="_blank">
+  <title>Portfolio</title>
+  <link rel="icon" type="image/x-icon" href="Images/favicon1.ico">
+</head>
+<body>
+
+  <style>
+    h5{color:yellow}
+    body{
+      background-image:url('Images/bg.jpg');
+      background-repeat:no-repeat;
+      background-size:100% 100%; /*cover*/
+      background-attachment: fixed;
+    }
+    thead{
+      background-color: orange;
+    }
+    tbody{
+      background-color: white;
+    }
+    tfoot{
+      background-color: green;
+    }
+    table, th,td{
+      border:1px solid black;
+      border-collapse: collapse;
+      border-radius:10px;
+      border-style:dotted;
+      border-color: blue
+    }
+    th,td{
+      padding:15px
+    }
+  </style>
+  <link rel="stylesheet" href="styles.css">
+
+
+</head>
+
+<body style="background-color: rgb(214, 207, 207)">
+<p id="m">k</p>
+
+
+<p style="color:red" title="moin"> this is first paragraph</p>
+<a href ="https://www.google.com">link</a>
+<img src="https://cdn.pixabay.com/photo/2015/04/19/08/32/rose-729509_960_720.jpg" alt="flower" width="100" height="100">
+<hr>
+this <br> this <br>
+<pre id="poem">
+poem poem     poem 
+Pre contain space as it is ...
+</pre>
+<a href="#button1">Jump to button</a>
+
+<del> deleted text</del> <ins>new inserted text </ins>
+<b> bold text </b> <strong> strong text</strong>
+<i> italic text </i> <em> emphasised text</em>
+<small>small text </small> <mark>marked text</mark>
+<sub>subscript</sub><sup>superscript</sup>
+<hr>
+<abbr title ="explained text">HTML</abbr> abbreviationtion text.
+<blockquote cite="https://google.com"> 
+  this is awesome block quote
+  and it is working fine
+</blockquote>
+<q>
+  short quotation q.
+</q>
+<address>
+  flat no. 301,<br>
+  galaxy Homes, <br>
+  Delhi
+</address>
+
+<cite>cite</cite> is use to define creative work like a book or movie or a song.
+<br>
+<bdo dir="rtl"> reverse the text line</bdo>
+
+
+
+<p style="color:rgb(134,176,213,0.8)">this is alpha color </p>
+color<br>
+rgb->rgb , rgba ->rgb(r,g,b,alpha), hex color-> rrggbb #12fa11
+
+<p style ="color: hsl(240,20%,50%)">hsl color</p>
+
+<h5> this is for internal css</h5><br>
+<h4> this is for external css</h4>
+<a href = "https://mohiyaddeen.me/" target = "_self">_self=> same window</a><br>
+<a href = "https://mohiyaddeen.me/" target = "_blank">_blank=> new window</a><br>
+<a href = "https://mohiyaddeen.me/" target = "_parent">_parentf=> parent frame</a><br>
+<a href = "https://mohiyaddeen.me/" target = "_top">self=> full body</a><br>
+<br>
+<a href="https://mohiyaddeen.me">
+  <img src="https://cdn.pixabay.com/photo/2015/04/19/08/32/rose-729509_960_720.jpg" alt="flower" width="100" height="100" style="float:right">>
+</a><br>
+<a href="mailto:moinsheikhmt@gmail.com">
+  send mail to me 
+</a><br>
+<button id="button1" onclick ="document.location='https://mohiyaddeen.me'">
+  click link button
+</button>
+
+<a href="#poem"> jump to poem</a>
+
+<img src="images/image1.jpg" usemap="#image-map" >
+<map name="image-map">
+  <area target="my_iframe" alt="" title="" href="images/1.jpg" coords="209,4,0,189" shape="rect">
+  <area target="" alt="" title="" href="images/2.jpg" coords="413,5,214,196" shape="rect">
+  <area target="" alt="" title="" href="images/3.jpg" coords="582,4,420,199" shape="rect">
+  <area target="" alt="" title="" href="images/4.jpg" coords="778,7,589,187" shape="rect">
+  <area target="" alt="" title="" href="images/5.jpg" coords="5,204,189,415" shape="rect">
+  <area target="" alt="" title="" href="images/6.jpg" coords="198,206,390,429" shape="rect">
+  <area target="" alt="" title="" href="images/7.jpg" coords="398,212,581,427" shape="rect">
+  <area target="" alt="" title="" href="images/8.jpg" coords="590,201,772,419" shape="rect">
+  <area target="" alt="" title="" href="images/9.jpg" coords="180,431,5,635" shape="rect">
+  <area target="" alt="" title="" href="images/10.jpg" coords="190,437,407,627" shape="rect">
+  <area target="" alt="" title="" href="images/11.jpg" coords="416,440,600,631" shape="rect">
+  <area target="" alt="" title="" href="images/12.jpg" coords="610,431,771,630" shape="rect">
+</map>
+
+<picture>
+  <source media="(min-width:1024px)" srcset = "Images\laptop_wall.jpg">
+  <source media ="(min-width:800px)" srcset = "Images\ipad_wall.jpg">
+  <source media="(min-width:500px)" srcset = "Images\mobile_wall.jpg">
+  <img src="Images\1.jpg>"
+</picture>
+
+<table style="width:100%">
+  <caption> Details </caption>
+  <colgroup>
+    <col span="1" style="background-color:rgb(177, 102, 154)">
+    <col style="background-color:yellow">
+  </colgroup>
+ <thead>
+  <tr>
+    <th colspan="2" style="width:75%">my Table</th>
+  </tr>
+  <tr>
+    <th style="width:75%">name</th>
+    <th>course</th>
+  </tr>
+</thead> 
+<tbody>
+  <tr style="height:70px">
+    <td>moin</td>
+    <td> M.tech</td>
+  </tr>
+  <tr>
+    <td>soya</td>
+    <td>B.tech</td>
+  </tr>
+  <tr>
+    <td>Amit</td>
+    <td>B.tech</td>
+  </tr>
+  <tr>
+    <td>kat</td>
+    <td>B.tech</td>
+  </tr>
+</tbody>
+<tfoot>
+  <tr>
+    <td>names</td>
+    <td>courses</td>
+  </tr>
+</tfoot>
+</table>
+
+<ul>
+  <li><a href="">one</a></li>
+  <li><a href="">two</a></li>
+  <li><a href="">three</a></li>
+  <li><a href="">four</a></li>
+</ul>
+<iframe name="my_iframe" src="index.html" height="200" width="200" style="border:2px solid red">
+
+</iframe>
+<p id=moin > </p>
+<img src="Images/mobile_wall.jpg" height="200px" width="100px">
+<div class="grid-container">
+  <div class="grid-item">1</div>
+  <div class="grid-item">2</div>
+  <div class="grid-item">3</div>
+  <div class="grid-item">4</div>
+  <div class="grid-item">5</div>
+  <div class="grid-item">6</div>
+  <div class="grid-item">7</div>
+  <div class="grid-item">8</div>
+  <div class="grid-item">9</div>
+</div>
+
+<p style="font-size: 5vw">this is awesome</p>
+
+<hr>
+<div>
+  <div class="left">
+    <p> home </p>
+  </div>
+  <div class ="main">
+    <p> Edit </p>
+  </div>
+  <div class="right">
+    <p> Contact </p>
+  </div>
+</div>
+
+
+<input type="text">
+<input type="number">
+<input type="password">
+<br>
+<input type="reset">
+<input type="button" value="kjdf">
+<input type="submit">
+<input type="checkbox" id="r2">
+<input type="radio" id="r1">
+<input type="range">
+<br>
+<label for="r1"> radio button  </label>
+<label for="r2"> check button</label>
+<br>
+
+<input type="file">
+<input type="image">
+<br>
+<input type="url">
+<input type="email">
+<input type="tel">
+<br>
+<input type="date">
+<input type="time">
+<input type="datetime-local">
+<input type="month">
+<input type="week">
+<br>
+<input type="color">
+<input type="search">
+<input type="hidden">
+<br>
+
+<input type="radio" name="radio1">
+<input type="radio" name="radio1">
+<input type="radio" name="radio1">
+<hr>
+<from action="Images/.1jpg">
+  <label>Name : </label>
+  <input type="text">
+  <input type="submit"></input>
+
+</from>
+
+<hr>
+<select>
+  <option> moin</option>
+  <option selected>soya</option>
+</select>
+
+<hr>
+
+
+<label for="cars">Choose a car:</label>
+<select id="cars" name="cars" size="2" multiple>
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="fiat">Fiat</option>
+  <option value="audi">Audi</option>
+</select>
+
+<fieldset>
+  <legend>Awesome</legend>
+  <input type="button" value="Input type button"> <br>
+  <button>button element</button>
+</fieldset>
+<hr>
+
+ <input list="n">
+ <datalist id="n">
+  <option>a</option>
+  <option>d</option>
+  <option>f</option>
+ </datalist> 
+
+<hr>
+
+
+
+<form oninput= "c.value=parseInt(a.value)+parseInt(b.value)">
+  <input type="number" name="a">
+  <input type="number" name="b">
+  <output name="c"></output>
+</form>
+
+<canvas id="myCanvas" width="200" height="100" style="border:1px solid red"></canvas>
+
+<hr><svg width="100" height="100">
+  <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+</svg>
+
+<video width="=200" height="200" controls>
+  <source src="C:\Users\Police(Cyber Deprt.)\Downloads\Telegram Desktop\Blockchain & NFTs (Basics) Smart Contracts to Crypto- Punks @RedBlueHit\01. Introduction to Blockchain Technology\01. Introduction.mp4" type="video/mp4">
+</video>
+
+<object width="100%" height="500px" data="C:\Users\Police(Cyber Deprt.)\Documents\Portfo\MohiyaddeenSheikh.github.io\Pdf\a.pdf"></object>
+<embed src="Pdf/a.pdf">
+
+
+<iframe height="180" width="120" src="https://www.youtube.com/embed/DwWTcSxEvdI?autoplay=1
+&mute=1"> 
+</iframe>
+<iframe width="420" height="315"
+src="https://www.youtube.com/embed/tgbNymZ7vqY?playlist=tgbNymZ7vqY&loop=1">
+</iframe>
+
+<iframe width="420" height="315"
+src="https://www.youtube.com/embed/tgbNymZ7vqY?controls=0">
+</iframe>
+<p> &nbsp; &amp; &quot; &lt; &gt; &apos; &cent; &pound; &yen; &euro; &copy; &reg; </p>
+<p> &trade; &larr; &rarr; &uarr; &darr; &forall; &part; &exist; &empty; &nabla; &isin; &notin; &ni; &prod; &sum;</p>
+<p>&#128512; &#128517;</p>
+<select id="cars" name="cars">
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="fiat">Fiat</option>
+  <option value="audi">Audi</option>
+</select>
+<input type="radio" name="a">
+<input type="radio" name="a">
+<input type="radio" name="a">
+<hr>
+
+<div><input class="ab" type="number" max="20" > 
+</div>
+<div>
+  wow
+  <p>a</p> <p>a</p> <p>a</p> <p>a</p>
+</div>
+
+<a href="#a1">aaaaaaaaaaaaaaaaaaaaa</a>
+<a href="#b1">bbbbbbbbbbbbbbbbbbbbb</a>
+
+<p id="a1">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+<p id="b1">bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</p>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+<style>
+  #a1::first-letter{
+    color:#2196F3;
+    font-size: 40px;
+  }
+:target{
+  border:2px solid red;
+  background-color: white;
+}
+div>input:focus{
+  color:white;
+  background-color: #333333;
+  
+}
+div>input:in-range{
+border:2px solid red;
+}
+
+</style>
+<script>
+  document.getElementById("moin").innerHTML="djkfkfj"
+</script>
+<style>
+
+  .left, .right {
+  float: left;
+  width: 20%; /* The width is 20%, by default */
+}
+
+.main {
+  float: left;
+  width: 60%; /* The width is 60%, by default */
+}
+  /* Use a media query to add a breakpoint at 800px: */
+  @media screen and (max-width: 1000px) {
+  .left, .main, .right {
+    width: 100%; 
+  }
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  background-color: #2196F3;
+  padding: 10px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  font-size: 30px;
+  text-align: center;
+}
+  ul{
+    list-style-type:none;
+    overflow:hidden;
+    background-color: #333333;
+  }
+  li{
+    float:left;
+  }
+  li a{
+    display:block;
+    padding:15px;
+    text-decoration:none;
+    text-align: center;
+  }
+  li a:hover{
+    background-color: #111111;
+  }
+ 
+
+</style>
+</html>
+
+
+--> 
