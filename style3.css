@@ -19,7 +19,7 @@
     background-color: #ddd;
     color: black;
   }
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: 850px) {
     .topnav a {
       float: none;
       width: 100%;
