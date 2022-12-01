@@ -1196,3 +1196,14 @@ transform: translate(.55rem);
     align-self: center;
     box-shadow: 0px 0px 16px 5px #F3B91A;
 }
+
+/* ------------------------ home first letter bold ------------------------- */
+.drop-cap1::first-letter {
+    -webkit-initial-letter: 4;
+            initial-letter: 4;
+    color: #6e57e0;
+    font-weight: bold;
+    font-size: 200%;
+    font-family: "Times New Roman", Times, serif;
+    /* margin-right: .75em; */
+  }
