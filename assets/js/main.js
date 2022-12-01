@@ -178,3 +178,36 @@ themeButton.addEventListener('click',()=>{
     localStorage.setItem('selected-theme',getCurrentTheme())
     localStorage.setItem('selected-icon',getCurrentIcon())
 })
+
+
+//--------------------------------about me pic fliper-------------------------------
+
+var mySwiper_about_me = new Swiper ('.swiper-container-about-me', {
+    // Optional parameters
+    //direction: 'vertical',
+    loop: true,
+    effect: 'cube',
+    cubeEffect: {
+      slideShadows: false,
+      shadow: false,
+    },
+  autoplay: {
+    delay: 3500,
+  },
+
+    // If we need pagination
+    // pagination: {
+    //   el: '.swiper-pagination',
+    // },
+
+    // Navigation arrows
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+
+
+  scrollbar: {
+     el: '.swiper-scrollbar',
+    },
+  })

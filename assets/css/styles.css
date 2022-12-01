@@ -129,10 +129,10 @@ a {
   text-decoration: none;
 }
 
-img {
+/* img {
   max-width: 100%;
   height: auto;
-}
+} */
 
 /*==================== REUSABLE CSS CLASSES ====================*/
 .section {
@@ -297,7 +297,8 @@ img {
     fill:var(--first-color);
 }
 .home__blob-img{
-    width: 170px;
+width: 186px;
+height:197px
 }
 .home__data{
     grid-column:1/3;
@@ -386,10 +387,13 @@ img {
 }
 /*==================== ABOUT ====================*/
 .about__img{
-    width:200px;
+    width:250px;
+    height:350px;
     border-radius: .5rem;
     justify-self: center;
     align-self: center;
+    box-shadow: 0px 0px 16px 5px #F3B91A;
+
 }
 .about__info{
     display:flex;
@@ -470,9 +474,36 @@ img {
     background-color: var(--first-color);
 }
 .skills__html{
-    width: 90%;
+    width: 75%;
 }
 .skills__css{
+    width:75%;
+}
+.skills__js{
+    width:75%;
+}
+.skills__flask{
+    width:85%;
+}
+.skills__ml{
+    width:95%;
+}
+.skills__nlp{
+    width:95%;
+}
+.skills__hadoop{
+    width:90%;
+}
+.skills__python{
+    width:90%;
+}
+.skills__corejava{
+    width:70%;
+}
+.skills__c{
+    width:70%;
+}
+.skills__nodejs{
     width:70%;
 }
 .skills__close .skills__list{
@@ -872,7 +903,7 @@ transform: translate(.55rem);
 
 /*==================== MEDIA QUERIES ====================*/
 /* For small devices */
-@media screen and (max-width:450px){
+@media screen and (max-width:568px){
     .container{
         margin-left: var(--mb-1);
         margin-right: var(--mb-1);
@@ -921,8 +952,19 @@ transform: translate(.55rem);
     .testimonial__description{
         text-align:center;
     }
+    .img-about-me{
+        width:89vw;
+        justify-content: center;
+    }
+    .about__data {
+        margin-top: 15px;
+      }
     
 }
+/* For medium devices */
+/* @media screen and (min-width:568px) {
+} */
+
 
 /* For medium devices */
 @media screen and (min-width:568px) {
@@ -943,13 +985,17 @@ transform: translate(.55rem);
     .contact__container,
     .footer__container{
         grid-template-columns: repeat(2,1fr);
-
+        
     }
     .qualification__sections{
         display:grid;
         grid-template-columns: .6fr;
         justify-content: center;
 
+    }
+
+    .img-about-me{
+        width:45vw;
     }
 }
 @media screen and (min-width:768px){
@@ -1016,7 +1062,7 @@ transform: translate(.55rem);
         column-gap: 5rem;
     }
     .about__img{
-        width: 350px;
+        width: 260px;
     }
     .about__description{
         text-align: initial;
@@ -1088,6 +1134,10 @@ transform: translate(.55rem);
         margin-top: 4.5rem;
     }
 
+    .img-about-me{
+        width:40vw;
+    }
+
 }
 /* For large devices */
 
@@ -1127,5 +1177,21 @@ transform: translate(.55rem);
     .contact__inputs{
         grid-template-columns: repeat(2, 1fr);
     }
-    
+    .img-about-me{
+        width:25vw;
+    }
+
+}
+
+/* --------------------------------about me pic fliper------------------------------- */
+.swiper-container-about-me {
+    width: 20px;
+    height: 330px;
+}
+.img-about-me{
+    height:350px;
+    border-radius: .5rem;
+    justify-self: center;
+    align-self: center;
+    box-shadow: 0px 0px 16px 5px #F3B91A;
 }
