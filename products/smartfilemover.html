@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0d0b"><meta name="description" content="SmartFileMover helps you scan, review, and organize files on Windows with a clear dashboard and controlled copy and move workflows.">
+<title>SmartFileMover — Bring order to your files</title>
+<style>
+:root{--bg:#090c0a;--panel:#101612;--panel2:#151d17;--ink:#f1f6ef;--muted:#a0ada2;--line:#29342b;--lime:#c6ff65;--lime2:#a4ef37;--red:#ff6b72;--max:1240px;--radius:24px}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:88px}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E");z-index:5}.wrap{width:min(var(--max),calc(100% - 48px));margin:auto}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;position:sticky;top:0;background:#090c0ae8;backdrop-filter:blur(18px);z-index:20}.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.04em;font-size:19px;text-decoration:none;color:var(--ink)}.brand-mark{height:42px;width:42px;display:grid;place-items:center;position:relative;flex:0 0 auto;perspective:180px}
+.brand-mark img{width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 0 9px #c6ff6540);animation:brandFloat 3.2s ease-in-out infinite,brandTilt 6s ease-in-out infinite;transform-origin:50% 65%}
+.brand-mark:after{content:"";position:absolute;inset:1px;border:1px solid #c6ff6555;border-radius:13px;opacity:0;animation:brandPulse 3.2s ease-out infinite;pointer-events:none}
+@keyframes brandFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.04)}}
+@keyframes brandTilt{0%,100%{rotate:0deg}25%{rotate:-4deg}75%{rotate:4deg}}
+@keyframes brandPulse{0%{transform:scale(.82);opacity:.7}100%{transform:scale(1.42);opacity:0}}
+.brand-mark:hover img{animation-duration:1.1s;filter:drop-shadow(0 0 14px #c6ff65a8)}
+@media(prefers-reduced-motion:reduce){.brand-mark img,.brand-mark:after{animation:none}}.nav{display:flex;align-items:center;gap:27px}.nav a{color:#b9c3ba;text-decoration:none;font-size:13px;transition:.2s}.nav a:hover{color:var(--lime)}.nav .nav-cta,.button{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;padding:13px 19px;background:linear-gradient(135deg,#ee4d59,#d62235);color:#fff;font-weight:800;font-size:13px;text-decoration:none;border:0;cursor:pointer;transition:transform .25s,background .25s,color .25s,box-shadow .25s}.nav .nav-cta:hover,.button:hover{transform:translateY(-2px);background:#fff;color:#d62235;box-shadow:0 12px 32px rgba(214,34,53,.22)}.button.secondary{background:#151c16;color:var(--ink);border:1px solid var(--line)}.button.secondary:hover{background:#1d281e;color:var(--ink)}.menu-btn{display:none;background:none;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:20px}.hero{padding:0 0 74px;position:relative}.hero-grid{display:grid;grid-template-columns:1fr .93fr;gap:45px;align-items:center}.eyebrow{color:var(--lime);font-size:11px;font-weight:850;letter-spacing:.17em;text-transform:uppercase;display:flex;gap:10px;align-items:center}.eyebrow:before{content:"";height:1px;width:26px;background:var(--lime)}h1{font-size:clamp(48px,7.1vw,92px);line-height:.94;letter-spacing:-.075em;margin:24px 0 25px;max-width:760px;font-weight:760}h1 span{color:var(--lime)}.hero-copy{font-size:17px;line-height:1.75;color:#aab6ab;max-width:570px}.typing-copy{min-height:6.0em;max-width:590px}.typing-cursor{display:inline-block;width:2px;height:1.05em;background:var(--lime);margin-left:4px;vertical-align:-.15em;animation:typingBlink .8s steps(1) infinite}@keyframes typingBlink{50%{opacity:0}}@media(prefers-reduced-motion:reduce){.typing-cursor{animation:none;opacity:0}}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:31px 0 35px}.hero-foot{display:flex;gap:25px;flex-wrap:wrap;color:#8f9b91;font-size:12px}.hero-foot b{color:#e4eee4;font-weight:650}.hero-visual{position:relative;min-height:480px;display:grid;place-items:center;perspective:1000px}.orb{position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#d8ff9e 0,#8fcf4c 14%,#243b1e 39%,#0b120c 68%);filter:drop-shadow(0 0 65px #9df14b1c);animation:float 7s ease-in-out infinite;opacity:.85}.orbit{position:absolute;width:440px;height:190px;border:1px solid #c6ff6540;border-radius:50%;transform:rotate(-29deg);animation:spin 19s linear infinite}.orbit.two{width:490px;height:245px;transform:rotate(45deg);animation-duration:27s;border-color:#ffffff19}.orbit:after{content:"";position:absolute;top:18%;left:14%;width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 22px var(--lime)}.float-card{position:absolute;background:#121a14eF;border:1px solid #a7c99b31;backdrop-filter:blur(18px);border-radius:17px;padding:16px 18px;box-shadow:0 22px 80px #0008;animation:float 6s ease-in-out infinite}.float-card small{color:#93a193;display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}.float-card strong{font-size:15px;letter-spacing:-.02em}.float-card .tiny{font-size:11px;color:#9ca99e;margin-top:6px}.card-a{top:45px;left:0;animation-delay:-2s}.card-b{bottom:75px;right:-3px;animation-delay:-4s}.pill{display:inline-flex;align-items:center;gap:6px;color:var(--lime);background:#c6ff6513;border:1px solid #c6ff6530;border-radius:99px;padding:6px 9px;font-size:10px;font-weight:750}.hero-visual .center-icon{position:relative;z-index:2;width:82px;height:82px;border-radius:25px;background:var(--lime);color:#10160d;display:grid;place-items:center;box-shadow:0 0 60px #c6ff6530;transform:rotate(-8deg)}.center-icon svg{width:47px}.scroll-note{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:10px;color:#657167;letter-spacing:.2em;text-transform:uppercase}.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;background:#0d120e}.ticker-track{display:flex;gap:32px;width:max-content;padding:18px 0;animation:marquee 28s linear infinite;color:#89958a;font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:750}.ticker-track span{display:flex;gap:32px;align-items:center}.ticker i{width:6px;height:6px;border-radius:50%;background:var(--lime);display:inline-block}.section{padding:105px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:38px}.section h2{font-size:clamp(35px,5vw,62px);letter-spacing:-.065em;line-height:1.02;margin:17px 0 0;max-width:750px}.section-head p{color:var(--muted);line-height:1.7;max-width:390px;margin:0;font-size:14px}.screens-section{background:linear-gradient(180deg,#0c100d,#101710 50%,#0a0d0b);border-block:1px solid #ffffff0c}.screen-stage{position:relative;border:1px solid #ffffff20;border-radius:28px;background:#121712;padding:14px;overflow:hidden;box-shadow:0 45px 110px #0007}.window-bar{height:34px;display:flex;align-items:center;gap:6px;padding:0 7px 12px}.window-bar i{width:8px;height:8px;border-radius:50%;background:#455047}.window-bar span{font-size:10px;color:#728073;margin-left:8px}.screen-stack{position:relative;border-radius:15px;overflow:hidden;background:#e8ece8;min-height:240px}.screen-stack img{display:block;width:100%;height:auto;transition:opacity .75s,transform 1.1s;transform:scale(1.015)}.screen-stack img.back{position:absolute;inset:0;opacity:0}.screen-stage[data-mode="dashboard"] img.front{opacity:0}.screen-stage[data-mode="dashboard"] img.back{opacity:1}.screen-caption{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:20px 8px 6px}.screen-caption strong{font-size:14px}.screen-caption p{color:#98a499;font-size:12px;margin:6px 0 0}.screen-toggle{display:flex;gap:5px;padding:5px;border:1px solid var(--line);background:#0b100c;border-radius:99px}.screen-toggle button{border:0;background:transparent;color:#aab5ab;padding:10px 14px;border-radius:99px;font-size:11px;font-weight:750;cursor:pointer}.screen-toggle button.active{background:var(--lime);color:#10160d}.screen-glow{position:absolute;width:300px;height:300px;background:#a9ef3d10;filter:blur(75px);pointer-events:none;right:-100px;bottom:-100px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.feature{min-height:230px;padding:24px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#121813,#0d110e);position:relative;overflow:hidden;transition:transform .25s,border-color .25s,background .25s}.feature:hover{transform:translateY(-5px);border-color:#bdf65c6b;background:linear-gradient(145deg,#172119,#0d110e)}.feature .num{font-size:10px;color:#738174;letter-spacing:.12em}.feature .ico{margin:22px 0 16px;width:39px;height:39px;display:grid;place-items:center;border-radius:12px;background:#c6ff6515;color:var(--lime)}.feature .ico svg{width:21px;height:21px}.feature h3{font-size:17px;letter-spacing:-.03em;margin:0 0 9px}.feature p{color:#96a398;font-size:12px;line-height:1.65;margin:0;max-width:300px}.feature:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-58px;bottom:-62px;background:#c6ff6508;transition:.3s}.feature:hover:after{background:#c6ff6517;transform:scale(1.6)}.feature-controls{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}.searchbox{position:relative;max-width:330px;width:100%}.searchbox input{width:100%;border:1px solid var(--line);border-radius:12px;background:#101611;color:var(--ink);padding:13px 15px 13px 40px;outline:none}.searchbox input:focus{border-color:#c6ff6580}.searchbox:before{content:"⌕";position:absolute;left:14px;top:6px;font-size:25px;color:#849184}.filters{display:flex;gap:7px;flex-wrap:wrap}.filters button{background:#101611;border:1px solid var(--line);border-radius:99px;color:#aab6ab;padding:9px 13px;font-size:11px;cursor:pointer}.filters button.active{background:#c6ff6519;color:var(--lime);border-color:#c6ff6550}.feature.hidden{display:none}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;counter-reset:step}.step{border-top:1px solid #475447;padding:22px 16px 15px 0;position:relative}.step:before{counter-increment:step;content:"0" counter(step);font-size:11px;color:var(--lime);letter-spacing:.12em}.step h3{font-size:19px;letter-spacing:-.04em;margin:28px 0 10px}.step p{font-size:12px;color:#98a599;line-height:1.75;max-width:230px}.step .line{position:absolute;top:-4px;left:0;width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 18px #c6ff6570}.safety-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:50px;align-items:center}.safety-card{border:1px solid var(--line);border-radius:24px;padding:25px;background:radial-gradient(circle at 90% 0,#c6ff6512,transparent 45%),#101611}.safety-row{display:flex;gap:15px;padding:18px 0;border-bottom:1px solid #ffffff0d}.safety-row:last-child{border-bottom:0}.check{flex:0 0 31px;height:31px;border-radius:10px;background:#c6ff6517;color:var(--lime);display:grid;place-items:center}.safety-row h3{font-size:14px;margin:1px 0 6px}.safety-row p{color:#98a499;font-size:12px;line-height:1.65;margin:0}.safety-note{border-left:2px solid var(--lime);padding:5px 0 5px 17px;color:#93a095;font-size:12px;line-height:1.7;margin-top:25px}.download{padding:0 0 100px}.download-box{border-radius:30px;background:var(--lime);color:#11170d;padding:clamp(28px,6vw,68px);position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;align-items:center;gap:30px}.download-box:after{content:"SM";position:absolute;right:130px;bottom:-115px;font-size:260px;letter-spacing:-.13em;font-weight:950;color:#10170b09;pointer-events:none}.download-box .eyebrow{color:#314322}.download-box .eyebrow:before{background:#314322}.download-box h2{font-size:clamp(38px,5vw,64px);line-height:.98;letter-spacing:-.07em;margin:17px 0}.download-box p{color:#34432d;max-width:560px;line-height:1.7;font-size:14px}.download-box .button{background:#10160d;color:#eaffd3;position:relative;z-index:2;white-space:nowrap}.download-box .button:hover{background:#24351c;color:#ff6b72}.download-box small{display:block;margin-top:12px;color:#4e6042;font-size:10px}.faq{display:grid;grid-template-columns:.75fr 1.25fr;gap:55px}.faq-list details{border-bottom:1px solid var(--line);padding:19px 0}.faq-list summary{cursor:pointer;list-style:none;font-size:14px;font-weight:700;display:flex;justify-content:space-between;gap:20px}.faq-list summary:after{content:"+";color:var(--lime);font-size:20px;font-weight:400}.faq-list details[open] summary:after{content:"−"}.faq-list p{color:#9ca89d;font-size:13px;line-height:1.75;max-width:700px}.footer{border-top:1px solid var(--line);padding:28px 0 36px;color:#7f8d81;font-size:11px}.footer-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}.footer-links{display:flex;gap:18px}.footer a{color:#9aa69b;text-decoration:none}.footer a:hover{color:var(--lime)}.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:translateY(0)}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:#182219;border:1px solid #c6ff6540;color:var(--ink);padding:13px 18px;border-radius:12px;font-size:12px;opacity:0;pointer-events:none;transition:.3s;z-index:50}.toast.show{opacity:1;transform:translate(-50%,0)}@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(2deg)}}@keyframes spin{to{rotate:360deg}}@keyframes marquee{to{transform:translateX(-50%)}}@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:10px}.hero{padding-top:0}.hero-visual{min-height:390px}.orb{width:280px;height:280px}.orbit{width:360px}.card-a{left:5%}.card-b{right:5%}.features{grid-template-columns:repeat(2,1fr)}.safety-grid,.faq{grid-template-columns:1fr;gap:25px}.steps{grid-template-columns:repeat(2,1fr)}.section-head{align-items:start;flex-direction:column}.section-head p{max-width:600px}.download-box{grid-template-columns:1fr}.download-box .button{justify-self:start}.nav{gap:14px}.nav a{font-size:12px}}@media(max-width:640px){.wrap{width:calc(100% - 30px)}.topbar{height:65px}.menu-btn{display:block}.nav{display:none;position:absolute;top:64px;left:0;right:0;background:#0b100c;border-bottom:1px solid var(--line);padding:20px;align-items:stretch;flex-direction:column}.nav.open{display:flex}.nav a{padding:8px;font-size:14px}.nav .nav-cta{text-align:center}.hero{padding:0 0 55px}h1{font-size:clamp(47px,15vw,75px)}.hero-copy{font-size:15px}.hero-visual{min-height:330px}.orb{width:220px;height:220px}.orbit{width:300px;height:140px}.orbit.two{width:330px;height:170px}.float-card{padding:12px}.card-a{top:20px;left:0}.card-b{bottom:30px;right:0}.section{padding:72px 0}.features{grid-template-columns:1fr}.feature{min-height:190px}.feature-controls{align-items:stretch;flex-direction:column}.searchbox{max-width:none}.steps{grid-template-columns:1fr 1fr}.screen-stage{padding:8px;border-radius:18px}.screen-caption{align-items:flex-start;flex-direction:column}.screen-toggle{width:100%}.screen-toggle button{flex:1}.download{padding-bottom:65px}.download-box{border-radius:22px}.footer-inner{align-items:flex-start;flex-direction:column}.scroll-note{display:none}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+.transfer-scene{position:relative;width:min(100%,560px);height:430px;display:grid;place-items:center;filter:drop-shadow(0 38px 80px #0009)}.monitor{position:relative;width:min(100%,520px);aspect-ratio:1.55;background:linear-gradient(145deg,#202922,#0f1511);border:1px solid #bff76330;border-radius:22px;padding:14px;box-shadow:inset 0 1px 0 #ffffff18,0 0 70px #c6ff6514;animation:monitorBreathe 5s ease-in-out infinite}.monitor:before{content:"";position:absolute;inset:-20px;background:radial-gradient(circle at 50% 30%,#c6ff6518,transparent 62%);z-index:-1}.monitor-screen{position:relative;height:100%;overflow:hidden;border-radius:14px;background:linear-gradient(135deg,#eef4ee,#cfd8d0);border:1px solid #ffffff60;color:#172015}.monitor-top{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 13px;border-bottom:1px solid #17201514;background:#f8fff6}.traffic{display:flex;gap:6px}.traffic i{width:8px;height:8px;border-radius:50%;background:#ff6b72}.traffic i:nth-child(2){background:#ffca57}.traffic i:nth-child(3){background:#7fe36f}.monitor-title{font-size:10px;font-weight:850;letter-spacing:.13em;text-transform:uppercase;color:#536052}.file-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:18px 140px 18px 16px}.file-tile{height:54px;border:1px solid #17201516;border-radius:10px;background:#fff;box-shadow:0 8px 18px #19231710;display:flex;align-items:center;gap:8px;padding:8px;animation:filePulse 3.8s ease-in-out infinite}.file-tile:nth-child(2n){animation-delay:-.8s}.file-tile:nth-child(3n){animation-delay:-1.5s}.file-icon{width:26px;height:34px;border-radius:6px;background:#dfe7df;position:relative;flex:0 0 auto}.file-icon:after{content:"";position:absolute;right:0;top:0;border-top:8px solid #ffffff;border-left:8px solid transparent}.file-icon.mp4{background:#c6ff65}.file-icon.pdf{background:#ff6b72}.file-icon.doc{background:#7ec8ff}.file-icon.zip{background:#cfa8ff}.file-icon.jpg{background:#ffd36b}.file-meta{display:grid;gap:5px;width:100%}.file-meta span{height:6px;border-radius:99px;background:#17201524}.file-meta span:last-child{width:58%}.green-folder{position:absolute;right:24px;bottom:38px;width:128px;height:100px;border-radius:13px;background:linear-gradient(145deg,#c6ff65,#83d927);box-shadow:0 16px 40px #83d92750,inset 0 -10px 22px #2f630f22}.green-folder:before{content:"";position:absolute;left:12px;top:-18px;width:57px;height:27px;border-radius:10px 10px 0 0;background:#dcff99}.green-folder:after{content:"FILES";position:absolute;left:20px;bottom:22px;font-size:12px;font-weight:900;letter-spacing:.14em;color:#17310e}.transfer-file{position:absolute;left:72px;top:154px;width:74px;height:52px;border-radius:12px;background:#10160d;color:#c6ff65;border:1px solid #c6ff65a0;box-shadow:0 0 26px #c6ff6570;display:grid;place-items:center;font-size:14px;font-weight:950;letter-spacing:.08em;animation:transferMp4 3.4s cubic-bezier(.64,.02,.19,1) infinite}.transfer-file:before{content:none}.transfer-spark{position:absolute;width:9px;height:9px;border-radius:50%;background:#c6ff65;box-shadow:0 0 22px #c6ff65;animation:sparkMove 3.4s linear infinite}.spark-a{left:145px;top:180px}.spark-b{left:235px;top:209px;animation-delay:-.5s}.spark-c{left:330px;top:231px;animation-delay:-1s}.monitor-stand{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);width:72px;height:70px;background:linear-gradient(90deg,#182019,#303b31,#151d17);border-radius:0 0 18px 18px;z-index:-1}.monitor-base{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:190px;height:26px;border-radius:50%;background:#1b241d;border:1px solid #c6ff6520;z-index:-2}.transfer-label{position:absolute;left:28px;bottom:54px;padding:10px 13px;border-radius:12px;background:#111911e6;border:1px solid #c6ff6540;color:#dfffc0;font-size:11px;font-weight:800;box-shadow:0 18px 40px #0008}.transfer-label span{display:block;margin-top:4px;color:#8f9b91;font-weight:600}@keyframes monitorBreathe{0%,100%{transform:translateY(0) rotateX(0)}50%{transform:translateY(-8px) rotateX(2deg)}}@keyframes filePulse{0%,100%{transform:translateY(0);opacity:.88}50%{transform:translateY(-3px);opacity:1}}@keyframes transferMp4{0%{transform:translate(0,0) scale(.96);opacity:0}12%{opacity:1}58%{transform:translate(292px,84px) scale(1);opacity:1}76%{transform:translate(330px,105px) scale(.55);opacity:0}100%{transform:translate(330px,105px) scale(.55);opacity:0}}@keyframes sparkMove{0%,100%{transform:translate(0,0);opacity:0}30%,65%{opacity:1}70%{transform:translate(90px,28px);opacity:0}}@media(max-width:900px){.transfer-scene{height:390px}.monitor{width:min(100%,470px)}.file-grid{padding-right:126px}.file-tile{height:48px}.green-folder{right:18px;width:112px;height:88px}.transfer-file{left:55px}}@media(max-width:640px){.transfer-scene{height:320px}.monitor{width:100%;padding:10px;border-radius:18px}.monitor-screen{border-radius:12px}.monitor-top{height:32px}.monitor-title{font-size:8px}.file-grid{grid-template-columns:repeat(3,1fr);gap:7px;padding:13px 98px 13px 11px}.file-tile{height:42px;padding:6px}.file-icon{width:20px;height:27px}.green-folder{right:11px;bottom:30px;width:88px;height:70px}.green-folder:before{width:42px;height:20px;top:-13px}.green-folder:after{left:13px;bottom:17px;font-size:9px}.transfer-file{left:36px;top:130px;width:58px;height:42px;font-size:11px}.transfer-label{left:13px;bottom:42px;font-size:9px;padding:8px 10px}.monitor-stand{bottom:25px;height:54px}.monitor-base{bottom:8px;width:150px}@keyframes transferMp4{0%{transform:translate(0,0) scale(.96);opacity:0}12%{opacity:1}58%{transform:translate(190px,67px) scale(1);opacity:1}76%{transform:translate(228px,81px) scale(.55);opacity:0}100%{transform:translate(228px,81px) scale(.55);opacity:0}}}
+.monitor-screen:before,.monitor-screen:after{content:"MP4";position:absolute;width:66px;height:46px;border-radius:11px;background:#10160d;color:#c6ff65;border:1px solid #c6ff65a0;box-shadow:0 0 22px #c6ff6555;display:grid;place-items:center;font-size:12px;font-weight:950;letter-spacing:.08em;z-index:2;animation:transferMp4 3.4s cubic-bezier(.64,.02,.19,1) infinite}.monitor-screen:before{left:38px;top:108px;animation-delay:-1.1s}.monitor-screen:after{left:132px;top:88px;animation-delay:-2.2s}.transfer-two,.transfer-three{display:none}@media(max-width:640px){h1{font-size:clamp(38px,11.4vw,44px);letter-spacing:0;line-height:1.02}.hero-copy{max-width:100%}.hero-visual{width:100%;min-width:0;overflow:hidden}.transfer-scene{width:100%;max-width:360px;transform:translateX(-42px) scale(.86);transform-origin:top center}.monitor{width:calc(100% - 2px)}.monitor-screen:before,.monitor-screen:after{width:52px;height:38px;font-size:10px}.monitor-screen:before{left:24px;top:110px}.monitor-screen:after{left:92px;top:88px}}
+.transfer-file,.monitor-screen:before,.monitor-screen:after{animation-duration:4.6s;--mid-x:272px;--mid-y:68px;--sink-x:326px;--sink-y:61px;--end-x:345px;--end-y:62px}.monitor-screen:before{animation-delay:-1.15s;--mid-x:306px;--mid-y:101px;--sink-x:360px;--sink-y:107px;--end-x:379px;--end-y:108px}.monitor-screen:after{animation-delay:-2.3s;--mid-x:212px;--mid-y:121px;--sink-x:266px;--sink-y:127px;--end-x:285px;--end-y:128px}@keyframes transferMp4{0%{transform:translate(0,0) scale(.96);opacity:0}6%{opacity:1}68%{transform:translate(var(--mid-x),var(--mid-y)) scale(.95);opacity:1}86%{transform:translate(var(--sink-x),var(--sink-y)) scale(.38);opacity:.78}100%{transform:translate(var(--end-x),var(--end-y)) scale(.12);opacity:0}}@media(max-width:640px){.transfer-file,.monitor-screen:before,.monitor-screen:after{--mid-x:182px;--mid-y:56px;--sink-x:214px;--sink-y:62px;--end-x:233px;--end-y:65px}.monitor-screen:before{--mid-x:194px;--mid-y:68px;--sink-x:230px;--sink-y:73px;--end-x:249px;--end-y:77px}.monitor-screen:after{--mid-x:126px;--mid-y:88px;--sink-x:162px;--sink-y:93px;--end-x:181px;--end-y:97px}}
+.transfer-file{--mid-x:250px;--mid-y:54px;--sink-x:286px;--sink-y:38px;--end-x:293px;--end-y:40px}.monitor-screen:before{--mid-x:288px;--mid-y:76px;--sink-x:324px;--sink-y:86px;--end-x:331px;--end-y:88px}.monitor-screen:after{--mid-x:190px;--mid-y:96px;--sink-x:230px;--sink-y:106px;--end-x:237px;--end-y:108px}@media(max-width:640px){.transfer-file{--mid-x:172px;--mid-y:46px;--sink-x:212px;--sink-y:-7px;--end-x:218px;--end-y:-5px}.monitor-screen:before{--mid-x:182px;--mid-y:56px;--sink-x:227px;--sink-y:15px;--end-x:233px;--end-y:17px}.monitor-screen:after{--mid-x:114px;--mid-y:76px;--sink-x:159px;--sink-y:37px;--end-x:165px;--end-y:39px}}
+
+
+.hero-foot {
+display: flex;
+flex-wrap: wrap;
+gap: 14px;
+margin-top: 32px;
+}
+
+.hero-feature {
+display: flex;
+align-items: center;
+gap: 12px;
+flex: 1 1 220px;
+padding: 15px 17px;
+border: 1px solid rgba(255, 255, 255, 0.13);
+border-radius: 16px;
+background: linear-gradient(
+135deg,
+rgba(255, 255, 255, 0.08),
+rgba(255, 255, 255, 0.025)
+);
+backdrop-filter: blur(12px);
+transition: transform 0.3s ease, border-color 0.3s ease,
+background 0.3s ease, box-shadow 0.3s ease;
+cursor: default;
+}
+
+.hero-feature:hover {
+transform: translateY(-5px);
+border-color: #ffd43b;
+background: rgba(255, 212, 59, 0.09);
+box-shadow: 0 10px 30px rgba(255, 212, 59, 0.09);
+}
+
+.feature-icon {
+display: grid;
+place-items: center;
+flex-shrink: 0;
+width: 43px;
+height: 43px;
+border-radius: 12px;
+background: rgba(255, 212, 59, 0.13);
+color: #ffd43b;
+font-size: 25px;
+transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.hero-feature:hover .feature-icon {
+transform: rotate(-6deg) scale(1.08);
+background: rgba(255, 212, 59, 0.22);
+}
+
+.feature-text {
+display: flex;
+flex-direction: column;
+gap: 5px;
+min-width: 0;
+}
+
+.feature-text strong {
+color: #ffffff;
+font-size: 13px;
+font-weight: 700;
+line-height: 1.4;
+}
+
+.feature-text small {
+color: rgba(255, 255, 255, 0.58);
+font-size: 11px;
+line-height: 1.4;
+}
+
+.feature-check {
+margin-left: auto;
+color: #ffd43b;
+font-size: 16px;
+opacity: 0.65;
+transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.hero-feature:hover .feature-check {
+opacity: 1;
+transform: scale(1.2);
+}
+
+@media (max-width: 600px) {
+.hero-foot {
+flex-direction: column;
+gap: 10px;
+margin-top: 24px;
+}
+
+.hero-feature {
+flex: 1 1 auto;
+padding: 13px 15px;
+}
+}
+
+</style>
+
+<style id="giveaway-float-style">
+.giveaway-float{position:fixed;right:22px;bottom:10px;z-index:60;display:inline-flex;align-items:center;gap:9px;padding:13px 18px;border:1px solid #e7ffb2;border-radius:999px;background:linear-gradient(135deg,#d8ff91,#a9ef45);color:#10170b;text-decoration:none;font-size:12px;font-weight:900;letter-spacing:.01em;box-shadow:0 10px 34px #0008,0 0 24px #c6ff6530;animation:giveawayBob 3s ease-in-out infinite;transition:transform .2s,box-shadow .2s}
+.giveaway-float:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 14px 38px #0009,0 0 30px #c6ff6555}
+.giveaway-float .gift{font-size:18px;line-height:1}
+@keyframes giveawayBob{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@media(max-width:640px){.giveaway-float{right:12px;bottom:14px;padding:11px 14px;font-size:11px;gap:7px}}
+@media(prefers-reduced-motion:reduce){.giveaway-float{animation:none}}
+</style>
+
+
+<style id="desktop-first-screen-spacing">
+/* Tighten the top spacing while preserving the original monitor and stand. */
+@media (min-width: 901px) {
+  .hero { padding-top: 0; padding-bottom: 12px; }
+  .hero-grid { gap: 28px; align-items: start; }
+  .hero-grid > .reveal { padding-top: 4px; }
+  .hero-visual { min-height: 430px; margin-top: 0; }
+  .transfer-scene { height: 430px; }
+  .typing-copy { min-height: 4.2em; }
+  h1 { margin-top: 12px; margin-bottom: 16px; }
+}
+</style>
+
+<style id="sfm-hero-slider-style">
+/* Feature slider stays at a fixed height so changing slides never shifts the layout. */
+.sfm-slider{font-family:inherit;color:#f1f6ef;width:100%;max-width:590px;height:176px;margin:12px 0 0;padding:0;box-sizing:border-box;background:transparent;border:0;border-radius:0;overflow:hidden}
+.sfm-viewport{height:150px;overflow:hidden;border-radius:12px}
+.sfm-track{display:flex;height:100%;transition:transform .55s cubic-bezier(.22,.8,.25,1)}
+.sfm-slide{flex:0 0 100%;min-width:0;height:100%;padding:1px 0;box-sizing:border-box}
+.sfm-card{box-sizing:border-box;height:69%;display:flex;align-items:center;gap:15px;padding:0 18px;border:1px solid rgba(255,255,255,.10);border-radius:13px;background:linear-gradient(135deg,rgba(255,255,255,.055),rgba(255,255,255,.018))}
+.sfm-icon{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:13px;color:var(--lime);background:rgba(198,255,101,.10);border:1px solid rgba(198,255,101,.15);font-size:27px;transition:transform .3s ease}
+.sfm-card:hover .sfm-icon{transform:scale(1.05)}.sfm-content{min-width:0}.sfm-eyebrow{color:var(--lime);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:7px}.sfm-content h3{font-size:clamp(16px,1.8vw,21px);line-height:1.25;font-weight:750;color:#fff;margin:0 0 6px}.sfm-content p{font-size:12px;line-height:1.55;color:rgba(255,255,255,.62);margin:0}
+.sfm-controls{height:42px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 3px 0;box-sizing:border-box}.sfm-arrows{display:flex;gap:7px}.sfm-slider button{width:32px;height:32px;min-width:32px;min-height:32px;padding:0;border:1px solid rgba(255,255,255,.14);border-radius:9px;background:#1b221c;color:#fff;font-size:17px;cursor:pointer;transition:border-color .2s,color .2s,background .2s}.sfm-slider button:hover{border-color:var(--lime);color:var(--lime);background:rgba(198,255,101,.07)}.sfm-slider button:focus-visible{outline:2px solid var(--lime);outline-offset:2px}.sfm-dots{display:flex;align-items:center;gap:6px}.sfm-slider .sfm-dot{width:8px;height:8px;min-width:8px;min-height:8px;padding:0;border:0;border-radius:10px;background:#505a50}.sfm-slider .sfm-dot[aria-current="true"]{width:21px;background:var(--lime)}.sfm-count{min-width:38px;text-align:right;font-size:10px;letter-spacing:1px;color:rgba(255,255,255,.52)}
+@media(max-width:900px){.sfm-slider{max-width:590px}}
+@media(max-width:430px){.sfm-slider{height:184px;padding:0}.sfm-viewport{height:158px}.sfm-card{padding:0 11px;gap:10px}.sfm-icon{width:40px;height:40px;flex-basis:40px;font-size:23px}.sfm-content p{font-size:11px}.sfm-eyebrow{font-size:8px;letter-spacing:1px}}
+@media(prefers-reduced-motion:reduce){.sfm-track,.sfm-slider button,.sfm-icon{transition:none!important}}
+</style>
+
+
+<style id="less-chaos-subtle-shake">
+.less-chaos-shake {
+  display: inline-block;
+  color: #fff !important;
+  white-space: nowrap;
+}
+.less-chaos-shake .chaos-char {
+  display: inline-block;
+  color: #fff !important;
+  animation: chaosCharShake 2.5s ease-in-out infinite;
+  animation-delay: var(--shake-delay, 0s);
+  transform-origin: center;
+}
+@keyframes chaosCharShake {
+  0%, 78%, 100% { transform: translate(0, 0) rotate(0); }
+  82% { transform: translate(-1.2px, 0.5px) rotate(-0.55deg); }
+  86% { transform: translate(1.1px, -0.5px) rotate(0.55deg); }
+  90% { transform: translate(-0.8px, 0.2px) rotate(-0.35deg); }
+  94% { transform: translate(0.5px, 0) rotate(0.2deg); }
+  97% { transform: translate(0, 0) rotate(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .less-chaos-shake .chaos-char { animation: none; }
+}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:20px"><a class="brand" href="#home" aria-label="SmartFileMover home"><span class="brand-mark"><img src="public/smartfilemover-logo.png" alt="SmartFileMover brand logo"></span>SmartFileMover</a><button class="menu-btn" id="menuBtn" aria-label="Toggle navigation">☰</button><nav class="nav" id="nav"><a href="#features">Features</a><a href="#how">How it works</a><a href="#safety">Safety</a><a href="#screens">App preview</a><a class="nav-cta" href="downloads/smartFileMover_setup.exe" download>Download ↓</a></nav></div></header>
+<main id="home"><section class="hero"><div class="wrap hero-grid"><div class="reveal visible"><div class="eyebrow">The faster way to Move/Copy files</div><h1><span class="less-chaos-shake">Less file chaos.</span><br><span>More control.</span></h1><p class="hero-copy typing-copy"><span id="heroTypingText" aria-live="polite">Smart File Scanning — Scan a selected drive or folder to discover files in one place. Review what was found before deciding what to do next.</span><span class="typing-cursor" aria-hidden="true"></span></p>
+<div class="sfm-slider" id="sfm-slider" aria-label="SmartFileMover key features">
+  <div class="sfm-viewport"><div class="sfm-track">
+    <div class="sfm-slide"><div class="sfm-card"><div class="sfm-icon" aria-hidden="true">⌕</div><div class="sfm-content"><div class="sfm-eyebrow">✳ FEATURE 01 · DISCOVER</div><h3>Scan Before You Act</h3><p>Know your files first. Scan and understand what you have before making changes.</p></div></div></div>
+    <div class="sfm-slide"><div class="sfm-card"><div class="sfm-icon" aria-hidden="true">▦</div><div class="sfm-content"><div class="sfm-eyebrow">✳ FEATURE 02 · REVIEW</div><h3>Review in a Dashboard</h3><p>See everything at a glance. Review file details in one organized dashboard.</p></div></div></div>
+    <div class="sfm-slide"><div class="sfm-card"><div class="sfm-icon" aria-hidden="true">⇄</div><div class="sfm-content"><div class="sfm-eyebrow">✳ FEATURE 03 · TAKE CONTROL</div><h3>Copy or Move with Intent</h3><p>Choose what happens to your files. You stay in control of every action.</p></div></div></div>
+  </div></div>
+</div>
+</div>
+<div class="hero-visual reveal visible" id="heroVisual" aria-label="Animated monitor showing files transferring into a green folder"><div class="transfer-scene"><div class="monitor"><div class="monitor-screen"><div class="monitor-top"><div class="traffic"><i></i><i></i><i></i></div><div class="monitor-title">SmartFileMover scan</div></div><div class="file-grid"><div class="file-tile"><div class="file-icon pdf"></div><div class="file-meta"><span></span><span></span></div></div><div class="file-tile"><div class="file-icon mp4"></div><div class="file-meta"><span></span><span></span></div></div><div class="file-tile"><div class="file-icon doc"></div><div class="file-meta"><span></span><span></span></div></div><div class="file-tile"><div class="file-icon zip"></div><div class="file-meta"><span></span><span></span></div></div><div class="file-tile"><div class="file-icon jpg"></div><div class="file-meta"><span></span><span></span></div></div><div class="file-tile"><div class="file-icon pdf"></div><div class="file-meta"><span></span><span></span></div></div><div class="file-tile"><div class="file-icon mp4"></div><div class="file-meta"><span></span><span></span></div></div><div class="file-tile"><div class="file-icon doc"></div><div class="file-meta"><span></span><span></span></div></div></div><div class="green-folder"></div><div class="transfer-file">MP4</div><span class="transfer-spark spark-a"></span><span class="transfer-spark spark-b"></span><span class="transfer-spark spark-c"></span></div></div><div class="monitor-stand"></div><div class="monitor-base"></div></div></div></div><div class="scroll-note">Scroll to explore ↓</div></section>
+<div class="ticker"><div class="ticker-track"><span>Scan with clarity <i></i> Review your results <i></i> Copy with confidence <i></i> Move with control <i></i> Built for Windows <i></i></span><span>Scan with clarity <i></i> Review your results <i></i> Copy with confidence <i></i> Move with control <i></i> Built for Windows <i></i></span></div></div>
+<section class="section screens-section" id="screens"><div class="wrap"><div class="section-head reveal"><div><div class="eyebrow">A look inside</div><h2>Real app. Real interface.<br><span style="color:var(--lime)">Your files, in focus.</span></h2></div><p>Explore the original SmartFileMover interface screenshots. Switch between the organizer view and dashboard view.</p></div><div class="screen-stage reveal" id="screenStage" data-mode="organizer"><div class="window-bar"><i></i><i></i><i></i><span>SmartFileMover · Windows interface</span></div><div class="screen-stack"><img class="front" src="public/screenshots/dashboard.gif" alt="Original SmartFileMover file organizer interface"><img class="back" src="public/screenshots/smartfilemover-organizer.png" alt="Original SmartFileMover dashboard interface"></div><div class="screen-caption"><div><strong id="screenTitle">File Organizer</strong><p id="screenDescription">Set up your file scan from the main organizer screen.</p></div><div class="screen-toggle" role="group" aria-label="Choose screenshot"><button class="active" data-mode="organizer">Dashboard view</button><button data-mode="dashboard">Organizer view</button></div></div><div class="screen-glow"></div></div></div></section>
+<section class="section" id="features"><div class="wrap"><div class="section-head reveal"><div><div class="eyebrow">Built around your workflow</div><h2>Everything you need<br>to <span style="color:var(--lime)">take control.</span></h2></div><p>Explore the full feature set by category, or search for a capability. Some detailed behaviors are still being verified in the Windows app.</p></div><div class="feature-controls reveal"><div class="searchbox"><input id="featureSearch" type="search" placeholder="Search listed features…" aria-label="Search features"></div><div class="filters" id="filters"><button class="active" data-filter="all">All listed features</button><button class="" data-filter="core">Core workflow</button><button class="" data-filter="scan">Scanning & filtering</button><button class="" data-filter="actions">Copy & move</button><button class="" data-filter="files">File details</button><button class="" data-filter="safety">Safety</button><button class="" data-filter="ui">Interface</button><button class="" data-filter="license">Licensing</button><button class="" data-filter="windows">Windows app</button></div></div><div class="features" id="featureGrid">
+<article class="feature reveal" data-cat="core" data-search="dashboard central screen for reviewing scan results and application activity. core"><div class="num">01 / CORE</div><div class="ico">▦</div><h3>Dashboard</h3><p>Central screen for reviewing scan results and application activity.</p></article>
+<article class="feature reveal" data-cat="core" data-search="file organizer main interface for organizing files. core"><div class="num">02 / CORE</div><div class="ico">▱</div><h3>File Organizer</h3><p>Main interface for organizing files.</p></article>
+<article class="feature reveal" data-cat="scan" data-search="file scanning scan files in a selected location. scan"><div class="num">03 / SCAN</div><div class="ico">⌕</div><h3>File scanning</h3><p>Scan files in a selected location.</p></article>
+<article class="feature reveal" data-cat="scan" data-search="file filtering filter files according to the criteria supported by the application. scan"><div class="num">04 / SCAN</div><div class="ico">⌘</div><h3>File filtering</h3><p>Filter files according to the criteria supported by the application.</p></article>
+<article class="feature reveal" data-cat="safety" data-search="dry run preview file operations before executing them. safety"><div class="num">05 / SAFETY</div><div class="ico">◉</div><h3>Dry Run</h3><p>Preview file operations before executing them.</p></article>
+<article class="feature reveal" data-cat="actions" data-search="copy files copy files to a destination while retaining the originals. actions"><div class="num">06 / FILE ACTIONS</div><div class="ico">▣</div><h3>Copy files</h3><p>Copy files to a destination while retaining the originals.</p></article>
+<article class="feature reveal" data-cat="actions" data-search="move files move files to a destination. actions"><div class="num">07 / FILE ACTIONS</div><div class="ico">⇢</div><h3>Move files</h3><p>Move files to a destination.</p></article>
+<article class="feature reveal" data-cat="core" data-search="scan results display discovered files in a results table. core"><div class="num">08 / REVIEW</div><div class="ico">▤</div><h3>Scan Results</h3><p>Display discovered files in a results table.</p></article>
+<article class="feature reveal" data-cat="core" data-search="recent activity view recent application activity. core"><div class="num">09 / ACTIVITY</div><div class="ico">◷</div><h3>Recent Activity</h3><p>View recent application activity.</p></article>
+<article class="feature reveal" data-cat="ui" data-search="settings access application settings. ui"><div class="num">10 / SETTINGS</div><div class="ico">⚙</div><h3>Settings</h3><p>Access application settings.</p></article>
+<article class="feature reveal" data-cat="files" data-search="source path display the location of a file. files"><div class="num">11 / FILE DETAILS</div><div class="ico">⌁</div><h3>Source Path</h3><p>Display the location of a file.</p></article>
+<article class="feature reveal" data-cat="files" data-search="file name display the file’s name. files"><div class="num">12 / FILE DETAILS</div><div class="ico">Aa</div><h3>File Name</h3><p>Display the file’s name.</p></article>
+<article class="feature reveal" data-cat="files" data-search="file size display the file’s size. files"><div class="num">13 / FILE DETAILS</div><div class="ico">↔</div><h3>File Size</h3><p>Display the file’s size.</p></article>
+<article class="feature reveal" data-cat="actions" data-search="destination selection specify where files should be copied or moved. actions"><div class="num">14 / DESTINATION</div><div class="ico">⌖</div><h3>Destination Selection</h3><p>Specify where files should be copied or moved.</p></article>
+<article class="feature reveal" data-cat="actions" data-search="copy operation the copy workflow is intended to keep the original file in place. actions"><div class="num">15 / COPY</div><div class="ico">◫</div><h3>Copy Operation</h3><p>The copy workflow is intended to keep the original file in place.</p></article>
+<article class="feature reveal" data-cat="actions" data-search="move operation transfer a file to its destination. actions"><div class="num">16 / MOVE</div><div class="ico">⇢</div><h3>Move Operation</h3><p>Transfer a file to its destination.</p></article>
+<article class="feature reveal" data-cat="core" data-search="operation status display status information associated with file operations. core"><div class="num">17 / STATUS</div><div class="ico">✓</div><h3>Operation Status</h3><p>Display status information associated with file operations.</p></article>
+<article class="feature reveal" data-cat="ui" data-search="graphite theme dark interface theme. ui"><div class="num">18 / APPEARANCE</div><div class="ico">◐</div><h3>Graphite Theme</h3><p>Dark interface theme.</p></article>
+<article class="feature reveal" data-cat="ui" data-search="bright theme light interface theme. ui"><div class="num">19 / APPEARANCE</div><div class="ico">◑</div><h3>Bright Theme</h3><p>Light interface theme.</p></article>
+<article class="feature reveal" data-cat="ui" data-search="navigation sidebar navigate between application sections. ui"><div class="num">20 / NAVIGATION</div><div class="ico">☷</div><h3>Navigation Sidebar</h3><p>Navigate between application sections.</p></article>
+<article class="feature reveal" data-cat="ui" data-search="results table review files and their associated information. ui"><div class="num">21 / RESULTS</div><div class="ico">▤</div><h3>Results Table</h3><p>Review files and their associated information.</p></article>
+<article class="feature reveal" data-cat="ui" data-search="actions area interface area intended for file actions. ui"><div class="num">22 / ACTIONS</div><div class="ico">⋯</div><h3>Actions Area</h3><p>Interface area intended for file actions.</p></article>
+<article class="feature reveal" data-cat="license" data-search="license interface interface for application licensing. license"><div class="num">23 / LICENSING</div><div class="ico">◇</div><h3>License Interface</h3><p>Interface for application licensing.</p></article>
+<article class="feature reveal" data-cat="windows" data-search="windows desktop application a python and tkinter-based windows desktop application. windows"><div class="num">24 / WINDOWS</div><div class="ico">⊞</div><h3>Windows Desktop Application</h3><p>A Python and Tkinter-based Windows desktop application.</p></article>
+<article class="feature reveal" data-cat="windows" data-search="windows executable packaged as a windows .exe application. windows"><div class="num">25 / DISTRIBUTION</div><div class="ico">▧</div><h3>Windows Executable</h3><p>Packaged as a Windows .exe application.</p></article>
+</div></div><p id="noResults" style="display:none;color:var(--muted);padding:25px 0">No matching features. Try another search.</p><p style="color:#6f7c71;font-size:11px;margin-top:24px;line-height:1.7">Feature overview: this page lists the core SmartFileMover capabilities discussed so far. Exact behavior can vary by build; test file operations on sample files before using important data.</p></div></section>
+<section class="section" id="how" style="background:#0d120e;border-block:1px solid #ffffff0c"><div class="wrap"><div class="section-head reveal"><div><div class="eyebrow">A simple workflow</div><h2>From scan to action<br>in <span style="color:var(--lime)">four steps.</span></h2></div><p>Designed to keep file operations understandable: choose a scope, inspect the results, then decide what to do.</p></div><div class="steps"><div class="step reveal"><div class="line"></div><h3>Choose a location</h3><p>Select a drive or folder and configure the search criteria you need.</p></div><div class="step reveal"><div class="line"></div><h3>Scan your files</h3><p>Let the scan discover files that match your configured filters.</p></div><div class="step reveal"><div class="line"></div><h3>Review the results</h3><p>Use the dashboard and table to inspect names, paths, and sizes.</p></div><div class="step reveal"><div class="line"></div><h3>Take action</h3><p>Choose a copy or move operation and use Dry Run where available.</p></div></div></div></section>
+<section class="section" id="safety"><div class="wrap safety-grid"><div class="reveal"><div class="eyebrow">Clarity before changes</div><h2 style="font-size:clamp(38px,5vw,60px);letter-spacing:-.07em;line-height:1.02;margin:18px 0">Know what you’re doing <span style="color:var(--lime)">before you do it.</span></h2><p style="color:var(--muted);font-size:14px;line-height:1.8;max-width:480px">File operations should be deliberate. SmartFileMover’s workflow emphasizes scanning and reviewing first, with copy, move, and Dry Run concepts to help you stay in control.</p><div class="safety-note">We don’t claim every safety rule has been independently verified. Check the current build and test on sample files before relying on any file-management workflow.</div></div><div class="safety-card reveal"><div class="safety-row"><div class="check">✓</div><div><h3>Review before acting</h3><p>Scan results are meant to be visible before you start a file operation.</p></div></div><div class="safety-row"><div class="check">✓</div><div><h3>Dry Run concept</h3><p>Preview intended operations where Dry Run is available before applying changes.</p></div></div><div class="safety-row"><div class="check">✓</div><div><h3>Copy is not move</h3><p>The intended copy workflow preserves the source file; a move workflow is separate.</p></div></div></div></div></section>
+<section class="download" id="download"><div class="wrap"><div class="download-box reveal"><div><div class="eyebrow">SmartFileMover for Windows</div><h2>Make room for<br>what matters.</h2><p>Bring scanning, review, and file actions into one focused desktop workflow. Explore the Windows application and its capabilities.</p><small>Windows installer · smartFileMover_setup.exe</small></div><a class="button" href="downloads/smartFileMover_setup.exe" id="downloadButton" download>Download for Windows ↓</a></div></div></section>
+<section class="section" style="padding-top:10px"><div class="wrap faq"><div class="reveal"><div class="eyebrow">Good to know</div><h2 style="font-size:clamp(36px,4vw,50px);letter-spacing:-.065em">Questions, answered.</h2><p style="color:var(--muted);font-size:13px;line-height:1.75;max-width:330px">A few useful notes about what this website represents.</p></div><div class="faq-list reveal"><details><summary>Is SmartFileMover a Windows app?</summary><p>Yes. SmartFileMover has been developed as a Python-based Windows desktop application and packaged as an executable.</p></details><details><summary>Can I copy files without deleting the originals?</summary><p>The intended Copy workflow preserves the original. Always test the current build with sample files before using it on important data.</p></details><details><summary>Where can I download SmartFileMover?</summary><p>Use the Download button to download the Windows installer from downloads/smartFileMover_setup.exe.</p></details><details><summary>Are all listed capabilities identical in every build?</summary><p>Not necessarily. This page describes the core feature set discussed for SmartFileMover. Check the current Windows build for exact control availability and behavior.</p></details></div></div></section></main>
+<footer class="footer"><div class="wrap footer-inner"><a class="brand" href="#home"><span class="brand-mark"><img src="public/smartfilemover-logo.png" alt=""></span>SmartFileMover</a><span>Designed for a more deliberate file workflow.</span><div class="footer-links"><a href="#features">Features</a><a href="#screens">App preview</a><a href="#safety">Safety</a><a href="#home">Back to top ↑</a></div></div></footer><div class="toast" id="toast" role="status"></div>
+<a class="giveaway-float" href="mailto:mohiy.technologies.support@gmail.com?subject=SmartFileMover%20%E2%80%94%20Free%20Key%20Request&amp;body=Hello%2C%0A%0AI would like to request a free SmartFileMover key.%0A%0AThank you." id="giveawayFloat" aria-label="Email us to request a free SmartFileMover key"><span class="gift" aria-hidden="true">🎁</span><span>Email Us for a Free Key</span></a>
+
+<script>
+const $=(s,root=document)=>root.querySelector(s), $$=(s,root=document)=>[...root.querySelectorAll(s)];
+// Scroll reveals
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}}),{threshold:.12});$$('.reveal').forEach(el=>observer.observe(el));
+// Mobile navigation
+$('#menuBtn').addEventListener('click',()=>$('#nav').classList.toggle('open'));$$('#nav a').forEach(a=>a.addEventListener('click',()=>$('#nav').classList.remove('open')));
+// Searchable, filterable feature library
+let currentFilter='all';function filterFeatures(){const q=$('#featureSearch').value.trim().toLowerCase();let shown=0;$$('.feature', $('#featureGrid')).forEach(card=>{const matchCat=currentFilter==='all'||card.dataset.cat===currentFilter;const matchText=!q||(card.dataset.search+' '+card.innerText).toLowerCase().includes(q);const show=matchCat&&matchText;card.classList.toggle('hidden',!show);if(show)shown++});$('#noResults').style.display=shown?'none':'block'}$$('#filters button').forEach(b=>b.addEventListener('click',()=>{currentFilter=b.dataset.filter;$$('#filters button').forEach(x=>x.classList.toggle('active',x===b));filterFeatures()}));$('#featureSearch').addEventListener('input',filterFeatures);
+// Real screenshot view switch
+const stage=$('#screenStage'), title=$('#screenTitle'), desc=$('#screenDescription');const captions={organizer:['File Organizer','Set up your file scan from the main organizer screen.'],dashboard:['Dashboard view','Review the dashboard interface and scan-results layout.']};$$('.screen-toggle button').forEach(b=>b.addEventListener('click',()=>{const mode=b.dataset.mode;stage.dataset.mode=mode;$$('.screen-toggle button').forEach(x=>x.classList.toggle('active',x===b));title.textContent=captions[mode][0];desc.textContent=captions[mode][1]}));
+// Gentle cursor parallax for the hero object
+const visual=$('#heroVisual');if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){visual.addEventListener('pointermove',e=>{const r=visual.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;visual.style.transform=`rotateY(${x*4}deg) rotateX(${-y*4}deg)`});visual.addEventListener('pointerleave',()=>visual.style.transform='')}
+// Hero typing carousel: type each feature, pause, erase, then show the next.
+const heroTyping=document.querySelector('#heroTypingText');
+if(heroTyping){
+ const heroMessages=[
+ 'Smart File Scanning — Scan a selected drive or folder to discover files in one place. Review what was found before deciding what to do next.',
+ 'File Filtering — Narrow results using the criteria supported by the app, so you can focus on the files that matter.',
+ 'Dry Run & Preview — Preview intended file operations before applying changes, wherever Dry Run is available.',
+ 'Copy & Move Operations — Copy files to a chosen destination while keeping the originals, or move files when you want to relocate them.',
+ 'Dashboard & Scan Results — Review discovered files in a results table and use the dashboard to understand scan output.',
+ 'Recent Activity — Review recent application activity to keep track of what the app has been doing.',
+ 'Graphite & Bright Themes — Switch between dark Graphite and light Bright appearances to suit your workspace.',
+ 'Settings & Licensing — Open the settings area to access available application preferences and the licensing interface.'
+ ];
+ let messageIndex=0,charIndex=0,deleting=false;
+ const typeSpeed=30,eraseSpeed=15,pauseAfterType=2100,pauseAfterErase=350;
+ function typeHeroMessage(){
+  const message=heroMessages[messageIndex];
+  if(!deleting){
+   charIndex=Math.min(charIndex+1,message.length);heroTyping.textContent=message.slice(0,charIndex);
+   if(charIndex===message.length){deleting=true;setTimeout(typeHeroMessage,pauseAfterType);return;}
+   setTimeout(typeHeroMessage,typeSpeed);
+  }else{
+   charIndex=Math.max(0,charIndex-2);heroTyping.textContent=message.slice(0,charIndex);
+   if(charIndex===0){deleting=false;messageIndex=(messageIndex+1)%heroMessages.length;setTimeout(typeHeroMessage,pauseAfterErase);return;}
+   setTimeout(typeHeroMessage,eraseSpeed);
+  }
+ }
+ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){heroTyping.textContent='';typeHeroMessage();}
+}
+</script>
+<script id="sfm-hero-slider-script">
+(function(){
+  const slider=document.getElementById('sfm-slider');
+  if(!slider||slider.dataset.initialized)return;
+  slider.dataset.initialized='true';
+  const track=slider.querySelector('.sfm-track');
+  const slides=[...slider.querySelectorAll('.sfm-slide')];
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let index=0,timer=null;
+  function show(i){
+    index=(i+slides.length)%slides.length;
+    track.style.transform='translateX(-'+index*100+'%)';
+  }
+  function stop(){if(timer!==null){clearInterval(timer);timer=null;}}
+  function start(){stop();if(!reduced&&!document.hidden)timer=setInterval(()=>show(index+1),3500);}
+  slider.addEventListener('mouseenter',stop);
+  slider.addEventListener('mouseleave',start);
+  document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
+  show(0);start();
+})();
+</script>
+
+
+<style id="scroll-note-floating-behavior">
+  .scroll-note {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    z-index: 40;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .25s ease, visibility .25s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .scroll-note.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  @media (max-width: 640px) { .scroll-note { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .scroll-note { transition: none; } }
+</style>
+<script id="scroll-note-hide-on-scroll">
+(function () {
+  const note = document.querySelector('.scroll-note');
+  if (!note) return;
+  function updateScrollNote() {
+    note.classList.toggle('is-hidden', window.scrollY > 24);
+  }
+  window.addEventListener('scroll', updateScrollNote, { passive: true });
+  updateScrollNote();
+})();
+</script>
+
+<script id="less-chaos-per-character-animation">
+(function () {
+  const heading = document.querySelector('.less-chaos-shake');
+  if (!heading || heading.dataset.charactersWrapped) return;
+  const label = heading.textContent;
+  heading.textContent = '';
+  heading.setAttribute('aria-label', label);
+  heading.setAttribute('aria-hidden', 'false');
+  Array.from(label).forEach(function (character, index) {
+    const span = document.createElement('span');
+    span.className = 'chaos-char';
+    span.textContent = character === ' ' ? '\u00a0' : character;
+    span.style.setProperty('--shake-delay', ((index * 0.19) % 1.7) + 's');
+    span.setAttribute('aria-hidden', 'true');
+    heading.appendChild(span);
+  });
+  heading.dataset.charactersWrapped = 'true';
+})();
+</script>
+
+</body></html>

@@ -1001,6 +1001,50 @@
 
         <!--==================== MAIN JS ====================-->
         <script src="assets/js/main.js"></script>
+    
+        <!-- Floating Products shortcut -->
+        <style id="products-floating-button-style">
+          /* Uses the portfolio's own CSS theme variables, including its dark theme. */
+          .products-float-link{
+            position:fixed !important;left:18px;top:50%;transform:translateY(-50%);z-index:2147483647 !important;
+            display:flex !important;visibility:visible !important;opacity:1 !important;align-items:center;gap:10px;padding:13px 17px 13px 13px;
+            max-width:calc(100vw - 20px);box-sizing:border-box;
+            color:#fff;text-decoration:none;font:700 14px/1.1 var(--body-font, 'Poppins', sans-serif);
+            background:var(--first-color);border:1px solid var(--first-color-lighter);
+            border-radius:999px;box-shadow:0 8px 26px hsla(var(--hue-color,250),69%,61%,.28),0 0 0 0 hsla(var(--hue-color,250),69%,61%,.35);
+            animation:productsFloat 3.4s ease-in-out infinite,productsPulse 2.8s ease-out infinite;
+            transition:box-shadow .25s ease,background .25s ease,transform .25s ease,opacity .22s ease,visibility .22s ease;
+          }
+          .products-float-link .products-float-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:var(--first-color-alt);color:#fff;font-size:17px;flex:0 0 auto}
+          .products-float-link .products-float-label{letter-spacing:.01em}
+          .products-float-link:hover,.products-float-link:focus-visible{background:var(--first-color-alt);box-shadow:0 12px 34px hsla(var(--hue-color,250),69%,61%,.38);outline:3px solid var(--first-color-lighter);outline-offset:3px}
+          .products-float-link:focus-visible{outline-offset:4px}
+          @keyframes productsFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+          @keyframes productsPulse{0%{box-shadow:0 8px 26px hsla(var(--hue-color,250),69%,61%,.28),0 0 0 0 hsla(var(--hue-color,250),69%,61%,.35)}70%{box-shadow:0 8px 26px hsla(var(--hue-color,250),69%,61%,.28),0 0 0 11px hsla(var(--hue-color,250),69%,61%,0)}100%{box-shadow:0 8px 26px hsla(var(--hue-color,250),69%,61%,.28),0 0 0 0 hsla(var(--hue-color,250),69%,61%,0)}}
+          /* Hide Products while the desktop page is scrolled; show it again at the top. */
+          .products-float-link.is-scroll-hidden{opacity:0 !important;visibility:hidden !important;pointer-events:none !important}
+          /* Desktop/laptop only: hide the floating Products button on tablets and phones. */
+          @media(max-width:1024px){
+            .products-float-link{display:none !important;visibility:hidden !important;opacity:0 !important;pointer-events:none !important}
+          }
+          @media(prefers-reduced-motion:reduce){.products-float-link{animation:none}}
+        </style>
+        <a class="products-float-link" href="products/smartfilemover.html" target="_blank" rel="noopener noreferrer" aria-label="Open SmartFileMover product page in a new tab">
+          <span class="products-float-icon" aria-hidden="true">✦</span>
+          <span class="products-float-label">Products</span>
+        </a>
+        <script>
+          (() => {
+            const productsButton = document.querySelector('.products-float-link');
+            if (!productsButton) return;
+            const updateProductsVisibility = () => {
+              productsButton.classList.toggle('is-scroll-hidden', window.scrollY > 8);
+            };
+            window.addEventListener('scroll', updateProductsVisibility, { passive: true });
+            updateProductsVisibility();
+          })();
+        </script>
+
     </body>
 
 </html>
