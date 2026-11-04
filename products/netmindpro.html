@@ -1,0 +1,875 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetMind Pro — Intelligent Network Discovery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #030712;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* 3D WebGL Canvas strictly forced on top of page content */
+        #webgl-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 50;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        #webgl-container.hidden-packet {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .hud-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 40px -10px rgba(14, 165, 233, 0.25);
+        }
+
+        .glass-hud {
+            background: rgba(3, 7, 18, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            backdrop-filter: blur(16px);
+        }
+
+        /* Scroll indicator fade transition */
+        #scroll-indicator {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            opacity: 1;
+        }
+        #scroll-indicator.fade-out {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+
+        /* Centered Download Message Card */
+        #download-popup-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.85);
+            z-index: 70;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        #download-popup-card.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 3px;
+        }
+    </style>
+
+<style>
+/* NetMind Pro product sections */
+.np-site-section{position:relative;z-index:2;padding:100px 6vw;background:linear-gradient(180deg,rgba(3,7,18,.90),rgba(5,13,29,.96));color:#e5f3ff}
+.np-wrap{max-width:1180px;margin:0 auto}
+.np-eyebrow{font:600 11px 'Fira Code',monospace;letter-spacing:.22em;text-transform:uppercase;color:#38bdf8;margin-bottom:14px}
+.np-title{font-size:clamp(2rem,4vw,3.4rem);font-weight:800;line-height:1.08;color:#f8fafc;margin:0 0 16px}
+.np-lead{max-width:760px;color:#a8bdd2;line-height:1.8;font-size:1rem}
+.np-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:38px}
+.np-card{border:1px solid rgba(56,189,248,.2);background:linear-gradient(145deg,rgba(15,30,52,.88),rgba(5,12,27,.88));border-radius:18px;padding:24px;box-shadow:0 14px 45px rgba(0,0,0,.22);transition:transform .25s,border-color .25s}
+.np-card:hover{transform:translateY(-5px);border-color:rgba(56,189,248,.65)}
+.np-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:rgba(14,165,233,.13);border:1px solid rgba(56,189,248,.25);color:#67e8f9;font-size:20px;margin-bottom:17px}
+.np-card h3{font-size:1.05rem;font-weight:700;color:#f8fafc;margin:0 0 9px}
+.np-card p{font-size:.9rem;line-height:1.7;color:#9fb4ca;margin:0}
+.np-download-panel{margin-top:42px;padding:clamp(26px,5vw,52px);border-radius:24px;border:1px solid rgba(34,211,238,.32);background:radial-gradient(circle at 85% 15%,rgba(8,145,178,.22),transparent 35%),linear-gradient(135deg,rgba(9,30,52,.96),rgba(3,9,22,.97));display:block}
+.np-download-panel h3{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;color:#fff;margin:0 0 10px}
+.np-download-panel p{color:#a8bdd2;line-height:1.7;margin:0;max-width:750px}
+.np-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#22d3ee,#0284c7);color:#03111e;font-weight:800;text-decoration:none;padding:16px 24px;border-radius:12px;white-space:nowrap;box-shadow:0 10px 30px rgba(6,182,212,.22);transition:transform .2s,filter .2s}
+.np-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.np-small{font-size:.78rem;color:#7891a9;line-height:1.65;margin-top:14px}
+.np-pill{display:inline-block;border:1px solid rgba(56,189,248,.25);background:rgba(8,47,73,.35);color:#7dd3fc;border-radius:999px;padding:6px 10px;font:11px 'Fira Code',monospace;margin:5px 5px 0 0}
+.np-note{margin-top:28px;padding:18px 20px;border-left:3px solid #0ea5e9;background:rgba(8,47,73,.22);color:#9fb4ca;font-size:.85rem;line-height:1.7}
+@media(max-width:900px){.np-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.np-site-section{padding:72px 6vw}.np-grid{grid-template-columns:1fr}}
+</style>
+
+<style>
+/* Three-card automatic feature carousel */
+.np-slider-shell{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;align-items:center;gap:14px;margin-top:38px}
+.np-slider-viewport{width:100%;min-width:0;overflow:hidden;outline:none;clip-path:inset(0)}
+.np-slider-viewport::-webkit-scrollbar{display:none}
+.np-feature-track{display:flex;gap:18px;width:100%;transform:translateX(0);transition:transform .7s cubic-bezier(.22,.8,.25,1);will-change:transform}
+.np-slide{flex:0 0 calc((100% - 36px)/3);width:calc((100% - 36px)/3);min-width:0;max-width:calc((100% - 36px)/3);min-height:220px;box-sizing:border-box}
+.np-slider-arrow{width:46px;height:46px;border-radius:50%;border:1px solid rgba(56,189,248,.38);background:rgba(8,30,52,.92);color:#a5f3fc;font-size:30px;line-height:1;cursor:pointer;transition:background .2s,border-color .2s}
+.np-slider-arrow:hover{background:rgba(8,145,178,.3);border-color:#67e8f9}
+.np-slider-arrow:focus-visible{outline:2px solid #67e8f9;outline-offset:3px}
+.np-slider-footer{display:flex;align-items:center;gap:18px;margin:22px 62px 0}
+.np-slider-progress{height:4px;flex:1;border-radius:99px;background:rgba(148,163,184,.2);overflow:hidden}
+.np-slider-progress span{display:block;width:0;height:100%;border-radius:99px;background:linear-gradient(90deg,#0891b2,#67e8f9);transition:width .45s ease}
+.np-slider-count{font:12px 'Fira Code',monospace;color:#9fb4ca;white-space:nowrap}
+@media(max-width:850px){.np-slide{flex-basis:calc((100% - 18px)/2);width:calc((100% - 18px)/2);max-width:calc((100% - 18px)/2)}}
+@media(max-width:600px){.np-slider-shell{grid-template-columns:36px minmax(0,1fr) 36px;gap:7px}.np-slider-arrow{width:36px;height:36px;font-size:24px}.np-slide{flex-basis:100%;width:100%;max-width:100%;min-height:205px}.np-slider-footer{margin-left:43px;margin-right:43px}.np-site-section{padding-left:5vw;padding-right:5vw}}
+@media(prefers-reduced-motion:reduce){.np-slider-viewport,.np-slider-progress span{scroll-behavior:auto;transition:none}}
+</style>
+</head>
+<body class="selection:bg-cyan-500 selection:text-black">
+
+    <!-- 3D Canvas Background Container -->
+    <div id="webgl-container"></div>
+
+    <!-- Top HUD Overlay Display -->
+    <div class="hud-overlay flex flex-col justify-between p-4 sm:p-6 text-xs sm:text-sm font-mono text-cyan-400">
+        <!-- Top Status Bar -->
+        <div class="flex justify-between items-center w-full max-w-7xl mx-auto pointer-events-auto">
+            <div class="glass-hud px-4 py-2.5 rounded-xl flex items-center gap-3">
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                </span>
+                <span class="tracking-widest font-semibold uppercase text-gray-200">NETMIND PRO</span>
+                <span class="hidden sm:inline text-cyan-600">|</span>
+                <span class="hidden sm:inline text-gray-400" id="hud-stage-label">Stage 1: Network Discovery</span>
+            </div>
+
+            <!-- Top Right Cumulative Scan Counter (ms) -->
+            <div class="glass-hud px-4 py-2.5 rounded-xl flex items-center gap-4">
+                <div>SCAN TIME: <span id="hud-scan-counter" class="text-cyan-300 font-bold">0 ms</span></div>
+                <div>MODE: <span class="text-emerald-400">ACTIVE</span></div>
+            </div>
+        </div>
+
+        <!-- Bottom Telemetry HUD -->
+        <div class="flex justify-between items-end w-full max-w-7xl mx-auto pointer-events-auto">
+            <div class="glass-hud p-3.5 rounded-xl hidden md:block">
+                <div class="text-gray-400 mb-1">NETWORK ACTIVITY</div>
+                <div class="text-gray-200 font-semibold" id="hud-route">DEVICE DISCOVERY → INSIGHTS</div>
+                <div class="w-48 bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+                    <div id="hud-progress-bar" class="bg-cyan-400 h-full w-0 transition-all duration-75"></div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator (Fades out at the end, returns when scrolling up) -->
+            <div id="scroll-indicator" class="flex flex-col items-center gap-2 animate-bounce mx-auto md:mx-0">
+                <span class="text-gray-400 text-xs tracking-widest uppercase">SCROLL TO EXPLORE</span>
+                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Centered Download Message Box with Close '×' Button -->
+    <div id="download-popup-card" class="w-full max-w-md px-4">
+        <div class="glass-card p-6 sm:p-8 rounded-2xl border-cyan-400/50 shadow-2xl text-center backdrop-blur-xl relative">
+            <button id="close-popup-btn" class="absolute top-3 right-3 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 w-7 h-7 rounded-full flex items-center justify-center text-sm transition-colors cursor-pointer" aria-label="Close popup">×</button>
+            
+            <div class="absolute -top-3 -left-3 flex h-7 w-7 items-center justify-center rounded-full bg-cyan-500 text-black text-xs font-bold animate-pulse">✓</div>
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-400/30 mb-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                </svg>
+            </div>
+            <div class="text-xs font-mono text-cyan-400 font-semibold uppercase tracking-widest mb-1">PACKET DELIVERED</div>
+            <h2 class="text-2xl font-bold text-white mb-2">NetMind Pro Ready</h2>
+            <p class="text-slate-300 text-sm mb-6 leading-relaxed">
+                Network payload received. Download NetMind Pro for Windows to start inspecting your local LAN.
+            </p>
+            <a class="np-btn w-full text-center justify-center py-3.5 text-sm" href="downloads/NetMindPro_Setup.exe" download>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Download NetMind Pro for Windows
+            </a>
+            <div class="text-[11px] font-mono text-slate-400 mt-3">Developed by Mohiyaddeen · Mohiy Technologies Pvt. Ltd.</div>
+        </div>
+    </div>
+
+    <!-- Scroll Content Sections -->
+    <div class="content">
+        <!-- Section 1 -->
+        <section class="h-screen flex items-center justify-end px-6 sm:px-16">
+            <div class="glass-card p-6 sm:p-8 rounded-2xl max-w-md w-full">
+                <div class="flex items-center gap-2 text-cyan-400 text-xs font-mono font-semibold mb-2">
+                    <span class="px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-800">01 · DISCOVER</span>
+                    <span>LOCAL NETWORK SCAN</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mb-3">Discover Your Network</h1>
+                <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                    NetMind Pro scans your local network to reveal connected devices and build a clearer picture of your network.
+                </p>
+                <div class="text-xs font-mono text-cyan-300/80 bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                    <div>Module: Network Discovery</div>
+                    <div>Scope: Your Local LAN</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="h-screen flex items-center justify-center px-6 sm:px-16">
+            <div class="glass-card p-6 sm:p-8 rounded-2xl max-w-md w-full text-center">
+                <div class="flex items-center justify-center gap-2 text-cyan-400 text-xs font-mono font-semibold mb-2">
+                    <span class="px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-800">LIVE ANALYSIS</span>
+                    <span>DEVICE INTELLIGENCE</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mb-3">Understand Every Device</h1>
+                <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                    Explore discovered devices with useful identity details, network information, and clear device-level insights.
+                </p>
+                <div class="text-xs font-mono text-cyan-300/80 bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                    <div>Status: Analyzing Devices</div>
+                    <div>View: Device Details</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="h-screen flex items-center justify-end px-6 sm:px-16">
+            <div class="glass-card p-6 sm:p-8 rounded-2xl max-w-md w-full">
+                <div class="flex items-center gap-2 text-emerald-400 text-xs font-mono font-semibold mb-2">
+                    <span class="px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800">02 · IDENTIFY</span>
+                    <span>DEVICE DETAILS</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mb-3">Know What Is Connected</h1>
+                <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                    Review the devices found on your network and use the available information to understand what is connected.
+                </p>
+                <div class="text-xs font-mono text-emerald-300/80 bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                    <div>Network: Local Area Network</div>
+                    <div>Insight: Device Identification</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section class="h-screen flex items-center justify-start px-6 sm:px-16">
+            <div class="glass-card p-6 sm:p-8 rounded-2xl max-w-md w-full">
+                <div class="flex items-center gap-2 text-amber-400 text-xs font-mono font-semibold mb-2">
+                    <span class="px-2 py-0.5 rounded bg-amber-950/80 border border-amber-800">03 · MONITOR</span>
+                    <span>NETWORK VISIBILITY</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mb-3">Monitor Network Changes</h1>
+                <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                    Keep an eye on network activity, review scan history, and spot changes in the devices visible to your scanner.
+                </p>
+                <div class="text-xs font-mono text-amber-300/80 bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                    <div>Tools: Monitoring & Scan History</div>
+                    <div>Visibility: Connected Devices</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section class="h-screen flex items-center justify-end px-6 sm:px-16">
+            <div class="glass-card p-6 sm:p-8 rounded-2xl max-w-md w-full">
+                <div class="flex items-center gap-2 text-cyan-400 text-xs font-mono font-semibold mb-2">
+                    <span class="px-2 py-0.5 rounded bg-cyan-950/80 border border-cyan-800">04 · REPORT</span>
+                    <span>NETWORK INSIGHTS</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mb-3">Turn Scan Results Into Reports</h1>
+                <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                    Use organized device information and exportable reports to make your network easier to understand and manage.
+                </p>
+                <div class="text-xs font-mono text-cyan-300/80 bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                    <div>Exports: CSV · Excel · PDF</div>
+                    <div>Workspace: Network Overview</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Product Features Section -->
+    <section class="np-site-section" id="features">
+      <div class="np-wrap">
+        <div class="np-eyebrow">NETMIND PRO / CAPABILITIES</div>
+        <h2 class="np-title">Complete visibility into<br>your local network.</h2>
+        <p class="np-lead">Explore every major capability in the feature slider. Discover devices, understand what is connected, monitor changes, and turn scan results into useful reports — all from the NetMind Pro Windows desktop application.</p>
+        <div class="np-slider-shell">
+          <button class="np-slider-arrow" type="button" id="npPrev" aria-label="Previous features">‹</button>
+          <div class="np-slider-viewport" id="npFeatureViewport" tabindex="0" aria-label="NetMind Pro features"><div class="np-feature-track" id="npFeatureTrack">
+          <article class="np-card np-slide"><div class="np-icon">⌕</div><h3>Network Scanner</h3><p>Scan your local network and discover reachable devices, IP addresses, MAC addresses, and host information.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">◈</div><h3>Device Intelligence</h3><p>Review device identity details and estimated vendor, device category, and operating-system information.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">⌁</div><h3>Multi-Subnet Discovery</h3><p>Scan supported local network ranges and subnets to find devices beyond one assumed IP range.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">◎</div><h3>Live Monitor</h3><p>Monitor device availability and changes in the devices your scanner can reach.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">⌘</div><h3>Network Topology</h3><p>Explore a visual map of discovered devices and their inferred network relationships.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">⚑</div><h3>Security Audit</h3><p>Review security indicators and device-level observations to help prioritize further investigation.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">♧</div><h3>Private MAC Detection</h3><p>Identify private/randomized MAC address observations where the available network data supports it.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">⚠</div><h3>Device Alerts</h3><p>Get notified about detected device changes and other configured network events.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">▤</div><h3>Scan History</h3><p>Review previous scan results and compare network discoveries over time.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">▥</div><h3>Analytics Dashboard</h3><p>Explore summarized network information and useful insights from collected scan data.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">⇩</div><h3>Reports & Export</h3><p>Export scan information into CSV, Excel, and PDF formats for record keeping and analysis.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">⌖</div><h3>DNS Lookup & Traceroute</h3><p>Use built-in network utilities to inspect name resolution and trace network routes.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">↯</div><h3>Wake-on-LAN</h3><p>Send Wake-on-LAN requests to supported devices on your network.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">◉</div><h3>Wi-Fi Information</h3><p>Review available Wi-Fi/network connection details from the Windows PC.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">▣</div><h3>Device Profiles</h3><p>Open device-focused profiles to review and organize discovered device information.</p></article>
+          <article class="np-card np-slide"><div class="np-icon">⚙</div><h3>Themes & Settings</h3><p>Customize the desktop workspace using available themes and application settings.</p></article>
+          </div></div>
+          <button class="np-slider-arrow" type="button" id="npNext" aria-label="Next features">›</button>
+        </div>
+        <div class="np-slider-footer">
+          <div class="np-slider-progress"><span id="npSliderProgress"></span></div>
+          <div class="np-slider-count"><span id="npSlideCurrent">01</span> / 16</div>
+        </div>
+        <div class="np-note"><strong style="color:#d8f4ff">Important:</strong> Device type, vendor, and operating-system details are estimates based on information available on the network. Sleeping devices, firewalls, network isolation, and router settings can prevent discovery. Topology relationships are inferred, and security indicators are triage guidance — not a formal security certification.</div>
+      </div>
+    </section>
+
+    <!-- Credits & Developer Information Section -->
+    <section class="np-site-section" id="credits" style="padding-top:0">
+      <div class="np-wrap">
+        <div class="np-download-panel">
+          <div class="np-eyebrow">PROJECT CREDITS & ATTRIBUTION</div>
+          <h3>Engineered for High-Performance LAN Visibility</h3>
+          <p>NetMind Pro is meticulously crafted by leading software architecture teams to empower developers, system administrators, and network engineers with robust local diagnostics.</p>
+          <div style="margin-top: 16px;">
+            <span class="np-pill">Lead Developer: Mohiyaddeen</span>
+            <span class="np-pill">Organization: Mohiy Technologies Pvt. Ltd.</span>
+            <span class="np-pill">Official Portal: mohiyaddeen.com</span>
+            <span class="np-pill">Windows 10 / 11</span>
+          </div>
+          <div class="np-small">For enterprise licensing, support inquiries, and custom integrations, visit <a href="https://www.mohiyaddeen.com" target="_blank" style="color: #38bdf8; text-decoration: underline;">www.mohiyaddeen.com</a>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Three.js, GSAP & ScrollTrigger Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // 1. Core Scene & Camera Setup
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030712, 0.04);
+
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 10);
+
+        // 2. WebGL Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.2;
+        container.appendChild(renderer.domElement);
+
+        // 3. Lighting Setup
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+        scene.add(ambientLight);
+
+        const keyLight = new THREE.DirectionalLight(0x38bdf8, 2.5);
+        keyLight.position.set(5, 8, 7);
+        scene.add(keyLight);
+
+        const fillLight = new THREE.DirectionalLight(0xa855f7, 1.2);
+        fillLight.position.set(-6, -4, 4);
+        scene.add(fillLight);
+
+        const envelopePointLight = new THREE.PointLight(0x38bdf8, 4, 8);
+        scene.add(envelopePointLight);
+
+        // 4. Background Grid & Glowing Particles
+        const gridHelper = new THREE.GridHelper(30, 40, 0x0284c7, 0x1e293b);
+        gridHelper.position.y = -5;
+        gridHelper.rotation.x = 0.2;
+        scene.add(gridHelper);
+
+        // Particle System
+        const particleCount = 200;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        for(let i=0; i<particleCount*3; i+=3) {
+            particlePositions[i] = (Math.random() - 0.5) * 25;
+            particlePositions[i+1] = (Math.random() - 0.5) * 20;
+            particlePositions[i+2] = (Math.random() - 0.5) * 15;
+        }
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        const particleMat = new THREE.PointsMaterial({
+            color: 0x38bdf8,
+            size: 0.06,
+            transparent: true,
+            opacity: 0.6
+        });
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
+
+        // Dynamic Frustum Corner Coordinate Calculator
+        function getLayoutConfig() {
+            const distance = camera.position.z;
+            const vFov = (camera.fov * Math.PI) / 180;
+            const height = 2 * Math.tan(vFov / 2) * distance;
+            const width = height * camera.aspect;
+
+            const isMobile = window.innerWidth <= 640;
+            const isIPad = window.innerWidth > 640 && window.innerWidth <= 1024;
+
+            let px = width / 2 - 1.25;
+            let py = height / 2 - 1.15;
+
+            if (isMobile) {
+                px = width / 2 - 0.75;
+                py = height / 2 - 0.85;
+            } else if (isIPad) {
+                px = width / 2 - 1.05;
+                py = height / 2 - 1.0;
+            }
+
+            const meshScale = isMobile ? 0.55 : (isIPad ? 0.8 : 1.0);
+            const smallMacBookScale = meshScale * 0.45;
+            const envStartScale = 0.12 * meshScale;
+            const envMaxScale = isMobile ? 0.9 : (isIPad ? 1.3 : 1.7);
+
+            return {
+                topLeft: new THREE.Vector3(-px, py, 0),
+                topRight: new THREE.Vector3(px, py, 0),
+                bottomRight: new THREE.Vector3(px, -py, 0),
+                bottomLeft: new THREE.Vector3(-px, -py, 0),
+                center: new THREE.Vector3(0, 0, 1.5),
+                meshScale,
+                smallMacBookScale,
+                envStartScale,
+                envMaxScale
+            };
+        }
+
+        // Procedural 3D MacBook Mesh with Bright Glowing Screen ON
+        function create3DLaptop() {
+            const laptopGroup = new THREE.Group();
+            const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3, metalness: 0.85 });
+            
+            const screenMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x0ea5e9, 
+                emissive: 0x38bdf8, 
+                emissiveIntensity: 1.5, 
+                roughness: 0.1 
+            });
+
+            const baseGeo = new THREE.BoxGeometry(1.8, 0.1, 1.2);
+            const baseMesh = new THREE.Mesh(baseGeo, bodyMaterial);
+            laptopGroup.add(baseMesh);
+
+            const lidGeo = new THREE.BoxGeometry(1.8, 1.1, 0.06);
+            lidGeo.translate(0, 0.55, 0);
+            const lidMesh = new THREE.Mesh(lidGeo, bodyMaterial);
+            lidMesh.position.set(0, 0.05, -0.55);
+            lidMesh.rotation.x = Math.PI / 7;
+            laptopGroup.add(lidMesh);
+
+            const displayGeo = new THREE.PlaneGeometry(1.55, 0.9);
+            const displayMesh = new THREE.Mesh(displayGeo, screenMaterial);
+            displayMesh.position.set(0, 0.6, -0.51);
+            displayMesh.rotation.x = Math.PI / 7;
+            laptopGroup.add(displayMesh);
+
+            return laptopGroup;
+        }
+
+        // Create Small MacBooks at Each Corner
+        const laptopTL = create3DLaptop();
+        const laptopTR = create3DLaptop();
+        const laptopBR = create3DLaptop();
+        const laptopBL = create3DLaptop();
+        scene.add(laptopTL);
+        scene.add(laptopTR);
+        scene.add(laptopBR);
+        scene.add(laptopBL);
+
+        // Procedural High-Res Texture for Envelope Packet
+        function generateEnvelopeTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 680;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#f6f0e4';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Grain
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+            for (let i = 0; i < 600; i++) {
+                ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
+            }
+
+            // Air Mail Stripes
+            const stripeWidth = 24;
+            for (let x = 0; x < canvas.width; x += stripeWidth * 2) {
+                ctx.fillStyle = '#b91c1c';
+                ctx.beginPath();
+                ctx.moveTo(x, 0); ctx.lineTo(x + stripeWidth, 0); ctx.lineTo(x, stripeWidth); ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = '#1d4ed8';
+                ctx.beginPath();
+                ctx.moveTo(x + stripeWidth, 0); ctx.lineTo(x + stripeWidth * 2, 0); ctx.lineTo(x + stripeWidth, stripeWidth); ctx.closePath();
+                ctx.fill();
+            }
+
+            // Stamp
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(800, 40, 160, 200);
+            ctx.fillStyle = '#0284c7';
+            ctx.fillRect(815, 55, 130, 170);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 20px sans-serif';
+            ctx.fillText('POSTAGE', 835, 145);
+
+            // Address Details
+            ctx.font = 'italic 34px "Fira Code", monospace';
+            ctx.fillStyle = '#0f172a';
+            ctx.fillText('TO: Network Insights', 260, 360);
+            ctx.fillText('MODE: Local Discovery', 320, 420);
+
+            ctx.font = 'bold 18px monospace';
+            ctx.fillStyle = '#475569';
+            ctx.fillText('FROM: Mohiy Technologies', 40, 65);
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        // Realistic Envelope Packet Setup
+        function createRealisticEnvelope() {
+            const envGroup = new THREE.Group();
+            const envelopeTexture = generateEnvelopeTexture();
+
+            const frontPaperMat = new THREE.MeshStandardMaterial({ map: envelopeTexture, roughness: 0.8, metalness: 0.05 });
+            const plainPaperMat = new THREE.MeshStandardMaterial({ color: 0xf6f0e4, roughness: 0.85, side: THREE.DoubleSide });
+            const waxMat = new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.4, metalness: 0.1 });
+
+            const bodyWidth = 1.0;
+            const bodyHeight = 0.65;
+            const bodyDepth = 0.04;
+
+            const bodyGeo = new THREE.BoxGeometry(bodyWidth, bodyHeight, bodyDepth);
+            const materials = [plainPaperMat, plainPaperMat, plainPaperMat, plainPaperMat, frontPaperMat, plainPaperMat];
+            const bodyMesh = new THREE.Mesh(bodyGeo, materials);
+            envGroup.add(bodyMesh);
+
+            const flapShape = new THREE.Shape();
+            flapShape.moveTo(-bodyWidth / 2, bodyHeight / 2);
+            flapShape.lineTo(bodyWidth / 2, bodyHeight / 2);
+            flapShape.lineTo(0, 0.02);
+            flapShape.closePath();
+
+            const flapExtrudeSettings = { depth: 0.008, bevelEnabled: true, bevelThickness: 0.002, bevelSize: 0.002 };
+            const flapGeo = new THREE.ExtrudeGeometry(flapShape, flapExtrudeSettings);
+            const flapMesh = new THREE.Mesh(flapGeo, plainPaperMat);
+            flapMesh.position.z = -bodyDepth / 2 - 0.003;
+            envGroup.add(flapMesh);
+
+            const waxGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.02, 32);
+            waxGeo.rotateX(Math.PI / 2);
+            const waxMesh = new THREE.Mesh(waxGeo, waxMat);
+            waxMesh.position.set(0, 0.04, -bodyDepth / 2 - 0.015);
+            envGroup.add(waxMesh);
+
+            return envGroup;
+        }
+
+        let config = getLayoutConfig();
+
+        const envelopePacket = createRealisticEnvelope();
+        envelopePacket.position.copy(config.topLeft);
+        envelopePacket.scale.set(config.envStartScale, config.envStartScale, config.envStartScale);
+        scene.add(envelopePacket);
+
+        // 7. Dynamic Continuous Scroll Animation Setup & Cumulative Scan Counter Logic
+        gsap.registerPlugin(ScrollTrigger);
+
+        let animationTimeline;
+        const stageLabel = document.getElementById('hud-stage-label');
+        const routeLabel = document.getElementById('hud-route');
+        const progressBar = document.getElementById('hud-progress-bar');
+        const pingLabel = document.getElementById('hud-ping');
+        const downloadCard = document.getElementById('download-popup-card');
+        const closePopupBtn = document.getElementById('close-popup-btn');
+        const webglContainer = document.getElementById('webgl-container');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        const scanCounterEl = document.getElementById('hud-scan-counter');
+
+        let userClosedPopup = false;
+        closePopupBtn.addEventListener('click', () => {
+            downloadCard.classList.remove('active');
+            webglContainer.classList.add('hidden-packet'); // Hides flying packet canvas as well
+            userClosedPopup = true;
+        });
+
+        let lastScrollY = window.pageYOffset;
+        let cumulativeScanMs = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.pageYOffset;
+            const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+            
+            if (scrollDelta > 0) {
+                cumulativeScanMs += Math.round(scrollDelta * 1.8);
+                scanCounterEl.innerText = `${cumulativeScanMs} ms`;
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        function updateCornerLayouts() {
+            config = getLayoutConfig();
+
+            laptopTL.position.copy(config.topLeft);
+            laptopTL.scale.set(config.smallMacBookScale, config.smallMacBookScale, config.smallMacBookScale);
+
+            laptopTR.position.copy(config.topRight);
+            laptopTR.scale.set(config.smallMacBookScale, config.smallMacBookScale, config.smallMacBookScale);
+
+            laptopBR.position.copy(config.bottomRight);
+            laptopBR.scale.set(config.smallMacBookScale, config.smallMacBookScale, config.smallMacBookScale);
+
+            laptopBL.position.copy(config.bottomLeft);
+            laptopBL.scale.set(config.smallMacBookScale, config.smallMacBookScale, config.smallMacBookScale);
+        }
+
+        function initScrollAnimation() {
+            if (animationTimeline) animationTimeline.kill();
+
+            updateCornerLayouts();
+            envelopePacket.position.copy(config.topLeft);
+
+            const waypoints = [
+                { start: config.topLeft, target: config.bottomRight },
+                { start: config.bottomRight, target: config.topRight },
+                { start: config.topRight, target: config.bottomLeft },
+                { start: config.bottomLeft, target: config.topLeft }
+            ];
+
+            const sections = document.querySelectorAll('.content section');
+            const totalSections = Math.max(1, sections.length);
+            const loopSteps = totalSections * 2;
+            const totalSteps = loopSteps + 1;
+            const stepDuration = 1 / totalSteps;
+
+            animationTimeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "body",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1.2,
+                    onUpdate: (self) => {
+                        const progress = Math.round(self.progress * 100);
+                        progressBar.style.width = `${progress}%`;
+                        const currentStage = Math.min(totalSections, Math.floor(self.progress * totalSections) + 1);
+                        stageLabel.innerText = `Stage ${currentStage}: Network Discovery`;
+                        routeLabel.innerText = `PACKET IN-FLIGHT (${progress}%)`;
+
+                        // Hide/show scroll indicator dynamically at the end of the page
+                        if (self.progress >= 0.96) {
+                            scrollIndicator.classList.add('fade-out');
+                        } else {
+                            scrollIndicator.classList.remove('fade-out');
+                        }
+
+                        if (self.progress >= 0.96 && !userClosedPopup) {
+                            downloadCard.classList.add('active');
+                            webglContainer.classList.remove('hidden-packet');
+                        } else if (self.progress < 0.96) {
+                            downloadCard.classList.remove('active');
+                            if (!userClosedPopup) {
+                                webglContainer.classList.remove('hidden-packet');
+                            }
+                            userClosedPopup = false; // Reset close state when scrolling away
+                        }
+                    }
+                }
+            });
+
+            for (let i = 0; i < loopSteps; i++) {
+                const startTime = i * stepDuration;
+                const halfDuration = stepDuration / 2;
+                const phaseIndex = i % 4;
+                const segment = waypoints[phaseIndex];
+
+                animationTimeline.set(envelopePacket.position, {
+                    x: segment.start.x,
+                    y: segment.start.y,
+                    z: segment.start.z
+                }, startTime);
+
+                animationTimeline.to(envelopePacket.position, {
+                    x: segment.target.x,
+                    y: segment.target.y,
+                    z: segment.target.z,
+                    ease: "none",
+                    duration: stepDuration
+                }, startTime);
+
+                animationTimeline.to(envelopePacket.scale, {
+                    x: config.envMaxScale,
+                    y: config.envMaxScale,
+                    z: config.envMaxScale,
+                    ease: "power1.out",
+                    duration: halfDuration
+                }, startTime);
+
+                animationTimeline.to(envelopePacket.scale, {
+                    x: config.envStartScale,
+                    y: config.envStartScale,
+                    z: config.envStartScale,
+                    ease: "power1.in",
+                    duration: halfDuration
+                }, startTime + halfDuration);
+
+                animationTimeline.to(envelopePacket.rotation, {
+                    x: Math.PI * 2 * (i + 1),
+                    y: Math.PI * 2 * (i + 1),
+                    z: Math.PI * (i + 1),
+                    ease: "none",
+                    duration: stepDuration
+                }, startTime);
+            }
+
+            const finalStartTime = loopSteps * stepDuration;
+            const lastPhaseIndex = (loopSteps - 1) % 4;
+            const lastPos = waypoints[lastPhaseIndex].target;
+
+            animationTimeline.set(envelopePacket.position, {
+                x: lastPos.x,
+                y: lastPos.y,
+                z: lastPos.z
+            }, finalStartTime);
+
+            animationTimeline.to(envelopePacket.position, {
+                x: config.center.x,
+                y: config.center.y + 1.4,
+                z: config.center.z,
+                ease: "power2.out",
+                duration: stepDuration
+            }, finalStartTime);
+
+            animationTimeline.to(envelopePacket.scale, {
+                x: config.envMaxScale * 1.4,
+                y: config.envMaxScale * 1.4,
+                z: config.envMaxScale * 1.4,
+                ease: "power2.out",
+                duration: stepDuration
+            }, finalStartTime);
+
+            animationTimeline.to(envelopePacket.rotation, {
+                x: 0,
+                y: 0,
+                z: 0,
+                ease: "power2.out",
+                duration: stepDuration
+            }, finalStartTime);
+        }
+
+        initScrollAnimation();
+
+        // 8. Render Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = Date.now() * 0.002;
+            laptopTL.position.z = Math.sin(time) * 0.05;
+            laptopTR.position.z = Math.cos(time) * 0.05;
+            laptopBR.position.z = Math.sin(time + 1) * 0.05;
+            laptopBL.position.z = Math.cos(time + 1) * 0.05;
+
+            envelopePointLight.position.copy(envelopePacket.position);
+            particles.rotation.y += 0.001;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // 9. Responsive Resize Listener
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            initScrollAnimation();
+        });
+    </script>
+
+    <script>
+    (() => {
+      const track = document.getElementById('npFeatureTrack');
+      const viewport = document.getElementById('npFeatureViewport');
+      if (!track || !viewport || track.dataset.carouselReady) return;
+      track.dataset.carouselReady = 'true';
+      const slides = Array.from(track.querySelectorAll('.np-slide'));
+      const progress = document.getElementById('npSliderProgress');
+      const current = document.getElementById('npSlideCurrent');
+      const prev = document.getElementById('npPrev');
+      const next = document.getElementById('npNext');
+      const shell = track.closest('.np-slider-shell');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let page = 0, timer = null, perPage = 3;
+      const pageCount = () => Math.ceil(slides.length / perPage);
+      const measure = () => {
+        perPage = window.innerWidth <= 600 ? 1 : window.innerWidth <= 850 ? 2 : 3;
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        const cardWidth = slides[0] ? slides[0].getBoundingClientRect().width : 0;
+        return (cardWidth + gap) * perPage;
+      };
+      const render = () => {
+        const distance = measure();
+        page = Math.max(0, Math.min(page, pageCount() - 1));
+        track.style.transform = `translate3d(${-page * distance}px,0,0)`;
+        if (current) current.textContent = `${String(page + 1).padStart(2,'0')} / ${String(pageCount()).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;
+        if (progress) progress.style.width = `${((page + 1) / pageCount()) * 100}%`;
+        if (prev) prev.disabled = pageCount() < 2;
+        if (next) next.disabled = pageCount() < 2;
+      };
+      const go = delta => { page = (page + delta + pageCount()) % pageCount(); render(); };
+      const stop = () => { if (timer) clearInterval(timer); timer = null; };
+      const start = () => { stop(); if (!reducedMotion && pageCount() > 1) timer = setInterval(() => go(1), 4500); };
+      prev?.addEventListener('click', () => { go(-1); start(); });
+      next?.addEventListener('click', () => { go(1); start(); });
+      shell?.addEventListener('mouseenter', stop);
+      shell?.addEventListener('mouseleave', start);
+      shell?.addEventListener('focusin', stop);
+      shell?.addEventListener('focusout', start);
+      document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+      window.addEventListener('resize', () => { page = Math.min(page, pageCount()-1); render(); });
+      render();
+      start();
+    })();
+    </script>
+</body>
+</html>

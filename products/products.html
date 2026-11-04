@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohiy Technologies — Product Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #030712;
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-pill {
+            background: rgba(3, 7, 18, 0.75);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            backdrop-filter: blur(12px);
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 25px rgba(34, 211, 238, 0.35);
+        }
+
+        .glow-violet {
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.35);
+        }
+
+        /* 3D Label Markers */
+        .node-label {
+            position: absolute;
+            transform: translate(-50%, -100%);
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 30;
+        }
+
+        /* Scanline Overlay Effect */
+        .scanline-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0.6;
+        }
+
+
+        /* Responsive layout additions — preserve the original desktop design */
+        html, body { min-height: 100%; }
+        #canvas-container, .scanline-overlay { inset: 0; width: 100%; height: 100%; }
+        #canvas-container canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+        button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+        /* Product popup: keep the complete card visible without an internal scrollbar. */
+        #product-card {
+            box-sizing: border-box;
+            max-height: calc(100dvh - 40px);
+            overflow: hidden;
+            overscroll-behavior: none;
+            padding: clamp(16px, 2.2vw, 26px);
+        }
+        #product-card > div:first-child { margin-bottom: 12px; }
+        #product-card #card-desc { margin-bottom: 14px; }
+        #product-card #card-features { gap: 8px; margin-bottom: 14px; }
+        #product-card #card-features > div { padding: 10px; }
+        #product-card #card-features .text-base { margin-bottom: 2px; }
+        #product-card > div:last-child { gap: 10px; }
+        #product-card > div:last-child > a,
+        #product-card > div:last-child > button { padding-top: 10px; padding-bottom: 10px; }
+
+        @media (max-width: 900px) {
+            .glass-panel { box-shadow: 0 12px 34px rgba(0,0,0,.42); }
+            #product-card { width: min(92vw, 620px); }
+            header { gap: 12px; }
+            footer { width: min(92vw, 680px); }
+        }
+
+        @media (max-width: 640px) {
+            body, html { overflow: hidden; }
+            .app-shell { padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)); }
+            header { align-items: flex-start; flex-direction: column; gap: 9px; }
+            header > div:first-child { max-width: 100%; padding: 8px 11px; gap: 8px; }
+            header > div:first-child > span:last-child { font-size: 11px; }
+            header > div:last-child { align-self: flex-end; gap: 7px; }
+            #toggleGridBtn, #resetCamBtn { padding: 8px 10px; font-size: 10px; }
+            #resetCamBtn span { display: inline !important; }
+            footer { width: 100%; max-width: none; margin-bottom: 2px; }
+            footer .glass-panel { padding: 6px; gap: 5px; }
+            #btn-mover, #btn-netmind { min-width: 0; padding: 11px 6px; gap: 7px; font-size: 10px; }
+            #btn-mover span, #btn-netmind span { white-space: normal; line-height: 1.25; text-align: center; }
+            footer .text-center { font-size: 9px; line-height: 1.35; margin-top: 7px; }
+            #product-card { position: fixed; z-index: 60; left: 50%; top: 50%; bottom: auto; transform: translate(-50%, -50%) scale(.95); width: calc(100vw - 22px); max-width: 480px; max-height: calc(100dvh - 28px); padding: 15px; border-radius: 20px; }
+            #product-card h2 { font-size: 22px; line-height: 1.15; }
+            #product-card #card-desc { font-size: 12px; margin-bottom: 14px; }
+            #card-features { gap: 7px; margin-bottom: 13px; }
+            #card-features > div { padding: 9px; min-width: 0; }
+            #card-features .text-base { font-size: 13px; }
+            #card-features .text-\[11px\] { font-size: 9px; line-height: 1.35; }
+            #product-card .flex-col.sm\:flex-row { flex-direction: column; }
+            #product-card button { min-height: 42px; }
+            .node-label > div { font-size: 9px; padding: 5px 7px; }
+            .scanline-overlay { opacity: .35; }
+        }
+
+        @media (max-width: 380px) {
+            header > div:first-child { font-size: 11px; }
+            #toggleGridBtn svg, #resetCamBtn svg { display: none; }
+            #btn-mover, #btn-netmind { font-size: 9px; }
+            #product-card { padding: 12px; max-height: calc(100dvh - 20px); }
+            #product-card #card-desc { margin-bottom: 10px; }
+            #product-card #card-features { gap: 6px; margin-bottom: 10px; }
+            #product-card #card-features > div { padding: 8px; }
+            #product-card h2 { font-size: 20px; }
+        }
+
+        @media (max-height: 700px) {
+            #product-card { padding: 12px; }
+            #product-card > div:first-child { margin-bottom: 8px; }
+            #product-card #card-title { font-size: 21px; }
+            #product-card #card-desc { font-size: 12px; line-height: 1.4; margin-bottom: 9px; }
+            #product-card #card-features { gap: 6px; margin-bottom: 9px; }
+            #product-card #card-features > div { padding: 7px; }
+            #product-card #card-features .text-base { font-size: 13px; }
+            #product-card #card-features .text-\[11px\] { font-size: 9px; line-height: 1.25; }
+            #product-card > div:last-child { gap: 7px; }
+            #product-card > div:last-child > a,
+            #product-card > div:last-child > button { padding-top: 8px; padding-bottom: 8px; }
+        }
+
+        @media (max-height: 620px) and (min-width: 641px) {
+            #product-card { padding: 9px; }
+            footer { margin-bottom: 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; }
+        }
+    </style>
+</head>
+<body class="selection:bg-cyan-500 selection:text-black">
+
+    <!-- WebGL Canvas Container -->
+    <div id="canvas-container"></div>
+    <div class="scanline-overlay"></div>
+
+    <!-- Interactive HTML UI Overlay -->
+    <div class="app-shell relative z-30 w-full h-full flex flex-col justify-between p-4 sm:p-8 pointer-events-none">
+        
+        <!-- Top Navigation Header -->
+        <header class="flex justify-between items-center w-full max-w-7xl mx-auto pointer-events-auto">
+            <div class="glass-pill px-4 sm:px-6 py-2.5 rounded-2xl flex items-center gap-3 border border-cyan-500/30">
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                </span>
+                <span class="font-bold tracking-wider text-sm sm:text-base bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-violet-400">
+                    MOHIY TECHNOLOGIES Pvt. Ltd.
+                </span>
+                <span class="hidden sm:inline text-slate-600">|</span>
+                <span class="hidden sm:inline text-xs font-mono text-slate-400"> Product Hub</span>
+            </div>
+
+            <!-- View Modes & Utilities -->
+            <div class="flex items-center gap-3">
+                <button id="toggleGridBtn" class="glass-pill px-3.5 py-2 rounded-xl text-xs font-mono text-cyan-300 hover:text-white hover:border-cyan-400 transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <span class="hidden sm:inline">GRID: ON</span>
+                </button>
+                <button id="resetCamBtn" class="glass-pill px-3.5 py-2 rounded-xl text-xs font-mono text-slate-300 hover:text-white hover:border-cyan-400 transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    <span>RESET VIEW</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Product Floating Labels in 3D Space -->
+        <div id="label-mover" class="node-label">
+            <div class="glass-pill px-3 py-1.5 rounded-lg border-amber-400/50 text-amber-300 text-xs font-mono flex items-center gap-2 glow-amber">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span>SMARTFILE MOVER</span>
+            </div>
+        </div>
+
+        <div id="label-netmind" class="node-label">
+            <div class="glass-pill px-3 py-1.5 rounded-lg border-cyan-400/50 text-cyan-300 text-xs font-mono flex items-center gap-2 glow-cyan">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span>NETMIND PRO</span>
+            </div>
+        </div>
+
+        <!-- Product Interactive Modal / Feature Overlay Drawer -->
+        <div id="product-card" class="glass-panel w-full max-w-xl mx-auto rounded-3xl p-6 sm:p-8 pointer-events-auto transition-all duration-500 opacity-0 transform translate-y-12 scale-95 hidden">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <span id="card-tag" class="text-xs font-mono font-bold tracking-widest px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        DATA MANAGEMENT
+                    </span>
+                    <h2 id="card-title" class="text-2xl sm:text-3xl font-extrabold text-white mt-2">SmartFile Mover</h2>
+                </div>
+                <button id="closeCardBtn" class="text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center text-lg transition">×</button>
+            </div>
+
+            <!-- Description -->
+            <p id="card-desc" class="text-slate-300 text-sm leading-relaxed mb-6">
+                Automated high-speed local file sorting, directory rule orchestration, and smart dynamic file migration tool engineered for seamless storage efficiency.
+            </p>
+
+            <!-- Feature Pills Grid -->
+            <div class="grid grid-cols-2 gap-3 mb-6" id="card-features">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-700/50">
+                <a id="cardVisitBtn" href="https://mohiyaddeen.com/products/smartfilemover.html" target="_blank" rel="noopener noreferrer" class="hidden flex-1 py-3 px-5 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 hover:brightness-110 shadow-lg shadow-amber-500/20 transition items-center justify-center gap-2">
+                    Visit SmartFileMover Website <span aria-hidden="true">↗</span>
+                </a>
+                <button id="cardActionBtn" class="flex-1 py-3 px-5 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 hover:brightness-110 shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span>Download Installer</span>
+                </button>
+                <button id="cardInspectBtn" class="py-3 px-5 rounded-xl font-semibold text-sm glass-pill text-cyan-300 hover:text-white border-cyan-500/30 transition">
+                    Inspect 3D Node
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Product Selector Buttons (hidden: products remain selectable via 3D nodes) -->
+        <style>
+            footer.w-full.max-w-2xl > .glass-panel { display: none !important; }
+        </style>
+        <footer class="w-full max-w-2xl mx-auto pointer-events-auto">
+            <div class="glass-panel p-2 sm:p-3 rounded-2xl flex items-center justify-between gap-2 border border-slate-700/60">
+                
+                <!-- SmartFile Mover Button -->
+                <button id="btn-mover" class="flex-1 py-3 px-4 sm:px-6 rounded-xl flex items-center justify-center gap-3 text-sm font-bold text-slate-300 hover:text-white hover:bg-amber-500/10 border border-transparent hover:border-amber-500/30 transition-all group">
+                    <div class="w-3 h-3 rounded-md bg-amber-400 group-hover:scale-125 transition"></div>
+                    <span class="tracking-wide">SMARTFILE MOVER</span>
+                </button>
+
+                <div class="w-px h-8 bg-slate-700/50"></div>
+
+                <!-- NetMind Pro Button -->
+                <button id="btn-netmind" class="flex-1 py-3 px-4 sm:px-6 rounded-xl flex items-center justify-center gap-3 text-sm font-bold text-slate-300 hover:text-white hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/30 transition-all group">
+                    <div class="w-3 h-3 rounded-full bg-cyan-400 group-hover:scale-125 transition"></div>
+                    <span class="tracking-wide">NETMIND PRO</span>
+                </button>
+
+            </div>
+            
+            <div class="text-center mt-3 text-[11px] font-mono text-slate-400">
+                Click one the Product Orbit.
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Required 3D Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        // --- 1. PRODUCT DATA ---
+        const PRODUCTS = {
+            mover: {
+                id: 'mover',
+                name: 'SmartFile Mover',
+                tag: 'FILE AUTOMATION & ORGANIZER',
+                desc: 'A Windows file-organizing utility that helps you scan a selected drive or folder, review discovered files in an organized dashboard, then choose whether to copy or move them.',
+                color: '#f59e0b',
+                colorLight: '#fbbf24',
+                gradient: 'from-amber-500 to-orange-500',
+                tagBg: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+                features: [
+                    { icon: '⌕', title: 'Scan Files', desc: 'Scan a selected drive or folder' },
+                    { icon: '▦', title: 'Review Dashboard', desc: 'Inspect results in one place' },
+                    { icon: '⇄', title: 'Copy or Move', desc: 'Choose the file operation' },
+                    { icon: '◉', title: 'Dry Run', desc: 'Preview operations where available' },
+                    { icon: '▤', title: 'Results & Activity', desc: 'Review files and recent activity' },
+                    { icon: '⚙', title: 'Settings & Themes', desc: 'Graphite and bright themes' }
+                ]
+            },
+            netmind: {
+                id: 'netmind',
+                name: 'NetMind Pro',
+                tag: 'LAN DISCOVERY & NETWORK INTELLIGENCE',
+                desc: 'A Windows desktop application for discovering reachable devices on your local network, reviewing device information, monitoring changes, exploring inferred network relationships, and exporting scan results.',
+                website: 'https://www.mohiyaddeen.com/products/netmindpro.html',
+                visitLabel: 'Visit NetMind Pro Website',
+                color: '#06b6d4',
+                colorLight: '#38bdf8',
+                gradient: 'from-cyan-500 to-blue-500',
+                tagBg: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+                features: [
+                    { icon: '⌕', title: 'Network Scanner', desc: 'Discover reachable devices on your local network.' },
+                    { icon: '◈', title: 'Device Intelligence', desc: 'View IP, MAC, vendor, and estimated device details.' },
+                    { icon: '⌁', title: 'Multi-Subnet Discovery', desc: 'Scan supported local network ranges and subnets.' },
+                    { icon: '◎', title: 'Live Monitor', desc: 'Monitor device availability and network changes.' },
+                    { icon: '⌘', title: 'Network Topology', desc: 'Explore discovered devices and inferred relationships.' },
+                    { icon: '⚑', title: 'Security Audit', desc: 'Review security indicators and device observations.' }
+                ]
+            }
+        };
+
+        // --- 2. THREE.JS SCENE SETUP ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030712, 0.035);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const defaultCamPos = { x: 0, y: 2, z: 16 };
+        const isCompactScreen = () => window.innerWidth <= 640;
+        const isTabletScreen = () => window.innerWidth > 640 && window.innerWidth <= 900;
+        camera.position.set(defaultCamPos.x, defaultCamPos.y, defaultCamPos.z);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.3;
+        container.appendChild(renderer.domElement);
+
+        // --- 3. LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+
+        const amberLight = new THREE.PointLight(0xf59e0b, 4, 15);
+        amberLight.position.set(-4, 2, 2);
+        scene.add(amberLight);
+
+        const cyanLight = new THREE.PointLight(0x06b6d4, 4, 15);
+        cyanLight.position.set(4, 2, 2);
+        scene.add(cyanLight);
+
+        const centerLight = new THREE.DirectionalLight(0x38bdf8, 1.5);
+        centerLight.position.set(0, 10, 10);
+        scene.add(centerLight);
+
+        // --- 4. CYBER ENVIRONMENT (GRID & PARTICLES) ---
+        const gridHelper = new THREE.GridHelper(40, 50, 0x0284c7, 0x1e293b);
+        gridHelper.position.y = -3.5;
+        scene.add(gridHelper);
+
+        // Background Starfield Particles
+        const particleCount = 400;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePos = new Float32Array(particleCount * 3);
+        for(let i=0; i<particleCount*3; i+=3) {
+            particlePos[i] = (Math.random() - 0.5) * 40;
+            particlePos[i+1] = (Math.random() - 0.5) * 30;
+            particlePos[i+2] = (Math.random() - 0.5) * 30;
+        }
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+        const particleMat = new THREE.PointsMaterial({
+            color: 0x38bdf8,
+            size: 0.05,
+            transparent: true,
+            opacity: 0.5
+        });
+        const starfield = new THREE.Points(particleGeo, particleMat);
+        scene.add(starfield);
+
+        // --- 5. NODE 1: SMARTFILE MOVER (3D Glowing Data Cube Group) ---
+        const moverGroup = new THREE.Group();
+        moverGroup.position.set(-4, 0, 0);
+        scene.add(moverGroup);
+
+        // Core Glowing Cube
+        const cubeGeo = new THREE.BoxGeometry(2, 2, 2);
+        const cubeMat = new THREE.MeshStandardMaterial({
+            color: 0x1e1b4b,
+            emissive: 0xd97706,
+            emissiveIntensity: 0.6,
+            roughness: 0.2,
+            metalness: 0.8
+        });
+        const moverCore = new THREE.Mesh(cubeGeo, cubeMat);
+        moverCore.userData = { id: 'mover' };
+        moverGroup.add(moverCore);
+
+        // Official SmartFileMover logo on the front face of the rotating cube.
+        // It is parented to moverCore, so it rotates and moves with the cube.
+        // Embed the logo directly so it remains visible when the site is deployed
+        // in a subfolder or the image file is not copied alongside index.html.
+        const moverLogoTexture = new THREE.TextureLoader().load('data:image/png;base64,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');
+        moverLogoTexture.colorSpace = THREE.SRGBColorSpace;
+        moverLogoTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        const moverLogoMaterial = new THREE.MeshBasicMaterial({
+            map: moverLogoTexture,
+            transparent: true,
+            alphaTest: 0.02,
+            side: THREE.DoubleSide,
+            depthTest: true,
+            depthWrite: false,
+            toneMapped: false
+        });
+        // Put the official logo on ALL SIX faces of the cube.
+        // Each logo plane is a child of moverCore, so every face rotates with the cube.
+        // A small offset keeps the planes just above the cube and avoids z-fighting.
+        const moverLogoFaceGeo = new THREE.PlaneGeometry(1.30, 1.30);
+        const moverLogoFaceConfigs = [
+            { position: [0, 0, 1.018], rotation: [0, 0, 0] },                 // front (+Z)
+            { position: [0, 0, -1.018], rotation: [0, Math.PI, 0] },           // back (-Z)
+            { position: [1.018, 0, 0], rotation: [0, Math.PI / 2, 0] },        // right (+X)
+            { position: [-1.018, 0, 0], rotation: [0, -Math.PI / 2, 0] },      // left (-X)
+            { position: [0, 1.018, 0], rotation: [-Math.PI / 2, 0, 0] },       // top (+Y)
+            { position: [0, -1.018, 0], rotation: [Math.PI / 2, 0, 0] }        // bottom (-Y)
+        ];
+        moverLogoFaceConfigs.forEach((face) => {
+            const logoFace = new THREE.Mesh(moverLogoFaceGeo, moverLogoMaterial);
+            logoFace.position.set(...face.position);
+            logoFace.rotation.set(...face.rotation);
+            logoFace.renderOrder = 20;
+            moverCore.add(logoFace);
+        });
+
+        // Wireframe Outer Shell
+        const wireGeo = new THREE.BoxGeometry(2.3, 2.3, 2.3);
+        const wireMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, wireframe: true, transparent: true, opacity: 0.6 });
+        const moverWire = new THREE.Mesh(wireGeo, wireMat);
+        moverGroup.add(moverWire);
+
+        // Orbiting Data Packets
+        const packetGeo = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+        const packetMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24 });
+        const packets = [];
+        for(let i=0; i<8; i++) {
+            const pkt = new THREE.Mesh(packetGeo, packetMat);
+            moverGroup.add(pkt);
+            packets.push(pkt);
+        }
+
+        // --- 6. NODE 2: NETMIND PRO (3D Glowing Network Sphere Topology Group) ---
+        const netmindGroup = new THREE.Group();
+        netmindGroup.position.set(4, 0, 0);
+        scene.add(netmindGroup);
+
+        // Core Topology Sphere
+        const sphereGeo = new THREE.IcosahedronGeometry(1.4, 2);
+        const sphereMat = new THREE.MeshStandardMaterial({
+            color: 0x0369a1,
+            emissive: 0x0284c7,
+            emissiveIntensity: 0.8,
+            wireframe: true
+        });
+        const netmindCore = new THREE.Mesh(sphereGeo, sphereMat);
+        netmindCore.userData = { id: 'netmind' };
+        netmindGroup.add(netmindCore);
+
+        // Inner Glowing Core
+        const innerGeo = new THREE.SphereGeometry(0.8, 32, 32);
+        const innerMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.7 });
+        const netmindInner = new THREE.Mesh(innerGeo, innerMat);
+        netmindGroup.add(netmindInner);
+
+        // --- 6a. CENTERED 3D NETWORK MAGNIFIER INSIDE THE NETMIND SPHERE ---
+        // Adapted from the supplied standalone 3D magnifier: it shares this
+        // scene/renderer and is parented to netmindGroup, so it stays at the
+        // exact centre of the sphere while the whole product moves.
+        // Keep the inner glow subtle so the magnifier remains clearly visible.
+        netmindInner.material.opacity = 0.13;
+        const centerMagnifier = new THREE.Group();
+        const magnifierScale = 0.27;
+        centerMagnifier.scale.setScalar(magnifierScale);
+        // Centre the complete magnifier's visual bounds (including its handle).
+        centerMagnifier.position.set(-0.135, 0.135, 0.04);
+        centerMagnifier.rotation.set(Math.PI / 6, Math.PI / 6, 0);
+        netmindGroup.add(centerMagnifier);
+
+        const magnifierBlue = new THREE.MeshStandardMaterial({
+            color: 0x087bff,
+            emissive: 0x002b88,
+            emissiveIntensity: 0.65,
+            metalness: 0.58,
+            roughness: 0.22
+        });
+        const magnifierRing = new THREE.Mesh(
+            new THREE.TorusGeometry(2.0, 0.3, 32, 96), magnifierBlue
+        );
+        centerMagnifier.add(magnifierRing);
+
+        const magnifierHandleLength = 2.4;
+        const magnifierHandleGeo = new THREE.CylinderGeometry(0.28, 0.22, magnifierHandleLength, 32);
+        magnifierHandleGeo.translate(0, magnifierHandleLength / 2, 0);
+        const magnifierHandle = new THREE.Mesh(magnifierHandleGeo, magnifierBlue);
+        const magnifierAngle = -Math.PI / 4;
+        const magnifierAttachX = 2.3 * Math.cos(magnifierAngle);
+        const magnifierAttachY = 2.3 * Math.sin(magnifierAngle);
+        magnifierHandle.position.set(magnifierAttachX, magnifierAttachY, 0);
+        magnifierHandle.rotation.z = magnifierAngle - Math.PI / 2;
+        centerMagnifier.add(magnifierHandle);
+        const magnifierJoint = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 24), magnifierBlue);
+        magnifierJoint.position.set(magnifierAttachX, magnifierAttachY, 0);
+        centerMagnifier.add(magnifierJoint);
+
+        // Dense device mesh contained within the magnifier lens.
+        const centerNetwork = new THREE.Group();
+        centerMagnifier.add(centerNetwork);
+        const centerNodes = [];
+        const centerConnections = [];
+        const centerPackets = [];
+        const centerDeviceMat = new THREE.MeshStandardMaterial({
+            color: 0x42eaff, emissive: 0x006080, emissiveIntensity: 1.1,
+            metalness: 0.25, roughness: 0.35
+        });
+        const centerLineMat = new THREE.LineBasicMaterial({
+            color: 0x00bfff, transparent: true, opacity: 0.48
+        });
+        const centerDeviceTypes = ['phone', 'laptop', 'desktop', 'router'];
+        for (let i = 0; i < 24; i++) {
+            const r = Math.sqrt(Math.random()) * 1.52;
+            const theta = Math.random() * Math.PI * 2;
+            const pos = new THREE.Vector3(r * Math.cos(theta), r * Math.sin(theta), (Math.random() - 0.5) * 0.16);
+            centerNodes.push(pos);
+            const kind = centerDeviceTypes[i % centerDeviceTypes.length];
+            const dims = kind === 'phone' ? [0.10, 0.18, 0.035]
+                : kind === 'laptop' ? [0.18, 0.035, 0.12]
+                : kind === 'desktop' ? [0.10, 0.20, 0.12] : [0.15, 0.07, 0.10];
+            const device = new THREE.Mesh(new THREE.BoxGeometry(...dims), centerDeviceMat);
+            device.position.copy(pos);
+            device.rotation.set(Math.random() * 0.25, Math.random() * 0.25, Math.random() * 0.25);
+            centerNetwork.add(device);
+        }
+        for (let i = 0; i < centerNodes.length; i++) {
+            for (let j = i + 1; j < centerNodes.length; j++) {
+                if (centerNodes[i].distanceTo(centerNodes[j]) < 1.05) {
+                    const conn = { from: i, to: j };
+                    centerConnections.push(conn);
+                    const lineGeo = new THREE.BufferGeometry().setFromPoints([centerNodes[i], centerNodes[j]]);
+                    centerNetwork.add(new THREE.Line(lineGeo, centerLineMat));
+                }
+            }
+        }
+        const centerPacketGeo = new THREE.SphereGeometry(0.055, 10, 10);
+        const centerPacketMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        for (let i = 0; i < Math.min(12, centerConnections.length); i++) {
+            const packetMesh = new THREE.Mesh(centerPacketGeo, centerPacketMat);
+            centerNetwork.add(packetMesh);
+            centerPackets.push({
+                mesh: packetMesh,
+                conn: centerConnections[Math.floor(Math.random() * centerConnections.length)],
+                progress: Math.random(),
+                speed: 0.003 + Math.random() * 0.004
+            });
+        }
+
+        // Orbiting Gyroscope Ring 1
+        const ringGeo1 = new THREE.TorusGeometry(2.1, 0.03, 16, 100);
+        const ringMat1 = new THREE.MeshBasicMaterial({ color: 0x22d3ee });
+        const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
+        ring1.rotation.x = Math.PI / 3;
+        netmindGroup.add(ring1);
+
+        // Orbiting Gyroscope Ring 2
+        const ringGeo2 = new THREE.TorusGeometry(2.4, 0.02, 16, 100);
+        const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x818cf8, transparent: true, opacity: 0.6 });
+        const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+        ring2.rotation.y = Math.PI / 4;
+        netmindGroup.add(ring2);
+
+        // Network Data Beam Line connecting the two nodes
+        const beamGeo = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(-4, 0, 0),
+            new THREE.Vector3(4, 0, 0)
+        ]);
+        const beamMat = new THREE.LineDashedMaterial({
+            color: 0x38bdf8,
+            dashSize: 0.3,
+            gapSize: 0.2,
+            transparent: true,
+            opacity: 0.35
+        });
+        const beamLine = new THREE.Line(beamGeo, beamMat);
+        beamLine.computeLineDistances();
+        scene.add(beamLine);
+
+        // --- 7. INTERACTION & CAMERA LOGIC ---
+        let activeProduct = null;
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        // Mouse Drag / Orbit Variables
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let targetRotation = { x: 0, y: 0 };
+
+        window.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+            if (isDragging && !activeProduct) {
+                const deltaMove = {
+                    x: e.clientX - previousMousePosition.x,
+                    y: e.clientY - previousMousePosition.y
+                };
+
+                targetRotation.y += deltaMove.x * 0.003;
+                targetRotation.x += deltaMove.y * 0.003;
+
+                // Clamp vertical tilt
+                targetRotation.x = Math.max(-0.4, Math.min(0.4, targetRotation.x));
+
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // Touch Support
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging && e.touches.length === 1 && !activeProduct) {
+                const deltaMove = {
+                    x: e.touches[0].clientX - previousMousePosition.x,
+                    y: e.touches[0].clientY - previousMousePosition.y
+                };
+
+                targetRotation.y += deltaMove.x * 0.004;
+                targetRotation.x += deltaMove.y * 0.004;
+                previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+        });
+
+        window.addEventListener('touchend', () => { isDragging = false; });
+
+        // 3D Node Click Detection
+        window.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('#product-card')) return;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects([moverCore, netmindCore]);
+
+            if (intersects.length > 0) {
+                const productId = intersects[0].object.userData.id;
+                selectProduct(productId);
+            }
+        });
+
+        // --- 8. UI OVERLAY CONTROLS ---
+        const productCard = document.getElementById('product-card');
+        const cardTitle = document.getElementById('card-title');
+        const cardTag = document.getElementById('card-tag');
+        const cardDesc = document.getElementById('card-desc');
+        const cardFeatures = document.getElementById('card-features');
+        const cardActionBtn = document.getElementById('cardActionBtn');
+        const cardInspectBtn = document.getElementById('cardInspectBtn');
+        const cardVisitBtn = document.getElementById('cardVisitBtn');
+        const btnMover = document.getElementById('btn-mover');
+        const btnNetmind = document.getElementById('btn-netmind');
+        const closeCardBtn = document.getElementById('closeCardBtn');
+        const toggleGridBtn = document.getElementById('toggleGridBtn');
+        const resetCamBtn = document.getElementById('resetCamBtn');
+
+        function selectProduct(id) {
+            const data = PRODUCTS[id];
+            if (!data) return;
+
+            activeProduct = id;
+
+            // Update UI Card Contents
+            cardTitle.innerText = data.name;
+            cardTag.innerText = data.tag;
+            cardTag.className = `text-xs font-mono font-bold tracking-widest px-2.5 py-1 rounded-md ${data.tagBg}`;
+            cardDesc.innerText = data.desc;
+
+            cardFeatures.innerHTML = data.features.map(f => `
+                <div class="glass-pill p-3 rounded-xl border border-slate-700/50">
+                    <div class="text-base mb-1">${f.icon} <span class="font-bold text-xs text-white">${f.title}</span></div>
+                    <div class="text-[11px] text-slate-400 font-mono">${f.desc}</div>
+                </div>
+            `).join('');
+
+            cardActionBtn.className = `flex-1 py-3 px-5 rounded-xl font-bold text-sm bg-gradient-to-r ${data.gradient} text-slate-950 hover:brightness-110 shadow-lg transition flex items-center justify-center gap-2`;
+
+            // Both product popups use one website CTA; no download or secondary actions.
+            const isProductWebsiteCard = Boolean(data.website || id === 'mover');
+            cardVisitBtn.href = data.website || 'https://mohiyaddeen.com/products/smartfilemover.html';
+            cardVisitBtn.innerHTML = `${data.visitLabel || 'Visit SmartFileMover Website'} <span aria-hidden="true">↗</span>`;
+            // Match each product's identity: blue for NetMind Pro, amber for SmartFileMover.
+            cardVisitBtn.className = `hidden flex-1 py-3 px-5 rounded-xl font-bold text-sm ${id === 'netmind' ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-blue-500/20' : 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-amber-500/20'} hover:brightness-110 shadow-lg transition items-center justify-center gap-2`;
+            cardVisitBtn.classList.toggle('hidden', !isProductWebsiteCard);
+            cardVisitBtn.classList.toggle('flex', isProductWebsiteCard);
+            cardActionBtn.classList.toggle('hidden', isProductWebsiteCard);
+            cardInspectBtn.classList.toggle('hidden', isProductWebsiteCard);
+
+            // Reveal Card with GSAP Animation
+            productCard.classList.remove('hidden');
+            gsap.to(productCard, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power2.out' });
+
+            // Animate Camera Focus to Selected Node
+            const targetPos = id === 'mover' ? moverGroup.position : netmindGroup.position;
+            gsap.to(camera.position, {
+                x: targetPos.x * 0.75,
+                y: targetPos.y + 0.8,
+                z: 6.5,
+                duration: 1.2,
+                ease: 'power3.inOut'
+            });
+
+            // Highlight Active Button
+            btnMover.classList.toggle('border-amber-500/80', id === 'mover');
+            btnNetmind.classList.toggle('border-cyan-500/80', id === 'netmind');
+        }
+
+        function resetCamera() {
+            // Stop any in-progress focus/reset tweens so repeated clicks always work.
+            gsap.killTweensOf(camera.position);
+            gsap.killTweensOf(productCard);
+
+            activeProduct = null;
+
+            gsap.to(productCard, {
+                opacity: 0, y: 30, scale: 0.95, duration: 0.25,
+                onComplete: () => productCard.classList.add('hidden')
+            });
+
+            // Reset both the camera and the user-dragged scene orientation.
+            targetRotation.x = 0;
+            targetRotation.y = 0;
+            gsap.to(scene.rotation, {
+                x: 0, y: 0, z: 0,
+                duration: 1.0,
+                ease: 'power3.inOut'
+            });
+
+            gsap.to(camera.position, {
+                x: defaultCamPos.x,
+                y: defaultCamPos.y,
+                z: isCompactScreen() ? 22 : (isTabletScreen() ? 18.5 : defaultCamPos.z),
+                duration: 1.0,
+                ease: 'power3.inOut'
+            });
+
+            btnMover.classList.remove('border-amber-500/80');
+            btnNetmind.classList.remove('border-cyan-500/80');
+        }
+
+        btnMover.addEventListener('click', () => selectProduct('mover'));
+        btnNetmind.addEventListener('click', () => selectProduct('netmind'));
+        closeCardBtn.addEventListener('click', resetCamera);
+        resetCamBtn.addEventListener('click', resetCamera);
+
+        let gridVisible = true;
+        toggleGridBtn.addEventListener('click', () => {
+            gridVisible = !gridVisible;
+            gridHelper.visible = gridVisible;
+            toggleGridBtn.querySelector('span').innerText = `GRID: ${gridVisible ? 'ON' : 'OFF'}`;
+        });
+
+        // --- 9. 3D HTML LABEL MARKERS SYNCHRONIZATION ---
+        const labelMover = document.getElementById('label-mover');
+        const labelNetmind = document.getElementById('label-netmind');
+
+        function updateLabels() {
+            const tempV = new THREE.Vector3();
+
+            // Mover Label
+            moverGroup.getWorldPosition(tempV);
+            tempV.y += 1.8;
+            tempV.project(camera);
+            const x1 = (tempV.x *  .5 + .5) * window.innerWidth;
+            const y1 = (tempV.y * -.5 + .5) * window.innerHeight;
+            labelMover.style.transform = `translate(-50%, -100%) translate(${x1}px,${y1}px)`;
+            labelMover.style.opacity = (tempV.z < 1 && !activeProduct) ? 1 : 0;
+
+            // Netmind Label
+            netmindGroup.getWorldPosition(tempV);
+            tempV.y += 1.8;
+            tempV.project(camera);
+            const x2 = (tempV.x *  .5 + .5) * window.innerWidth;
+            const y2 = (tempV.y * -.5 + .5) * window.innerHeight;
+            labelNetmind.style.transform = `translate(-50%, -100%) translate(${x2}px,${y2}px)`;
+            labelNetmind.style.opacity = (tempV.z < 1 && !activeProduct) ? 1 : 0;
+        }
+
+        // --- 10. MAIN ANIMATION LOOP ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            // Continuous rotation of Node 1 (SmartFile Mover Cube)
+            moverCore.rotation.x = elapsedTime * 0.4;
+            moverCore.rotation.y = elapsedTime * 0.6;
+            moverWire.rotation.x = -elapsedTime * 0.2;
+            moverWire.rotation.y = -elapsedTime * 0.3;
+
+            // Animate Orbiting Data Packets
+            packets.forEach((pkt, idx) => {
+                const angle = elapsedTime * 1.5 + (idx * Math.PI / 4);
+                const radius = 1.8;
+                pkt.position.x = Math.cos(angle) * radius;
+                pkt.position.z = Math.sin(angle) * radius;
+                pkt.position.y = Math.sin(elapsedTime * 2 + idx) * 0.4;
+            });
+
+            // Continuous rotation of Node 2 (NetMind Pro Network Sphere)
+            netmindCore.rotation.y = elapsedTime * 0.3;
+            netmindCore.rotation.z = elapsedTime * 0.2;
+            // Animate the live data packets inside the centred magnifier.
+            centerPackets.forEach(packet => {
+                packet.progress += packet.speed;
+                if (packet.progress >= 1) {
+                    packet.progress = 0;
+                    packet.conn = centerConnections[Math.floor(Math.random() * centerConnections.length)];
+                }
+                const from = centerNodes[packet.conn.from];
+                const to = centerNodes[packet.conn.to];
+                packet.mesh.position.lerpVectors(from, to, packet.progress);
+            });
+            ring1.rotation.z = elapsedTime * 0.8;
+            ring2.rotation.x = elapsedTime * 0.6;
+
+            // Subtle Floating Motion
+            moverGroup.position.y = Math.sin(elapsedTime * 1.2) * 0.2;
+            netmindGroup.position.y = Math.cos(elapsedTime * 1.2) * 0.2;
+
+            // Smooth Drag Orbit Inertia
+            if (!activeProduct) {
+                scene.rotation.y += (targetRotation.y - scene.rotation.y) * 0.05;
+                scene.rotation.x += (targetRotation.x - scene.rotation.x) * 0.05;
+            }
+
+            // Animate Dashed Line Beam
+            beamLine.material.dashOffset = -elapsedTime * 1.2;
+
+            updateLabels();
+            renderer.render(scene, camera);
+        }
+
+        // Window Resize Handler
+        function handleResponsiveScene() {
+            const compact = isCompactScreen();
+            const tablet = isTabletScreen();
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.fov = compact ? 52 : (tablet ? 48 : 45);
+            camera.position.z = compact ? 22 : (tablet ? 18.5 : (activeProduct ? camera.position.z : defaultCamPos.z));
+            moverGroup.position.x = compact ? -2.65 : (tablet ? -3.35 : -4);
+            netmindGroup.position.x = compact ? 2.65 : (tablet ? 3.35 : 4);
+            beamGeo.setFromPoints([new THREE.Vector3(moverGroup.position.x, 0, 0), new THREE.Vector3(netmindGroup.position.x, 0, 0)]);
+            beamLine.computeLineDistances();
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, compact ? 1.5 : 2));
+        }
+        window.addEventListener('resize', handleResponsiveScene);
+        handleResponsiveScene();
+
+        // Start Loop
+        animate();
+    </script>
+</body>
+</html>
