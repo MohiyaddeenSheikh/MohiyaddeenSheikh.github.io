@@ -216,6 +216,11 @@ a {
         border-radius: 1.5rem 1.5rem 0,0;
         transition: .3s;
     }
+        .mobile-products-button {
+        display: inline-flex;
+        margin-left: 0.5rem;
+        vertical-align: middle;
+    }
 }
 
 
@@ -1213,10 +1218,3 @@ transform: translate(.55rem);
     display: none;
 }
 
-@media screen and (max-width: 767px) {
-    .mobile-products-button {
-        display: inline-flex;
-        margin-left: 0.5rem;
-        vertical-align: middle;
-    }
-}
