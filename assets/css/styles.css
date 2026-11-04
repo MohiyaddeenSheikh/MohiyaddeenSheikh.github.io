@@ -1207,3 +1207,16 @@ transform: translate(.55rem);
     font-family: "Times New Roman", Times, serif;
     /* margin-right: .75em; */
   }
+
+  /* Products button: visible only on mobile */
+.mobile-products-button {
+    display: none;
+}
+
+@media screen and (max-width: 767px) {
+    .mobile-products-button {
+        display: inline-flex;
+        margin-left: 0.5rem;
+        vertical-align: middle;
+    }
+}
