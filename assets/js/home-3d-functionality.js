@@ -44,30 +44,40 @@ import { createGraduationCap } from "./home-3d-shape.js";
     // 1. SETTINGS
     // =====================================================
 
-    const DEFAULT_SETTINGS = {
-        size: 100,
-        x: 0,
-        y: -10,
-        tilt: 24,
-        visible: true,
-        theme: "classic",
-        autoRotate: false,
-        movementMode: "straight"
-    };
+ const DEFAULT_SETTINGS = {
+    size: 42,
+    x: -4,
+    y: -21,
+    tilt: 4,
+    visible: true,
+    theme: "classic",
+    autoRotate: false,
+    movementMode: "random"
+};
 
-    let settings = { ...DEFAULT_SETTINGS };
+let settings = { ...DEFAULT_SETTINGS };
 
-    try {
-        const saved = JSON.parse(
-            localStorage.getItem("portfolio-cap-settings")
-        );
+try {
+    const saved = JSON.parse(
+        localStorage.getItem("portfolio-cap-settings")
+    );
 
-        if (saved && typeof saved === "object") {
-            settings = { ...DEFAULT_SETTINGS, ...saved };
+    if (saved && typeof saved === "object") {
+        settings = { ...DEFAULT_SETTINGS, ...saved };
+
+        // Migrate old 100% default to 42%.
+        if (Number(saved.size) === 100) {
+            settings.size = 42;
         }
-    } catch (error) {
-        console.warn("Could not load saved cap settings.");
+
+        localStorage.setItem(
+            "portfolio-cap-settings",
+            JSON.stringify(settings)
+        );
     }
+} catch (error) {
+    console.warn("Could not load cap settings:", error);
+}
 
     const THEMES = {
         classic: {
@@ -592,13 +602,13 @@ function updateCapPosition() {
 
     // Find all section headings
     const headings = Array.from(
-        document.querySelectorAll(
-            ".section[id] .section__title"
-        )
-    ).filter(el => {
-        const r = el.getBoundingClientRect();
-        return r.width > 0 && r.height > 0;
-    });
+    document.querySelectorAll(
+        ".section[id] .section__title, .footer .footer__title"
+    )
+).filter(el => {
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height-10 > 0;
+});
 
     // Store heading positions in document coordinates
     const destinations = headings.map(el => {

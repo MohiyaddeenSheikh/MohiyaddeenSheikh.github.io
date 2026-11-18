@@ -44,28 +44,38 @@ import * as THREE from
     // =====================================================
 
     const DEFAULT_SETTINGS = {
-        size: 100,
-        x: 0,
-        y: -10,
-        tilt: 24,
-        visible: true,
-        theme: "classic",
-        autoRotate: false
-    };
+    size: 42,
+    x: -4,
+    y: -31,
+    tilt: 4,
+    visible: true,
+    theme: "classic",
+    autoRotate: false
+};
 
-    let settings = { ...DEFAULT_SETTINGS };
+let settings = { ...DEFAULT_SETTINGS };
 
-    try {
-        const saved = JSON.parse(
-            localStorage.getItem("portfolio-cap-settings")
-        );
+try {
+    const saved = JSON.parse(
+        localStorage.getItem("portfolio-cap-settings")
+    );
 
-        if (saved && typeof saved === "object") {
-            settings = { ...DEFAULT_SETTINGS, ...saved };
+    if (saved && typeof saved === "object") {
+        settings = { ...DEFAULT_SETTINGS, ...saved };
+
+        // Migrate the old 100% default to the new 42% default.
+        if (Number(saved.size) === 100) {
+            settings.size = 42;
+
+            localStorage.setItem(
+                "portfolio-cap-settings",
+                JSON.stringify(settings)
+            );
         }
-    } catch (error) {
-        console.warn("Could not load saved cap settings.");
     }
+} catch (error) {
+    console.warn("Could not load cap settings:", error);
+}
 
     const THEMES = {
         classic: {
@@ -297,7 +307,7 @@ import * as THREE from
                     <output id="cap-size-value"></output>
                 </label>
                 <input id="cap-size" type="range"
-                    min="55" max="150" value="${settings.size}">
+                    min="30" max="150" value="${settings.size}">
             </div>
 
             <div class="portfolio-cap-control">
@@ -1274,11 +1284,16 @@ import * as THREE from
             ease
         );
 
-        capModel.rotation.set(
-            tiltRotation,
-            userRotation,
-            0
-        );
+        // Smooth random graduation cap movement
+const randomX = Math.sin(elapsed * 0.7) * 0.035;
+const randomY = Math.sin(elapsed * 0.45) * 0.025;
+const randomTilt = Math.sin(elapsed * 0.55) * 0.025;
+
+capModel.rotation.set(
+    tiltRotation + randomX,
+    userRotation + randomY,
+    randomTilt
+);
 
         updateTassel(dt, elapsed);
 
