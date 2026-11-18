@@ -4838,3 +4838,24 @@ transform: translate(.55rem);
     }
 
 }
+/* Hide Contact button next to Products on mobile only */
+@media screen and (max-width: 767px) {
+    .profile-contact-btn {
+        display: none !important;
+    }
+
+    .profile-products-btn {
+        flex: 1;
+    }
+}
+.profile-products-btn {
+    background: #6e57e0 !important;
+    color: #ffffff !important;
+    border: 1px solid #6e57e0 !important;
+}
+
+.profile-products-btn:hover {
+    background: #806cf0 !important;
+    border-color: #806cf0 !important;
+    transform: translateY(-2px);
+}
