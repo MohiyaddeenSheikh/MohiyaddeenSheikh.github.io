@@ -216,11 +216,6 @@ a {
         border-radius: 1.5rem 1.5rem 0,0;
         transition: .3s;
     }
-        .mobile-products-button {
-        display: inline-flex;
-        margin-left: 0.5rem;
-        vertical-align: middle;
-    }
 }
 
 
@@ -1213,8 +1208,3633 @@ transform: translate(.55rem);
     /* margin-right: .75em; */
   }
 
-  /* Products button: visible only on mobile */
-.mobile-products-button {
+/*==================== INTERACTIVE 3D GRADUATION CAP ====================*/
+.home__img { position: relative; isolation: isolate; overflow: visible; }
+.home__blob { position: relative; z-index: 1; display: block; }
+#home-3d-canvas.home-3d-canvas {
+    position: fixed !important; inset: 0 !important;
+    width: 100vw !important; height: 100vh !important;
+    display: block !important; z-index: 2147483000 !important;
+    pointer-events: none !important; background: transparent !important;
+}
+.cap-settings-root {
+    position: fixed; right: 18px; bottom: 18px; z-index: 2147483647;
+    font-family: inherit; color: var(--title-color, #222);
+}
+.cap-settings-trigger {
+    width: 48px; height: 48px; border: 0; border-radius: 50%; cursor: pointer;
+    display: grid; place-items: center; font-size: 22px;
+    color: #fff; background: var(--first-color, #6e57e0);
+    box-shadow: 0 5px 22px rgba(0,0,0,.24); transition: transform .2s, filter .2s;
+}
+.cap-settings-trigger:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.cap-settings-panel {
+    position: absolute; right: 0; bottom: 60px; width: min(330px, calc(100vw - 32px));
+    max-height: min(78vh, 680px); overflow-y: auto; padding: 17px;
+    border-radius: 16px; background: var(--container-color, #fff);
+    color: var(--title-color, #222); border: 1px solid rgba(120,120,120,.22);
+    box-shadow: 0 14px 45px rgba(0,0,0,.24); backdrop-filter: blur(18px);
+    opacity: 0; visibility: hidden; transform: translateY(8px) scale(.98);
+    transform-origin: bottom right; transition: .2s ease;
+}
+.cap-settings-root.is-open .cap-settings-panel { opacity: 1; visibility: visible; transform: none; }
+.cap-settings-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:13px; }
+.cap-settings-heading h3 { margin:0; font-size:16px; font-weight:700; }
+.cap-settings-close { border:0; background:transparent; color:inherit; cursor:pointer; font-size:25px; line-height:1; }
+.cap-setting-row { display:grid; grid-template-columns:1fr auto; gap:5px 10px; margin:12px 0; font-size:13px; }
+.cap-setting-row output { opacity:.72; font-variant-numeric:tabular-nums; }
+.cap-setting-row input { grid-column:1 / -1; width:100%; accent-color:var(--first-color, #6e57e0); cursor:pointer; }
+.cap-setting-toggle { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:13px 0; font-size:13px; }
+.cap-setting-toggle input { accent-color:var(--first-color, #6e57e0); }
+.cap-theme-label { display:block; font-size:13px; margin:14px 0 8px; font-weight:600; }
+.cap-theme-swatches { display:flex; flex-wrap:wrap; gap:9px; }
+.cap-theme-swatch { width:29px; height:29px; border-radius:50%; border:2px solid rgba(120,120,120,.35); cursor:pointer; position:relative; }
+.cap-theme-swatch[aria-pressed="true"] { outline:2px solid var(--first-color, #6e57e0); outline-offset:3px; }
+.cap-control-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+.cap-control-actions button, .cap-settings-actions button {
+    border:0; border-radius:9px; padding:9px 10px; cursor:pointer; font:inherit; font-size:12px;
+    color:#fff; background:var(--first-color, #6e57e0);
+}
+.cap-control-actions button.secondary, .cap-settings-actions button.secondary { background:rgba(120,120,120,.18); color:inherit; }
+.cap-settings-actions { display:flex; gap:8px; margin-top:10px; }
+.cap-settings-actions button { flex:1; }
+.cap-settings-hint { margin:12px 0 0; font-size:11px; line-height:1.5; opacity:.68; }
+@media (max-width: 480px) {
+    .cap-settings-root { right:12px; bottom:12px; }
+    .cap-settings-trigger { width:44px; height:44px; }
+    .cap-settings-panel { bottom:54px; }
+}
+/* =========================================
+   DEVELOPER EDITOR - HERO INTRODUCTION
+========================================= */
+
+.dev-editor {
+    width: 100%;
+    max-width: 650px;
+    margin: 15px 0 25px;
+    overflow: hidden;
+    border-radius: 13px;
+    background: #171923;
+    color: #d4d4d4;
+    border: 1px solid #343746;
+    box-shadow: 0 20px 55px rgba(0, 0, 0, .22);
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+}
+
+/* Window bar */
+
+.dev-editor__top {
+    height: 43px;
+    background: #222530;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    border-bottom: 1px solid #343746;
+}
+
+.dev-editor__dots {
+    display: flex;
+    gap: 7px;
+}
+
+.dev-editor__dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dev-editor__dots span:nth-child(1) {
+    background: #ff5f57;
+}
+
+.dev-editor__dots span:nth-child(2) {
+    background: #febc2e;
+}
+
+.dev-editor__dots span:nth-child(3) {
+    background: #28c840;
+}
+
+.dev-editor__window-title {
+    color: #aeb4c2;
+    font-size: 11px;
+}
+
+.dev-editor__top-icon {
+    color: #9ca3af;
+}
+
+/* Editor body */
+
+.dev-editor__body {
+    display: flex;
+    min-height: 370px;
+}
+
+.dev-editor__sidebar {
+    width: 43px;
+    flex-shrink: 0;
+    background: #1c1f2a;
+    border-right: 1px solid #343746;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 24px;
+    padding-top: 19px;
+    color: #858b9b;
+    font-size: 19px;
+}
+
+.dev-editor__sidebar .active {
+    color: #fff;
+    border-left: 2px solid #8b70ff;
+    padding-left: 9px;
+}
+
+/* Main editor */
+
+.dev-editor__main {
+    flex: 1;
+    min-width: 0;
+}
+
+.dev-editor__tabs {
+    height: 39px;
+    display: flex;
+    background: #20232e;
+    border-bottom: 1px solid #343746;
+}
+
+.dev-editor__tab {
+    padding: 11px 15px;
+    font-size: 11px;
+    color: #9ca3af;
+    border-right: 1px solid #343746;
+}
+
+.dev-editor__tab.active {
+    color: #fff;
+    background: #171923;
+    border-top: 2px solid #8b70ff;
+}
+
+.dev-editor__breadcrumb {
+    padding: 10px 18px;
+    color: #858b9b;
+    font-size: 10px;
+}
+
+/* Code */
+
+.dev-editor__code {
+    padding: 8px 15px 17px;
+    line-height: 1.85;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.line-no {
+    display: inline-block;
+    width: 27px;
+    color: #656b7a;
+    user-select: none;
+}
+
+.code-purple {
+    color: #c792ea;
+}
+
+.code-yellow {
+    color: #ffcb6b;
+}
+
+.code-blue {
+    color: #82aaff;
+}
+
+.code-green {
+    color: #c3e88d;
+}
+
+.code-comment {
+    color: #7f9f79;
+    font-style: italic;
+}
+
+/* Blinking cursor */
+
+.dev-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 15px;
+    background: #a78bfa;
+    vertical-align: middle;
+    animation: devCursorBlink 1s steps(2) infinite;
+}
+
+@keyframes devCursorBlink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Terminal */
+
+.dev-editor__terminal {
+    border-top: 1px solid #343746;
+    background: #141720;
+}
+
+.dev-terminal__heading {
+    display: flex;
+    gap: 22px;
+    padding: 11px 15px;
+    border-bottom: 1px solid #343746;
+    font-size: 9px;
+    color: #aeb4c2;
+    letter-spacing: 1px;
+}
+
+.dev-terminal__heading span:first-child {
+    color: #fff;
+    border-bottom: 2px solid #8b70ff;
+    padding-bottom: 5px;
+}
+
+.dev-terminal__content {
+    padding: 12px 16px 15px;
+    line-height: 1.9;
+    font-size: 11px;
+}
+
+.terminal-green {
+    color: #9ece6a;
+}
+
+.terminal-muted {
+    color: #9298a7;
+}
+
+/* Status bar */
+
+.dev-editor__status {
+    min-height: 25px;
+    background: #6551c9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 12px;
+    color: white;
+    font-size: 9px;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 568px) {
+
+    .dev-editor {
+        margin-top: 15px;
+        border-radius: 10px;
+    }
+
+    .dev-editor__body {
+        min-height: auto;
+    }
+
+    .dev-editor__code {
+        font-size: 10px;
+        line-height: 1.8;
+        padding-left: 8px;
+    }
+
+    .dev-editor__sidebar {
+        width: 34px;
+        font-size: 16px;
+    }
+
+    .dev-editor__tab {
+        padding: 11px 9px;
+        font-size: 9px;
+    }
+
+    .dev-terminal__content {
+        font-size: 9px;
+    }
+
+    .dev-editor__status {
+        font-size: 8px;
+    }
+}
+
+/* ==========================================
+   MINIMIZED VS CODE PROFILE
+========================================== */
+
+.vscode-launcher {
+    width: 100%;
+    margin: 15px 0 25px;
+}
+
+.vscode-mini-window {
+    max-width: 340px;
+    background: #171923;
+    color: #ddd;
+    border: 1px solid #343746;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    font-family: Consolas, monospace;
+}
+
+.vscode-mini-titlebar {
+    height: 32px;
+    background: #222530;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 10px;
+    font-size: 10px;
+    color: #c4c7d0;
+}
+
+.vscode-mini-dots {
+    display: flex;
+    gap: 5px;
+}
+
+.vscode-mini-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.vscode-mini-dots span:nth-child(1) {
+    background: #ff5f57;
+}
+
+.vscode-mini-dots span:nth-child(2) {
+    background: #febc2e;
+}
+
+.vscode-mini-dots span:nth-child(3) {
+    background: #28c840;
+}
+
+.vscode-open-button {
+    width: 100%;
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 15px;
+    border: 0;
+    background: #171923;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .25s;
+}
+
+.vscode-open-button:hover {
+    background: #292d3b;
+}
+
+.vscode-open-button > i:first-child {
+    font-size: 30px;
+    color: #62aaff;
+}
+
+.vscode-open-button > i:last-child {
+    margin-left: auto;
+    font-size: 19px;
+    color: #a78bfa;
+}
+
+.vscode-open-button span {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.vscode-open-button strong {
+    font-size: 12px;
+}
+
+.vscode-open-button small {
+    font-size: 10px;
+    color: #9298a7;
+}
+
+.vscode-mini-status {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: #6551c9;
+    color: white;
+    font-size: 9px;
+}
+
+
+/* ==========================================
+   FULLSCREEN VS CODE WINDOW
+========================================== */
+
+.vscode-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: none;
+    background: #171923;
+    font-family: Consolas, "Courier New", monospace;
+}
+
+.vscode-fullscreen.open {
+    display: flex;
+}
+
+.vscode-window {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: #d4d4d4;
+    background: #171923;
+}
+
+
+/* Titlebar */
+
+.vscode-titlebar {
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #222530;
+    border-bottom: 1px solid #343746;
+    padding: 0 12px;
+    gap: 12px;
+}
+
+.vscode-titlebar-left {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+}
+
+.vscode-app-icon {
+    color: #62aaff;
+    font-size: 19px;
+}
+
+.vscode-titlebar-center {
+    color: #aeb4c2;
+    font-size: 11px;
+}
+
+.vscode-window-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.vscode-window-controls button {
+    width: 35px;
+    height: 30px;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.vscode-window-controls button:hover {
+    background: #3b4050;
+}
+
+#vscode-close:hover {
+    background: #d94848;
+}
+
+
+/* Main layout */
+
+.vscode-layout {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.vscode-activity {
+    width: 55px;
+    flex-shrink: 0;
+    background: #1c1f2a;
+    border-right: 1px solid #343746;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 28px;
+    padding-top: 22px;
+    font-size: 22px;
+    color: #858b9b;
+}
+
+.vscode-activity .active {
+    color: white;
+    border-left: 2px solid #8b70ff;
+    padding-left: 12px;
+}
+
+.vscode-explorer {
+    width: 220px;
+    flex-shrink: 0;
+    background: #1c1f2a;
+    border-right: 1px solid #343746;
+    padding: 20px 12px;
+    font-size: 11px;
+}
+
+.vscode-explorer h4 {
+    font-size: 11px;
+    font-weight: normal;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
+
+.vscode-explorer p {
+    color: #aeb4c2;
+    margin-bottom: 12px;
+}
+
+.vscode-file {
+    padding: 10px 8px;
+    color: #b8becb;
+}
+
+.vscode-file i {
+    margin-right: 8px;
+    color: #82aaff;
+}
+
+.vscode-file.active {
+    background: #303547;
+    color: white;
+}
+
+
+/* Main editor */
+
+.vscode-editor-main {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    background: #171923;
+}
+
+.vscode-tabs {
+    height: 43px;
+    background: #20232e;
+    border-bottom: 1px solid #343746;
+    display: flex;
+}
+
+.vscode-tab {
+    padding: 13px 18px;
+    font-size: 11px;
+    background: #171923;
+    border-top: 2px solid #8b70ff;
+}
+
+.vscode-tab i {
+    color: #62aaff;
+    margin-right: 7px;
+}
+
+.vscode-tab span {
+    margin-left: 20px;
+}
+
+.vscode-breadcrumb {
+    padding: 13px 25px;
+    color: #858b9b;
+    font-size: 11px;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+}
+
+
+/* Code area */
+
+.vscode-content {
+    padding: 25px 35px 60px;
+    font-size: 13px;
+    line-height: 2;
+}
+
+.vscode-code-heading,
+.vscode-code-line {
+    white-space: nowrap;
+    min-height: 27px;
+}
+
+.vscode-code-line > span:first-child,
+.vscode-code-heading > span:first-child {
+    display: inline-block;
+    width: 35px;
+    color: #626b7d;
+    font-size: 11px;
+}
+
+.v-purple {
+    color: #c792ea;
+}
+
+.v-yellow {
+    color: #ffcb6b;
+}
+
+.v-blue {
+    color: #82aaff;
+}
+
+.v-green {
+    color: #c3e88d;
+}
+
+.v-comment {
+    color: #7f9f79;
+}
+
+
+/* Profile sections */
+
+.vscode-section {
+    margin: 40px 0 20px 35px;
+    max-width: 850px;
+}
+
+.vscode-section h2 {
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 15px;
+}
+
+.vscode-info-card {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 13px 17px;
+    margin: 9px 0;
+    border: 1px solid #343746;
+    border-left: 3px solid #8b70ff;
+    background: #20232e;
+    border-radius: 5px;
+}
+
+.vscode-info-card strong {
+    color: #e6e6e6;
+    font-size: 13px;
+}
+
+.vscode-info-card span {
+    color: #aeb4c2;
+    font-size: 12px;
+}
+
+.vscode-info-card small {
+    color: #8b91a1;
+    font-size: 10px;
+}
+
+.vscode-final-code {
+    margin: 35px 0 0 35px;
+    white-space: nowrap;
+}
+
+.v-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 16px;
+    background: #a78bfa;
+    vertical-align: middle;
+    animation: vscodeBlink 1s steps(2) infinite;
+}
+
+@keyframes vscodeBlink {
+    50% { opacity: 0; }
+}
+
+
+/* Bottom status */
+
+.vscode-statusbar {
+    height: 25px;
+    flex-shrink: 0;
+    background: #6551c9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 13px;
+    font-size: 10px;
+    color: white;
+}
+
+
+/* Responsive */
+
+@media(max-width:700px) {
+
+    .vscode-explorer {
+        display: none;
+    }
+
+    .vscode-activity {
+        width: 38px;
+        font-size: 18px;
+    }
+
+    .vscode-titlebar-center {
+        display: none;
+    }
+
+    .vscode-content {
+        padding: 18px 12px 40px;
+        font-size: 11px;
+    }
+
+    .vscode-section {
+        margin-left: 10px;
+    }
+
+    .vscode-final-code {
+        margin-left: 10px;
+        font-size: 11px;
+    }
+
+    .vscode-statusbar {
+        font-size: 8px;
+        gap: 8px;
+    }
+}
+
+
+.py-comment {
+    color: #6a9955;
+}
+.vscode-python-code {
+    display: block;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    line-height: 1.8;
+    white-space: normal;
+}
+
+.py-comment {
+    color: #6a9955;
+}
+
+.vscode-typing-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 13px;
+    background: #6a9955;
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: vscodeTypingBlink .8s steps(2) infinite;
+}
+
+@keyframes vscodeTypingBlink {
+    50% {
+        opacity: 0;
+    }
+}
+/* Fit the complete introduction on one screen */
+@media screen and (min-width: 768px) {
+
+    #home.home {
+        min-height: 100vh;
+        padding: 0.5rem 0 0 !important;
+        display: flex;
+        align-items: center;
+    }
+
+    #home .home__container {
+        width: 100%;
+        row-gap: 0.5rem;
+    }
+
+    #home .home__content {
+        padding-top: 0 !important;
+        column-gap: 1.5rem;
+        align-items: center;
+    }
+
+    #home .home__blob {
+        width: 220px !important;
+    }
+
+    #home .home__scroll {
+        display: none;
+    }
+
+    #home .home__title {
+        margin-bottom: 0.3rem;
+    }
+
+    #home .home__subtitle {
+        margin-bottom: 0.5rem;
+    }
+
+    #home .vscode-launcher {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    #home .button {
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* ===== Attractive Developer Profile Card ===== */
+
+.vscode-mini-window {
+    position: relative;
+    isolation: isolate;
+    max-width: 390px;
+    background: #171923;
+    color: #ddd;
+    border: 1px solid var(--first-color-lighter);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:
+        0 8px 26px hsla(var(--hue-color, 250), 69%, 61%, .28),
+        0 0 0 0 hsla(var(--hue-color, 250), 69%, 61%, .35);
+
+    animation:
+        vscodeWindowFloat 3.4s ease-in-out infinite,
+        vscodeWindowPulse 2.8s ease-out infinite;
+
+    font-family: Consolas, monospace;
+}
+
+@keyframes vscodeWindowFloat {
+    0%, 100% {
+        translate: 0 0;
+    }
+    50% {
+        translate: 0 -7px;
+    }
+}
+
+@keyframes vscodeWindowPulse {
+    0% {
+        box-shadow:
+            0 8px 26px hsla(var(--hue-color, 250), 69%, 61%, .28),
+            0 0 0 0 hsla(var(--hue-color, 250), 69%, 61%, .35);
+    }
+    70% {
+        box-shadow:
+            0 8px 26px hsla(var(--hue-color, 250), 69%, 61%, .28),
+            0 0 0 11px hsla(var(--hue-color, 250), 69%, 61%, 0);
+    }
+    100% {
+        box-shadow:
+            0 8px 26px hsla(var(--hue-color, 250), 69%, 61%, .28),
+            0 0 0 0 hsla(var(--hue-color, 250), 69%, 61%, 0);
+    }
+}
+
+.vscode-open-button {
+    min-height: auto;
+    padding: 18px;
+    display: block;
+    background: #171923;
+    text-align: left;
+}
+
+.vscode-open-button:hover {
+    background: #202432;
+}
+
+.profile-card-content {
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.profile-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-avatar {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6e57e0, #38bdf8);
+    color: white;
+    font-size: 23px;
+}
+
+.profile-card-heading h3 {
+    color: #ffffff;
+    font-size: 15px;
+    margin: 0;
+}
+
+.profile-card-heading span:not(.profile-online-dot) {
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+.profile-online-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #22c55e;
+    margin-left: auto;
+    box-shadow: 0 0 10px #22c55e;
+}
+
+.profile-card-description {
+    color: #b9c0d0;
+    font-size: 11px;
+    line-height: 1.7;
+    margin: 17px 0;
+}
+
+.profile-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.profile-tech-tags span {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 5px;
+    background: #292d3b;
+    color: #82aaff;
+    font-size: 9px;
+}
+
+.profile-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: 17px;
+    padding-top: 12px;
+    border-top: 1px solid #343746;
+    font-size: 9px;
+}
+
+.profile-card-footer > span:first-child {
+    color: #86d993;
+}
+
+.profile-explore {
+    color: #c4b5fd;
+}
+
+.profile-explore i {
+    margin-left: 3px;
+}
+
+/* Contact and Products buttons inside VS Code card */
+
+.profile-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #343746;
+}
+
+.profile-card-actions a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 8px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.profile-contact-btn {
+    background: #6e57e0;
+    color: #ffffff !important;
+}
+
+.profile-contact-btn:hover {
+    background: #806cf0;
+    transform: translateY(-2px);
+}
+
+.profile-products-btn {
+    background: #292d3b;
+    color: #c4b5fd !important;
+    border: 1px solid #454052;
+}
+
+.profile-products-btn:hover {
+    background: #373249;
+    transform: translateY(-2px);
+}
+
+.profile-card-actions i {
+    font-size: 15px;
+}
+
+/* Prevent old button styles from affecting the card */
+.profile-card-content {
+    width: 100%;
+    cursor: default;
+}
+
+.profile-card-content:hover {
+    background: transparent;
+}
+
+/* =========================================
+   PREMIUM GOOGLE SCHOLAR + GITHUB BUTTONS
+========================================= */
+
+.home__social {
+    gap: 18px;
+}
+
+.home__social-icon.social-google,
+.home__social-icon.social-github {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: var(--container-color);
+    border: 1px solid rgba(130, 130, 130, .2);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .10);
+    transition: transform .3s ease, box-shadow .3s ease,
+                border-color .3s ease;
+}
+
+.home__social-icon.social-google svg {
+    width: 29px;
+    height: 29px;
+}
+
+.home__social-icon.social-github {
+    color: #171717;
+}
+
+.dark-theme .home__social-icon.social-github {
+    color: #fff;
+}
+
+.home__social-icon.social-github svg {
+    width: 27px;
+    height: 27px;
+}
+
+.home__social-icon.social-google:hover,
+.home__social-icon.social-github:hover {
+    transform: translateY(-6px) scale(1.08);
+    box-shadow: 0 12px 28px rgba(110, 87, 224, .25);
+    border-color: var(--first-color);
+}
+
+.home__social-icon.social-google:hover {
+    background: #fff;
+}
+
+.home__social-icon.social-github:hover {
+    background: #24292f;
+    color: #fff;
+}
+
+/* =========================================
+   PREMIUM FLOATING PRODUCTS BUTTON
+========================================= */
+
+.products-float-link {
+    position: fixed !important;
+    left: 18px !important;
+    top: 50% !important;
+    z-index: 2147483647 !important;
+
+    display: flex !important;
+    align-items: center;
+    gap: 11px;
+
+    padding: 10px 19px 10px 11px;
+    border-radius: 18px;
+
+    color: #fff !important;
+    text-decoration: none;
+
+    background: rgba(35, 30, 65, .88) !important;
+    border: 1px solid transparent !important;
+
+    background-image:
+        linear-gradient(rgba(35, 30, 65, .96), rgba(35, 30, 65, .96)),
+        linear-gradient(120deg, #4285f4, #9b59ff, #ec4899, #fbbc05, #4285f4) !important;
+
+    background-origin: border-box !important;
+    background-clip: padding-box, border-box !important;
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    box-shadow:
+        0 8px 30px rgba(110, 87, 224, .28),
+        0 0 18px rgba(110, 87, 224, .12);
+
+    animation:
+        productsFloat 3.4s ease-in-out infinite,
+        productsGlow 2.8s ease-out infinite;
+
+    transition: background .3s ease, box-shadow .3s ease,
+                opacity .22s ease, visibility .22s ease;
+
+    overflow: hidden;
+}
+
+.products-float-link .products-float-icon {
+    width: 37px !important;
+    height: 37px !important;
+    display: grid !important;
+    place-items: center;
+
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #8066ff, #5135c9) !important;
+
+    color: #fff !important;
+    font-size: 20px !important;
+
+    box-shadow: 0 4px 14px rgba(110, 87, 224, .4);
+}
+
+.products-float-link .products-float-label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .3px;
+}
+
+.products-float-link:hover {
+    transform: translateY(-50%) scale(1.06);
+    box-shadow:
+        0 12px 35px rgba(110, 87, 224, .4),
+        0 0 25px rgba(110, 87, 224, .3);
+}
+
+@keyframes productsFloat {
+    0%, 100% {
+        translate: 0 0;
+    }
+    50% {
+        translate: 0 -7px;
+    }
+}
+
+@keyframes productsGlow {
+    0%, 100% {
+        box-shadow: 0 8px 30px rgba(110, 87, 224, .28);
+    }
+    50% {
+        box-shadow:
+            0 8px 30px rgba(110, 87, 224, .35),
+            0 0 18px rgba(150, 110, 255, .3);
+    }
+}
+
+@media (max-width: 600px) {
+    .products-float-link {
+        left: 9px !important;
+        padding: 8px 12px 8px 8px;
+    }
+
+    .products-float-link .products-float-icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .products-float-link .products-float-label {
+        font-size: 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .products-float-link {
+        animation: none !important;
+    }
+}
+
+
+/* Move floating Products button away from social icons */
+.products-float-link {
+    top: auto !important;
+    bottom: 100px !important;
+    left: 18px !important;
+    transform: none !important;
+}
+
+/* Keep hover effect */
+.products-float-link:hover {
+    transform: translateY(-5px) scale(1.05) !important;
+}
+
+@media (max-width: 600px) {
+    .products-float-link {
+        left: 10px !important;
+        bottom: 85px !important;
+    }
+}
+/* =========================================
+   GOOGLE SCHOLAR + GITHUB
+   VS CODE STYLE FLOATING BORDER ANIMATION
+========================================= */
+
+.home__social-icon.social-google,
+.home__social-icon.social-github {
+    position: relative;
+    isolation: isolate;
+    overflow: visible;
+
+    border: 1px solid var(--first-color-lighter) !important;
+    border-radius: 16px;
+
+    animation:
+        socialFloat 3.4s ease-in-out infinite,
+        socialPulse 2.8s ease-out infinite;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+}
+
+/* Slightly different timing for each button */
+.home__social-icon.social-github {
+    animation-delay: .35s, .35s;
+}
+
+/* Floating movement */
+@keyframes socialFloat {
+    0%, 100% {
+        translate: 0 0;
+    }
+
+    50% {
+        translate: 0 -7px;
+    }
+}
+
+/* Glowing border pulse */
+@keyframes socialPulse {
+    0% {
+        box-shadow:
+            0 8px 26px hsla(var(--hue-color, 250), 69%, 61%, .28),
+            0 0 0 0 hsla(var(--hue-color, 250), 69%, 61%, .35);
+    }
+
+    70% {
+        box-shadow:
+            0 8px 26px hsla(var(--hue-color, 250), 69%, 61%, .28),
+            0 0 0 11px hsla(var(--hue-color, 250), 69%, 61%, 0);
+    }
+
+    100% {
+        box-shadow:
+            0 8px 26px hsla(var(--hue-color, 250), 69%, 61%, .28),
+            0 0 0 0 hsla(var(--hue-color, 250), 69%, 61%, 0);
+    }
+}
+
+/* Hover effect */
+.home__social-icon.social-google:hover,
+.home__social-icon.social-github:hover {
+    scale: 1.12;
+    border-color: var(--first-color) !important;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .home__social-icon.social-google,
+    .home__social-icon.social-github {
+        animation: none !important;
+    }
+}
+
+/* =========================================
+   ANIMATED GLOWING BORDER - PROFILE SHAPE
+========================================= */
+
+.home__blob {
+    animation: blobBorderGlow 2.8s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes blobBorderGlow {
+    0%, 100% {
+        filter:
+            drop-shadow(0 0 3px rgba(110, 87, 224, .35))
+            drop-shadow(0 0 8px rgba(110, 87, 224, .15));
+    }
+
+    50% {
+        filter:
+            drop-shadow(0 0 5px rgba(110, 87, 224, .75))
+            drop-shadow(0 0 16px rgba(110, 87, 224, .45))
+            drop-shadow(0 0 25px rgba(150, 110, 255, .25));
+    }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .home__blob {
+        animation: none !important;
+    }
+}
+
+/* Disable old fixed Products shortcut */
+
+
+/* =========================================
+   PRODUCTS BUTTON - MATCH SOCIAL BUTTONS
+========================================= */
+
+.home__social-icon.social-products {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+
+    font-size: 25px;
+    color: #fff !important;
+
+    background: var(--container-color);
+    border: 1px solid var(--first-color-lighter);
+    border-radius: 16px;
+
+    animation:
+        socialFloat 3.4s ease-in-out infinite,
+        socialPulse 2.8s ease-out infinite;
+
+    animation-delay: .7s, .7s;
+
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.home__social-icon.social-products:hover {
+    transform: scale(1.12);
+    color: var(--first-color) !important;
+    border-color: var(--first-color);
+    box-shadow: 0 12px 28px rgba(110, 87, 224, .3);
+}
+
+/* Keep all three icons equally spaced */
+.home__social {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+/* Products icon button */
+.home__social-icon.social-products {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px;
+    display: grid !important;
+    place-items: center !important;
+    color: var(--first-color) !important;
+    background: var(--container-color);
+    border: 1px solid var(--first-color-lighter) !important;
+    border-radius: 16px !important;
+}
+
+.home__social-icon.social-products svg {
+    display: block;
+    width: 26px;
+    height: 26px;
+}
+
+/* Keep all three social buttons aligned */
+.home__social {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.home__social-icon.social-playstore {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    display: grid;
+    place-items: center;
+    background: var(--container-color);
+    border: 1px solid var(--first-color-lighter);
+    border-radius: 16px;
+
+    animation:
+        socialFloat 3.4s ease-in-out infinite,
+        socialPulse 2.8s ease-out infinite;
+
+    animation-delay: 1.2s, 1.2s;
+}
+
+.home__social-icon.social-playstore svg {
+    width: 30px;
+    height: 30px;
+}
+
+/* =====================================
+   PROFILE IMAGE RECTANGULAR FRAME
+   Match VS Code window dimensions
+===================================== */
+
+#home .home__img,
+#home .vscode-launcher {
+    width: min(390px, 100%);
+    max-width: 390px;
+    justify-self: center;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* Rectangular box around the portrait */
+#home .home__img {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 230px;
+    padding: 15px;
+
+    border: 1px solid #343746;
+    border-radius: 10px;
+
+    background: var(--container-color);
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
+}
+
+/* Preserve original portrait dimensions */
+#home .home__blob {
+    width: 200px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Keep VS Code window the same width */
+#home .vscode-mini-window {
+    width: 100%;
+    max-width: 390px;
+    box-sizing: border-box;
+}
+
+/* Match portrait frame and VS Code window */
+#home .home__img,
+#home .vscode-launcher {
+    width: min(390px, 100%);
+    max-width: 390px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* Portrait frame */
+#home .home__img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    min-height: 230px;
+    padding: 15px;
+    border: 1px solid #343746;
+    border-radius: 10px;
+}
+
+/* Keep portrait unchanged */
+#home .home__blob {
+    width: 200px;
+    height: auto;
+}
+
+/* VS Code outer window */
+#home .vscode-mini-window {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+
+/* ---------------------neon */
+
+/* =========================================
+   PREMIUM PORTRAIT FRAME
+========================================= */
+
+#home .home__img {
+    position: relative;
+    isolation: isolate;
+    border: 1px solid rgba(139, 92, 246, 0.35) !important;
+    border-radius: 18px;
+    box-shadow:
+        0 0 12px rgba(139, 92, 246, 0.12),
+        0 0 35px rgba(59, 130, 246, 0.08),
+        inset 0 0 18px rgba(139, 92, 246, 0.06);
+    overflow: visible;
+}
+
+/* Subtle permanent outer highlight */
+#home .home__img::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border: 1px solid rgba(139, 92, 246, 0.12);
+    border-radius: 22px;
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* SVG border animation layer */
+#home .portrait-neon-border {
+    position: absolute;
+    inset: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    overflow: visible;
+    pointer-events: none;
+    z-index: 6;
+}
+
+/* Stationary border track */
+#home .neon-track {
+    fill: none;
+    stroke: rgba(167, 139, 250, 0.22);
+    stroke-width: 0.8;
+}
+
+/* Soft glow behind the moving light */
+#home .neon-glow {
+    fill: none;
+    stroke: #8b5cf6;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 7 93;
+    filter: blur(2px);
+    animation: portraitNeonTravel 18s linear infinite;
+}
+
+/* Bright moving neon light */
+#home .neon-beam {
+    fill: none;
+    stroke: #907eeb;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 7 93;
+    filter:
+        drop-shadow(0 0 3px #ffffff)
+        drop-shadow(0 0 6px #a78bfa)
+        drop-shadow(0 0 12px #8b5cf6);
+    animation: portraitNeonTravel 18s linear infinite;
+}
+
+/* Move only the light along the border */
+@keyframes portraitNeonTravel {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -100;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    #home .neon-glow,
+    #home .neon-beam {
+        animation: none;
+    }
+}
+
+/* MOBILE HOME LAYOUT */
+/* MOBILE HOME LAYOUT */
+@media screen and (max-width: 567px) {
+
+    /* One-column mobile layout */
+    #home .home__content {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Four social buttons - centered at the top */
+    #home .home__social {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 12px !important;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #home .home__social-icon {
+        flex: 0 0 44px;
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+    }
+
+    /* VS Code window - second */
+    #home .home__data {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+    }
+
+    /* Portrait box - third */
+    #home .home__img {
+        grid-column: 1 !important;
+        grid-row: 3 !important;
+        justify-self: center !important;
+        width: min(390px, 100%) !important;
+    }
+}
+
+/* VS Code typing animation */
+.profile-card-description {
+    min-height: 3.2em;
+}
+
+.typing-cursor {
+    display: inline-block;
+    margin-left: 2px;
+    animation: typingCursorBlink 0.7s steps(1) infinite;
+}
+
+@keyframes typingCursorBlink {
+    50% {
+        opacity: 0;
+    }
+}
+
+
+/* =====================================================
+   MOBILE PROFILE CARD: CLEAN FRAME + SMALL REAL PHOTO
+   Desktop styling remains unchanged.
+===================================================== */
+@media screen and (max-width: 567px) {
+    /* Hide the separate portrait frame on mobile. */
+    #home .home__img {
+        display: none !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        outline: 0 !important;
+    }
+
+    #home .home__img::before,
+    #home .home__img::after,
+    #home .portrait-neon-border {
+        display: none !important;
+        content: none !important;
+        animation: none !important;
+        filter: none !important;
+        box-shadow: none !important;
+        border: 0 !important;
+    }
+
+    /* Remove neon border and pulse from the VS Code card. */
+    #home .vscode-mini-window {
+        border: 0 !important;
+        outline: 0 !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .16) !important;
+        animation: none !important;
+        border-radius: 12px !important;
+    }
+
+    #home .vscode-mini-window::before,
+    #home .vscode-mini-window::after {
+        display: none !important;
+        content: none !important;
+        box-shadow: none !important;
+        filter: none !important;
+    }
+
+    #home .profile-avatar {
+        display: none !important;
+    }
+
+    #home .profile-card-heading {
+        gap: 10px !important;
+        min-width: 0;
+    }
+
+    /* Small portrait beside the name. */
+    #home .profile-avatar-photo {
+        display: block !important;
+        flex: 0 0 42px;
+        width: 42px !important;
+        height: 42px !important;
+        object-fit: cover;
+        object-position: center 25%;
+        border-radius: 10px;
+        border: 0 !important;
+        outline: 0 !important;
+        box-shadow: none !important;
+    }
+
+    #home .profile-online-dot {
+        margin-left: auto;
+        flex: 0 0 8px;
+        box-shadow: none !important;
+    }
+}
+
+/* Hidden on desktop; shown only on mobile. */
+#home .profile-avatar-photo {
     display: none;
 }
 
+
+/* =========================================================
+   MOBILE SCROLL TRANSITION: PROFILE -> ABOUT ME IN VS CODE
+   Desktop is not affected.
+========================================================= */
+@media screen and (max-width: 767px) {
+    /* A scroll runway controls the fade transition. */
+    #home.home.section {
+        height: 175vh !important;
+        min-height: 175vh !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    #home .home__container {
+        position: sticky !important;
+        top: 0 !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+
+    #home .home__content,
+    #home .home__data,
+    #home .vscode-launcher {
+        height: 100% !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+    }
+
+    #home .vscode-mini-window {
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        position: relative !important;
+    }
+
+    #home .vscode-mobile-content {
+        position: relative !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+        background: #171923 !important;
+    }
+
+    #home .vscode-mobile-profile,
+    #home .vscode-mobile-about {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        box-sizing: border-box !important;
+        transition: opacity .45s ease, transform .45s ease !important;
+        will-change: opacity, transform;
+    }
+
+    #home .vscode-mobile-profile {
+        display: block !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    #home .vscode-mobile-profile > .profile-card-content {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 100% !important;
+        overflow-y: auto !important;
+        padding: clamp(22px, 7vh, 58px) 22px 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    #home .vscode-mobile-about {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        overflow-y: auto !important;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        padding: 20px 22px 24px !important;
+        opacity: 0;
+        transform: translateY(18px);
+        pointer-events: none;
+        color: #ddd;
+    }
+
+    #home .vscode-mobile-about .section__title {
+        color: #fff !important;
+        font-size: 23px !important;
+        text-align: left !important;
+        margin: 0 !important;
+    }
+
+    #home .vscode-mobile-about .section__subtitle {
+        color: #a78bfa !important;
+        display: block !important;
+        text-align: left !important;
+        margin: 0 0 8px !important;
+    }
+
+    #home .vscode-mobile-about .about__container {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #home .vscode-mobile-about .about__image-mobile {
+        display: block !important;
+        width: min(100%, 230px) !important;
+        max-height: 155px !important;
+        object-fit: cover !important;
+        object-position: center 35% !important;
+        border-radius: 10px !important;
+        margin: 0 auto 4px !important;
+    }
+
+    #home .vscode-mobile-about .about__description {
+        color: #d5d7e0 !important;
+        font-size: 13px !important;
+        line-height: 1.75 !important;
+        margin: 0 !important;
+    }
+
+    #home .vscode-mobile-about .about__info {
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        margin: 10px 0 !important;
+    }
+
+    #home .vscode-mobile-about .about__info > div {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        text-align: center !important;
+    }
+
+    #home .vscode-mobile-about .about__info-title {
+        color: #a78bfa !important;
+        font-size: 20px !important;
+    }
+
+    #home .vscode-mobile-about .about__info-name {
+        color: #bfc3d0 !important;
+        font-size: 10px !important;
+        line-height: 1.4 !important;
+    }
+
+    #home .vscode-mobile-about .about__buttons {
+        margin: 4px 0 0 !important;
+    }
+
+    #home .vscode-mobile-about .about__buttons .button {
+        display: inline-flex !important;
+        font-size: 12px !important;
+        padding: 10px 14px !important;
+    }
+
+    #home .vscode-mini-window > .home__social {
+        flex: 0 0 auto !important;
+        margin: 0 !important;
+        z-index: 5 !important;
+    }
+
+    /* Hide the original About section; its content is displayed in the editor. */
+    #about {
+        display: none !important;
+    }
+
+    #home .home__img,
+    #home .home__scroll {
+        display: none !important;
+    }
+}
+/* =========================================
+   MOBILE: FULLSCREEN VS CODE + FIXED BOTTOM
+========================================= */
+
+@media screen and (max-width: 767px) {
+
+    #home .vscode-mini-window {
+        position: fixed !important;
+        inset: 0 !important;
+
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+
+        max-width: none !important;
+        max-height: none !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        overflow: hidden !important;
+        border-radius: 0 !important;
+        border: 0 !important;
+
+        z-index: 9999 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Top title bar */
+    #home .vscode-mini-titlebar {
+        flex: 0 0 38px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Main scrolling content */
+    #home .vscode-mobile-content {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        width: 100% !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    #home .vscode-mobile-profile,
+    #home .vscode-mobile-about {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding: 16px 24px !important;
+        transition: opacity .35s ease, transform .35s ease !important;
+    }
+
+    /* Social buttons always above status bar */
+    #home .vscode-mini-window > .home__social {
+        position: relative !important;
+        inset: auto !important;
+
+        flex: 0 0 64px !important;
+        width: 100% !important;
+        height: 64px !important;
+
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-evenly !important;
+        align-items: center !important;
+
+        gap: 6px !important;
+        margin: 0 !important;
+        padding: 6px !important;
+
+        background: #171923 !important;
+        box-sizing: border-box !important;
+        z-index: 10 !important;
+    }
+
+    #home .vscode-mini-window > .home__social .home__social-icon {
+        flex: 0 0 42px !important;
+        width: 42px !important;
+        height: 42px !important;
+    }
+
+    /* Purple status bar stays at absolute bottom */
+    #home .vscode-mini-window > .vscode-mini-status {
+        position: relative !important;
+        bottom: auto !important;
+
+        flex: 0 0 27px !important;
+        width: 100% !important;
+        height: 27px !important;
+
+        margin: 0 !important;
+        padding: 6px 10px !important;
+
+        display: flex !important;
+        justify-content: space-between !important;
+
+        box-sizing: border-box !important;
+        z-index: 11 !important;
+    }
+
+    /* Hide original home scroll prompt */
+    #home .home__scroll {
+        display: none !important;
+    }
+
+}
+
+@media screen and (max-width: 767px) {
+
+    /* Prevent inner panels from consuming the scroll gesture. */
+    #home .vscode-mini-window {
+        touch-action: none !important;
+    }
+
+    #home .vscode-mobile-content,
+    #home .vscode-mobile-profile,
+    #home .vscode-mobile-about,
+    #home .vscode-mobile-profile > .profile-card-content {
+        overflow: hidden !important;
+        touch-action: none !important;
+    }
+
+}
+/* MOBILE: Reserve 50% screen height for typing animation */
+@media screen and (max-width: 767px) {
+
+    #home .profile-card-description {
+        display: block !important;
+
+        height: 40vh !important;
+        height: 40dvh !important;
+
+        min-height: 40vh !important;
+        min-height: 40dvh !important;
+
+        max-height: 40vh !important;
+        max-height: 40dvh !important;
+
+        flex: 0 0 40vh !important;
+        flex-basis: 40dvh !important;
+
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        line-height: 1.7 !important;
+    }
+
+}
+
+/* MOBILE: Horizontal Introduction / About transition */
+
+@media screen and (max-width: 767px) {
+
+    #home .vscode-mobile-profile,
+    #home .vscode-mobile-about {
+        transition:
+            opacity 0.35s ease,
+            transform 0.35s ease !important;
+
+        will-change: transform, opacity;
+    }
+
+    #home .vscode-mobile-content {
+        overflow: hidden !important;
+        touch-action: pan-y !important;
+    }
+
+    #home .vscode-mini-window {
+        touch-action: pan-y !important;
+    }
+
+    #home .vscode-mobile-profile,
+    #home .vscode-mobile-about {
+        touch-action: pan-y !important;
+    }
+
+}
+/* FINAL MOBILE INTRODUCTION POSITION FIX */
+@media screen and (max-width: 767px) {
+
+    #home .vscode-mobile-profile {
+        position: absolute !important;
+        inset: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+    }
+
+    #home .vscode-mobile-profile > .profile-card-content {
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
+
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+
+        padding: 12px 22px 20px !important;
+        margin: 0 !important;
+
+        transform: none !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+    }
+
+    #home .profile-card-heading {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #home .profile-card-description {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        flex: 0 0 auto !important;
+        margin: 17px 0 !important;
+    }
+}
+
+/* MOBILE: Permanent profile identity header */
+@media screen and (max-width: 767px) {
+
+    #home .vscode-mobile-profile-header {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        display: block !important;
+
+        padding: 12px 22px 14px !important;
+        margin: 0 !important;
+
+        background: #171923 !important;
+        box-sizing: border-box !important;
+
+        position: relative !important;
+        z-index: 20 !important;
+    }
+
+    #home .vscode-mobile-profile-header .profile-card-heading {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #home .vscode-mobile-content {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        position: relative !important;
+    }
+
+    #home .vscode-mobile-profile > .profile-card-content {
+        padding-top: 12px !important;
+    }
+}
+
+/* Hide duplicate About Me heading inside mobile content */
+@media screen and (max-width: 767px) {
+    #home .vscode-mobile-about > .section__title {
+        display: none !important;
+    }
+}
+/* Hide floating 3D graduation cap and settings button on mobile */
+@media screen and (max-width: 767px) {
+
+    #home-3d-canvas,
+    canvas.home-3d-canvas,
+    .portfolio-cap-gear {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+}
+
+/* =========================================================
+   MOBILE: SCROLLABLE VS CODE PORTFOLIO SECTION VIEWER
+   Keeps titlebar, identity header, social row and status bar fixed.
+========================================================= */
+@media screen and (max-width: 767px) {
+    #home .vscode-mobile-content {
+        display: flex !important;
+        flex: 1 1 auto !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 0 !important;
+        position: relative !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: y proximity !important;
+        touch-action: pan-y !important;
+        background: #171923 !important;
+        scrollbar-width: none !important;
+    }
+
+    #home .vscode-mobile-content::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    #home .vscode-mobile-panel {
+        display: block !important;
+        position: relative !important;
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 100% !important;
+        height: auto !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+        scroll-snap-align: start !important;
+        scroll-snap-stop: always !important;
+        background: #171923 !important;
+        color: #ddd !important;
+        touch-action: pan-y !important;
+    }
+
+    #home .vscode-mobile-intro {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    #home .vscode-mobile-intro > .profile-card-content {
+        display: flex !important;
+        position: relative !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 100% !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 12px 22px 20px !important;
+        margin: 0 !important;
+        touch-action: pan-y !important;
+    }
+
+    #home .vscode-mobile-profile-header {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        display: block !important;
+        padding: 12px 22px 14px !important;
+        margin: 0 !important;
+        background: #171923 !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+        z-index: 20 !important;
+    }
+
+    #home .vscode-mobile-profile-header .profile-card-heading {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Use the titlebar as the section heading to avoid duplicate titles. */
+    #home .vscode-mobile-panel > section > .section__title {
+        display: none !important;
+    }
+
+    #home .vscode-mobile-panel > section {
+        width: 100% !important;
+        min-height: 100% !important;
+        height: auto !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+        padding-top: 1.25rem !important;
+        padding-bottom: 2rem !important;
+        margin: 0 !important;
+    }
+
+    #home .vscode-mini-window {
+        touch-action: pan-y !important;
+    }
+
+    #home .vscode-mini-status {
+        flex: 0 0 27px !important;
+    }
+}
+
+/* MOBILE: About Me <-> Skills horizontal transition */
+
+@media screen and (max-width: 767px) {
+
+    #home .vscode-mobile-content {
+        position: relative !important;
+        display: block !important;
+        overflow: hidden !important;
+        touch-action: pan-y !important;
+    }
+
+    #home .vscode-mobile-profile,
+    #home .vscode-mobile-about,
+    #home .vscode-mobile-skills {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+
+        transition:
+            opacity 0.4s ease,
+            transform 0.4s ease !important;
+
+        will-change: opacity, transform;
+        padding: 20px 22px 24px !important;
+        color: #ddd !important;
+        background: #171923 !important;
+        touch-action: pan-y !important;
+    }
+
+    #home .vscode-mobile-skills {
+        opacity: 0;
+        transform: translateX(100%);
+        pointer-events: none;
+    }
+
+    #home .vscode-mobile-skills .section__title {
+        display: none !important;
+    }
+
+    #home .vscode-mobile-skills .section__subtitle {
+        display: none !important;
+    }
+
+    #home .vscode-mobile-skills .skills__title,
+    #home .vscode-mobile-skills .skills__name {
+        color: #fff !important;
+    }
+
+    #home .vscode-mobile-skills .skills__subtitle {
+        color: #aaa !important;
+    }
+
+    #home .vscode-mobile-skills .skills__list {
+        overflow: hidden;
+    }
+}
+
+/* =========================================================
+   MOBILE PANELS: VERTICAL SCROLLING
+========================================================= */
+
+.vscode-mobile-profile,
+.vscode-mobile-about,
+.vscode-mobile-skills,
+.vscode-mobile-qualification {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+}
+.vscode-mobile-content {
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+    flex: 1 1 auto;
+}
+/* Hide scrollbar without changing panel layout */
+
+.vscode-mobile-profile,
+.vscode-mobile-about,
+.vscode-mobile-skills,
+.vscode-mobile-qualification {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.vscode-mobile-profile::-webkit-scrollbar,
+.vscode-mobile-about::-webkit-scrollbar,
+.vscode-mobile-skills::-webkit-scrollbar,
+.vscode-mobile-qualification::-webkit-scrollbar {
+    display: none;
+}
+
+/* Services mobile scrolling - hidden scrollbar */
+
+.vscode-mobile-services {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.vscode-mobile-services::-webkit-scrollbar {
+    display: none;
+}
+
+/* =========================================================
+   MOBILE SERVICES REDESIGN
+   Desktop remains unchanged
+========================================================= */
+
+@media screen and (max-width: 767px) {
+
+    /* Services grid: TWO CARDS PER ROW */
+
+    #services .services__container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 10px 4px 25px;
+    }
+
+    /* Individual service cards */
+
+    #services .services__content {
+        position: relative;
+        padding: 20px 12px;
+        min-height: 165px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+
+        background: linear-gradient(
+            145deg,
+            rgba(35, 39, 52, 0.98),
+            rgba(19, 22, 32, 0.98)
+        );
+
+        box-shadow:
+            0 5px 15px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    /* Card tap effect */
+
+    #services .services__content:active {
+        transform: scale(0.96);
+    }
+
+    /* Service icons */
+
+    #services .services__icon {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: var(--first-color);
+    }
+
+    /* Service title */
+
+    #services .services__title {
+        font-size: 0.95rem;
+        line-height: 1.35;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    /* View more button */
+
+    #services .services__button {
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+
+    /* =====================================================
+       MACOS STYLE SERVICE POPUP
+    ===================================================== */
+
+    #services .services__modal {
+        padding: 12px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background: rgba(0, 0, 0, 0.75);
+    }
+
+    #services .services__modal-content {
+        position: relative;
+
+        width: 100%;
+        max-width: 420px;
+        max-height: 80vh;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        padding: 65px 20px 25px;
+
+        border-radius: 16px;
+
+        background: linear-gradient(
+            145deg,
+            #242735,
+            #151824
+        );
+
+        border: 1px solid rgba(255, 255, 255, 0.12);
+
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.55),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        animation: serviceMacOpen 0.3s ease;
+    }
+
+    /* Hide popup scrollbar */
+
+    #services .services__modal-content::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* macOS title bar */
+/* =========================================
+   MACOS TRAFFIC LIGHT CONTROLS
+========================================= */
+
+.mac-window-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    z-index: 1000001;
+}
+
+.mac-window-controls button,
+.mac-window-controls span {
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+    display: block;
+    padding: 0;
+    border: none;
+}
+
+/* RED - CLOSE */
+
+.mac-close {
+    background: #ff5f57;
+    cursor: pointer;
+}
+
+.mac-close:hover {
+    background: #ff3b30;
+}
+
+/* YELLOW - MINIMIZE */
+
+.mac-minimize {
+    background: #febc2e;
+}
+
+/* GREEN - MAXIMIZE */
+
+.mac-maximize {
+    background: #28c840;
+}
+
+
+    /* Popup close button */
+
+    #services .services__modal-close {
+        position: absolute;
+        top: 15px;
+        right: 17px;
+
+        width: 30px;
+        height: 30px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background: rgba(255, 255, 255, 0.08);
+
+        color: #ffffff;
+        font-size: 1.1rem;
+
+        transition: background 0.2s ease;
+    }
+
+    #services .services__modal-close:active {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Popup heading */
+
+    #services .services__modal-title {
+        color: #ffffff;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+    }
+
+    /* Popup description */
+
+    #services .services__modal-description {
+        color: #c5c9d5;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    /* Popup service list */
+
+    #services .services__modal-services {
+        display: grid;
+        gap: 12px;
+    }
+
+    #services .services__modal-service {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+
+        color: #e4e7ef;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    #services .services__modal-service i {
+        color: #28c840;
+        font-size: 1rem;
+        margin-top: 3px;
+    }
+
+}
+
+
+/* macOS popup animation */
+
+@keyframes serviceMacOpen {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+/* =========================================================
+   MOBILE MACOS SERVICE POPUP - CLICK POSITION FIX
+========================================================= */
+
+@media screen and (max-width: 767px) {
+
+    .mobile-service-modal {
+        position: fixed !important;
+        inset: 0 !important;
+
+        width: 100vw;
+        height: 100dvh;
+
+        z-index: 999999 !important;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 12px !important;
+
+        background: rgba(0, 0, 0, 0.78);
+
+        pointer-events: auto;
+    }
+
+    .mobile-service-modal .services__modal-content {
+        position: relative !important;
+
+        width: 100%;
+        max-width: 420px;
+
+        max-height: 80dvh;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        padding: 65px 20px 25px;
+
+        border-radius: 16px;
+
+        background: linear-gradient(
+            145deg,
+            #242735,
+            #151824
+        );
+
+        box-sizing: border-box;
+    }
+
+    /* Close button: larger clickable area */
+
+    .mobile-service-modal .services__modal-close {
+        position: absolute !important;
+
+        top: 10px !important;
+        right: 10px !important;
+
+        width: 48px !important;
+        height: 48px !important;
+
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+
+        z-index: 1000000 !important;
+
+        color: white !important;
+        font-size: 25px !important;
+
+        cursor: pointer;
+        pointer-events: auto;
+
+        touch-action: manipulation;
+
+        background: rgba(255,255,255,0.12);
+        border-radius: 50%;
+    }
+
+    .mobile-service-modal .services__modal-close i {
+        pointer-events: none;
+    }
+
+    .mobile-service-modal .services__modal-title {
+        color: white;
+    }
+
+    .mobile-service-modal .services__modal-service {
+        color: #e4e7ef;
+    }
+
+}
+
+/* White text inside Services cards */
+
+#services .services__title {
+    color: #ffffff !important;
+}
+
+
+
+/* =========================================================
+   MOBILE PORTFOLIO PANEL + NATIVE PROJECT CAROUSEL
+   Desktop Portfolio Swiper is not modified.
+========================================================= */
+@media screen and (max-width: 767px) {
+
+    #home .vscode-mobile-portfolio {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior-y: contain !important;
+        scrollbar-width: none !important;
+        padding: 22px 16px 28px !important;
+        color: #f4f4f7 !important;
+        background:
+            radial-gradient(circle at 12% 0%, rgba(124, 92, 255, .18), transparent 42%),
+            linear-gradient(160deg, #171923 0%, #11131c 100%) !important;
+        opacity: 0;
+        transform: translateX(100%);
+        pointer-events: none;
+        transition: opacity .4s ease, transform .4s ease !important;
+        will-change: opacity, transform;
+        touch-action: pan-y !important;
+    }
+
+    #home .vscode-mobile-portfolio::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    #home .vscode-mobile-portfolio > .section__title {
+        display: block !important;
+        color: #fff !important;
+        font-size: 1.45rem !important;
+        text-align: center !important;
+        margin: 4px 0 5px !important;
+        letter-spacing: .3px;
+    }
+
+    #home .vscode-mobile-portfolio > .section__subtitle {
+        display: block !important;
+        color: #a9a9bb !important;
+        text-align: center !important;
+        margin: 0 0 22px !important;
+        font-size: .78rem !important;
+    }
+
+    #home .mobile-portfolio-slider {
+        width: 100% !important;
+        max-width: 440px !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: transparent !important;
+    }
+
+    #home .mobile-portfolio-track {
+        display: flex !important;
+        width: 100% !important;
+        gap: 0 !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-snap-type: x mandatory !important;
+        scroll-behavior: smooth !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior-x: contain !important;
+        scrollbar-width: none !important;
+        touch-action: pan-x pan-y !important;
+        transform: none !important;
+    }
+
+    #home .mobile-portfolio-track::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    #home .mobile-portfolio-card {
+        display: flex !important;
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0 !important;
+        padding: 12px 12px 18px !important;
+        margin: 0 !important;
+        border: 1px solid rgba(255, 255, 255, .09) !important;
+        border-radius: 20px !important;
+        overflow: hidden !important;
+        scroll-snap-align: start !important;
+        scroll-snap-stop: always !important;
+        background: linear-gradient(145deg, #242638, #1a1c29) !important;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .28),
+                    inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+    }
+
+    #home .mobile-portfolio-card .portfolio__img {
+        display: block !important;
+        width: 100% !important;
+        height: clamp(175px, 48vw, 230px) !important;
+        max-width: none !important;
+        object-fit: cover !important;
+        object-position: center !important;
+        border-radius: 13px !important;
+        margin: 0 0 17px !important;
+        box-shadow: 0 7px 22px rgba(0, 0, 0, .3) !important;
+    }
+
+    #home .mobile-portfolio-card .portfolio__data {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding: 0 3px !important;
+    }
+
+    #home .mobile-portfolio-card .portfolio__title {
+        color: #fff !important;
+        font-size: 1.05rem !important;
+        margin: 0 0 7px !important;
+    }
+
+    #home .mobile-portfolio-card .portfolio__description {
+        color: #b9bac8 !important;
+        font-size: .82rem !important;
+        line-height: 1.6 !important;
+        min-height: 42px;
+        margin: 0 0 14px !important;
+    }
+
+    #home .mobile-portfolio-card .portfolio__button {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 40px !important;
+        padding: 9px 16px !important;
+        border-radius: 10px !important;
+        font-size: .8rem !important;
+        box-shadow: 0 5px 15px rgba(124, 92, 255, .22);
+    }
+
+    #home .mobile-portfolio-controls {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 16px !important;
+        margin: 18px auto 0 !important;
+    }
+
+    #home .mobile-portfolio-controls button {
+        border: 0 !important;
+        outline: none !important;
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    #home .mobile-portfolio-prev,
+    #home .mobile-portfolio-next {
+        display: grid !important;
+        place-items: center !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 50% !important;
+        color: #fff !important;
+        background: rgba(124, 92, 255, .2) !important;
+        border: 1px solid rgba(160, 140, 255, .35) !important;
+        font-size: 1.35rem !important;
+        transition: background .2s ease, transform .2s ease !important;
+    }
+
+    #home .mobile-portfolio-prev:active,
+    #home .mobile-portfolio-next:active {
+        transform: scale(.92);
+    }
+
+    #home .mobile-portfolio-prev:disabled,
+    #home .mobile-portfolio-next:disabled {
+        opacity: .32 !important;
+        cursor: default !important;
+    }
+
+    #home .mobile-portfolio-dots {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 7px !important;
+    }
+
+    #home .mobile-portfolio-dot {
+        width: 7px !important;
+        height: 7px !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, .28) !important;
+        transition: width .25s ease, background .25s ease !important;
+    }
+
+    #home .mobile-portfolio-dot.is-active {
+        width: 21px !important;
+        border-radius: 10px !important;
+        background: #9b83ff !important;
+    }
+}
+
+
+
+/* =========================================================
+   MOBILE CONTACT ME PANEL — MOBILE ONLY
+========================================================= */
+@media screen and (max-width: 767px) {
+    #home .vscode-mobile-contact {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        padding: 26px 18px 30px;
+        border-radius: inherit;
+        background: radial-gradient(circle at 85% 8%, rgba(124, 92, 255, .19), transparent 36%),
+                    linear-gradient(155deg, #171827 0%, #10111d 58%, #171426 100%);
+        color: #f7f7ff;
+        opacity: 0;
+        transform: translateX(100%);
+        pointer-events: none;
+        transition: transform .38s cubic-bezier(.22,.75,.25,1), opacity .3s ease;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #home .vscode-mobile-contact::-webkit-scrollbar { display: none; }
+
+    #home .vscode-mobile-contact > .section__title {
+        color: #fff;
+        text-align: center;
+        font-size: 1.65rem;
+        margin: 5px 0 5px;
+    }
+
+    #home .vscode-mobile-contact > .section__subtitle {
+        display: block;
+        color: #a9abc2;
+        text-align: center;
+        margin-bottom: 24px;
+        font-size: .88rem;
+    }
+
+    #home .mobile-contact-container {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    #home .mobile-contact-container > div:first-child {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    #home .mobile-contact-container .contact__information {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 15px;
+        margin: 0;
+        border: 1px solid rgba(170, 160, 255, .16);
+        border-radius: 15px;
+        background: rgba(255, 255, 255, .045);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .14);
+    }
+
+    #home .mobile-contact-container .contact__icon {
+        color: #a99aff;
+        font-size: 1.55rem;
+        margin: 0;
+    }
+
+    #home .mobile-contact-container .contact__title {
+        color: #fff;
+        font-size: .92rem;
+        margin: 0 0 4px;
+    }
+
+    #home .mobile-contact-container .contact__subtitle,
+    #home .mobile-contact-container .mobile-contact-link {
+        color: #b8bad0;
+        font-size: .82rem;
+        overflow-wrap: anywhere;
+        text-decoration: none;
+    }
+
+    #home .mobile-contact-container .mobile-contact-link:active { color: #c3b7ff; }
+
+    #home .mobile-contact-container .contact__form {
+        display: grid;
+        gap: 13px;
+        width: 100%;
+        margin: 0;
+    }
+
+    #home .mobile-contact-container .contact_inputs {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    #home .mobile-contact-container .contact__content {
+        padding: 12px 14px 10px;
+        border: 1px solid rgba(170, 160, 255, .17);
+        border-radius: 13px;
+        background: rgba(255, 255, 255, .045);
+    }
+
+    #home .mobile-contact-container .contact__label {
+        display: block;
+        color: #aaa9c2;
+        font-size: .75rem;
+        margin-bottom: 5px;
+    }
+
+    #home .mobile-contact-container .contact__input {
+        width: 100%;
+        min-height: 24px;
+        padding: 2px 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: #fff;
+        font: inherit;
+        font-size: .9rem;
+        resize: vertical;
+    }
+
+    #home .mobile-contact-container textarea.contact__input { min-height: 95px; }
+    #home .mobile-contact-container .contact__input::placeholder { color: #777990; }
+
+    #home .mobile-contact-container .button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: 48px;
+        border-radius: 13px;
+        background: linear-gradient(110deg, #7964ed, #9b70ee);
+        color: #fff;
+        box-shadow: 0 8px 22px rgba(121, 100, 237, .24);
+    }
+}
+@media screen and (max-width: 767px) {
+
+    .vscode-mobile-profile .home__description.drop-cap1 {
+        font-family: inherit;
+        font-size: var(--normal-font-size);
+        font-weight: 400;
+        line-height: 1.8;
+        color: var(--text-color);
+        text-align: left;
+        margin-top: 1rem;
+    }
+
+}
+
+
+
+/* =========================================================
+   ONE CONSISTENT HORIZONTAL SLIDE FOR ALL MOBILE PANELS
+   Matches the Introduction <-> About Me transition.
+   Desktop is not affected.
+========================================================= */
+@media screen and (max-width: 767px) {
+    #home .vscode-mobile-content {
+        position: relative !important;
+        overflow: hidden !important;
+        isolation: isolate;
+    }
+
+    #home .vscode-mobile-profile,
+    #home .vscode-mobile-about,
+    #home .vscode-mobile-skills,
+    #home .vscode-mobile-qualification,
+    #home .vscode-mobile-services,
+    #home .vscode-mobile-portfolio,
+    #home .vscode-mobile-contact {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        will-change: transform, opacity;
+        transition:
+            transform 400ms cubic-bezier(0.22, 0.75, 0.25, 1),
+            opacity 400ms ease !important;
+    }
+}
+/* =====================================================
+   MOBILE: ANIMATED GREEN ONLINE INDICATOR
+===================================================== */
+
+@keyframes mobileOnlineBlink {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 10px #22c55e;
+    }
+
+    50% {
+        opacity: 0.25;
+        transform: scale(0.75);
+        box-shadow: 0 0 2px #22c55e;
+    }
+}
+
+@media screen and (max-width: 767px) {
+
+    #home .vscode-mobile-profile-header .profile-online-dot {
+        background: #22c55e !important;
+        animation: mobileOnlineBlink 1.2s ease-in-out infinite !important;
+        transform-origin: center;
+    }
+
+}
+
+/* Respect reduced-motion accessibility settings */
+@media (prefers-reduced-motion: reduce) {
+    #home .vscode-mobile-profile-header .profile-online-dot {
+        animation: none !important;
+        opacity: 1 !important;
+    }
+}
+/* Keep profile name position stable during role typing animation */
+@media screen and (max-width: 767px) {
+    #home .profile-card-heading > div {
+        min-height: 42px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #home .profile-card-heading > div span {
+        display: inline-block;
+        min-height: 20px;
+        line-height: 20px;
+        white-space: nowrap;
+    }
+}
+
+/* Mobile VS Code title bar: section icon on the left, traffic lights on the right */
+@media screen and (max-width: 767px) {
+    #home .vscode-mini-titlebar {
+        display: flex !important;
+        align-items: center !important;
+        gap: 9px !important;
+    }
+
+    #home .vscode-mini-title-icon {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 16px;
+        width: 16px;
+        font-size: 15px;
+        line-height: 1;
+        color: #c4c7d0;
+    }
+
+    #home .vscode-mini-title-label {
+        display: inline-block;
+        min-width: 0;
+        white-space: nowrap;
+    }
+
+    #home .vscode-mini-dots {
+        display: flex !important;
+        align-items: center;
+        gap: 5px;
+        margin-left: auto !important;
+        flex: 0 0 auto;
+    }
+}
+@media screen and (max-width: 767px) {
+    #home .vscode-mini-dots {
+        gap: 9px !important;
+        align-items: center;
+    }
+
+    #home .vscode-mini-dots span {
+        width: 13px !important;
+        height: 13px !important;
+        min-width: 13px !important;
+        min-height: 13px !important;
+    }
+}
+@media screen and (max-width: 767px) {
+    #home .vscode-mini-titlebar {
+        display: flex;
+        align-items: center;
+    }
+
+    #home .vscode-mini-dots {
+        display: flex;
+        flex-direction: row;
+        flex-direction: row-reverse;
+        gap: 9px;
+        margin-left: auto;
+        align-items: center;
+    }
+
+    #home .vscode-mini-dots span {
+        width: 15px !important;
+        height: 15px !important;
+        min-width: 15px !important;
+        min-height: 15px !important;
+    }
+}
+@media screen and (max-width: 767px) {
+    #home .vscode-mini-titlebar {
+        min-height: 42px !important;
+        padding: 0 12px !important;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Title icon */
+    #home .vscode-mini-title-icon {
+        font-size: 22px !important;
+        font-weight: 700 !important;
+    }
+
+    /* Bold title */
+    #home .vscode-mini-title-label {
+        font-size: 17px !important;
+        font-weight: 700 !important;
+    }
+
+    /* Window buttons */
+    #home .vscode-mini-dots {
+        display: flex;
+        flex-direction: row;
+        gap: 9px !important;
+        margin-left: auto;
+        align-items: center;
+    }
+
+    #home .vscode-mini-dots span {
+        width: 15px !important;
+        height: 15px !important;
+        min-width: 15px !important;
+        min-height: 15px !important;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    #home .vscode-mini-title-label {
+        font-size: 17px !important;
+        font-weight: 800 !important;
+
+        background: linear-gradient(
+            90deg,
+            #f6f4f1 0%,
+            #d4cfcf 50%,
+            #b8beb7 100%
+        );
+
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+    }
+
+    #home .vscode-mini-title-icon {
+        font-size: 22px !important;
+        background: linear-gradient(
+            180deg,
+            #FF9933 0%,
+            #FFFFFF 50%,
+            #138808 100%
+        );
+
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}
+/* =========================================
+   MOBILE LEFT / RIGHT SWIPE INDICATORS
+   Fixed overlay: does not change page layout.
+========================================= */
+
+.mobile-swipe-hint {
+    display: none;
+}
+
+@media screen and (max-width: 767px) {
+    .mobile-swipe-hint {
+        display: block;
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        z-index: 9999;
+        pointer-events: none;
+    }
+
+    .mobile-swipe-hint span {
+        position: absolute;
+        top: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 55px;
+        color: #FF9933;
+        font-family: Arial, sans-serif;
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 1;
+        text-shadow: 0 0 5px rgba(255,255,255,.8),
+                     0 0 12px rgba(255,153,51,.5);
+        transform: translateY(-50%);
+    }
+
+    .mobile-swipe-hint .swipe-left {
+        left: 3px;
+        animation: swipeLeftIndicator 1.2s ease-in-out infinite;
+    }
+
+    .mobile-swipe-hint .swipe-right {
+        right: 3px;
+        animation: swipeRightIndicator 1.2s ease-in-out infinite;
+    }
+
+    /* Introduction: right arrow only. */
+    .mobile-swipe-hint[data-active-view="intro"] .swipe-left {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    /* Contact: left arrow only. */
+    .mobile-swipe-hint[data-active-view="contact"] .swipe-right {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    @keyframes swipeLeftIndicator {
+        0%, 100% { transform: translate(0, -50%); opacity: .45; }
+        50% { transform: translate(-8px, -50%); opacity: 1; }
+    }
+
+    @keyframes swipeRightIndicator {
+        0%, 100% { transform: translate(0, -50%); opacity: .45; }
+        50% { transform: translate(8px, -50%); opacity: 1; }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mobile-swipe-hint span {
+        animation: none !important;
+    }
+}
+/* FORCE MOBILE RIGHT ARROW TO SHOW */
+@media screen and (max-width: 767px) {
+
+    .mobile-swipe-hint .swipe-right {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: absolute !important;
+        right: 8px !important;
+        left: auto !important;
+        top: 50% !important;
+        z-index: 100000 !important;
+        color: #FF9933 !important;
+        font-size: 52px !important;
+        font-weight: 900 !important;
+        transform: translateY(-50%) !important;
+    }
+
+    .mobile-swipe-hint[data-active-view="contact"] .swipe-right {
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+}
+
+/* =========================================
+   VS CODE WINDOW — RED BORDER FLASH
+========================================= */
+.dont-touch-border {
+    position: absolute;
+    inset: 2px;
+    box-sizing: border-box;
+    border: 6px solid var(--border-color, #ff3030);
+    border-radius: 10px;
+
+    box-shadow:
+        inset 0 0 12px var(--border-color),
+        inset 0 0 30px var(--border-color);
+
+    pointer-events: none;
+    z-index: 10000;
+
+    animation: borderBlink 0.5s ease-in-out infinite;
+}
+
+@keyframes borderBlink {
+    0%, 100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 767px) {
+
+    .vscode-side-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+
+        width: 22px;
+        height: 38px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+        border: none;
+        background: transparent;
+
+        color: #a855f7;
+        font-size: 19px;
+        font-weight: bold;
+
+        cursor: pointer;
+        z-index: 10001;
+
+        opacity: 0.85;
+
+        animation: purpleArrowShake 1.2s ease-in-out infinite;
+
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .vscode-left-arrow {
+        left: 3px;
+    }
+
+    .vscode-right-arrow {
+        right: 3px;
+    }
+
+    .vscode-left-arrow {
+        animation-name: purpleArrowLeft;
+    }
+
+    .vscode-right-arrow {
+        animation-name: purpleArrowRight;
+    }
+
+    @keyframes purpleArrowLeft {
+        0%, 100% {
+            transform: translate(0, -50%);
+        }
+        50% {
+            transform: translate(-4px, -50%);
+        }
+    }
+
+    @keyframes purpleArrowRight {
+        0%, 100% {
+            transform: translate(0, -50%);
+        }
+        50% {
+            transform: translate(4px, -50%);
+        }
+    }
+
+    .vscode-side-arrow:active {
+        color: #d8b4fe;
+        transform: translateY(-50%) scale(1.2);
+    }
+
+}
