@@ -1260,3 +1260,9 @@ transform: translate(.55rem);
   .cap-settings-root { right:14px; bottom:16px; }
   .cap-settings-trigger { width:44px; height:44px; }
 }
+/* Hide complete navigation container on mobile */
+@media screen and (max-width: 767px) {
+    .nav.container {
+        display: none !important;
+    }
+}
