@@ -43,85 +43,81 @@ document.addEventListener("DOMContentLoaded", () => {
         !contact
     ) return;
 
-/* =====================================================
-   MOBILE VS CODE TRAFFIC LIGHT BUTTONS
-===================================================== */
 
-const vscodeDots = vscode.querySelectorAll(".vscode-mini-dots span");
+    /* =====================================================
+       MOBILE VS CODE TRAFFIC LIGHT BUTTONS
+    ===================================================== */
 
-let dontTouchTimer = null;
-let borderTimer = null;
+    const vscodeDots = vscode.querySelectorAll(".vscode-mini-dots span");
 
-const trafficLightColors = [
-    "#ff5f57", // Red
-    "#febc2e", // Yellow
-    "#28c840"  // Green
-];
+    let dontTouchTimer = null;
+    let borderTimer = null;
 
-vscodeDots.forEach((button, index) => {
+    const trafficLightColors = [
+        "#ff5f57",
+        "#febc2e",
+        "#28c840"
+    ];
 
-    button.style.cursor = "pointer";
-    button.setAttribute("role", "button");
+    vscodeDots.forEach((button, index) => {
 
-    button.addEventListener("click", function (event) {
+        button.style.cursor = "pointer";
+        button.setAttribute("role", "button");
 
-        event.preventDefault();
-        event.stopPropagation();
+        button.addEventListener("click", function (event) {
 
-        if (!mobile.matches) return;
+            event.preventDefault();
+            event.stopPropagation();
 
-        // Remove previous border
-        vscode.querySelectorAll(".dont-touch-border")
-            .forEach(el => el.remove());
-
-        clearTimeout(borderTimer);
-
-        // Create coloured blinking border
-        const border = document.createElement("div");
-        border.className = "dont-touch-border";
-
-        border.style.setProperty(
-            "--border-color",
-            trafficLightColors[index]
-        );
-
-        vscode.appendChild(border);
-
-        borderTimer = setTimeout(() => {
-            border.remove();
-        }, 4100);
-
-        // Red button only: Don't Touch Me message
-        if (index === 0) {
-
-            document.querySelectorAll(".dont-touch-message")
+            vscode.querySelectorAll(".dont-touch-border")
                 .forEach(el => el.remove());
 
-            clearTimeout(dontTouchTimer);
+            clearTimeout(borderTimer);
 
-            const rect = button.getBoundingClientRect();
+            const border = document.createElement("div");
+            border.className = "dont-touch-border";
 
-            const message = document.createElement("div");
+            border.style.setProperty(
+                "--border-color",
+                trafficLightColors[index]
+            );
 
-            message.className = "dont-touch-message";
-            message.textContent = "Don't Touch Me!";
+            vscode.appendChild(border);
 
-            message.style.left =
-                `${rect.left + rect.width / 2}px`;
+            borderTimer = setTimeout(() => {
+                border.remove();
+            }, 4100);
 
-            message.style.top =
-                `${rect.top + rect.height / 2}px`;
+            if (index === 0) {
 
-            document.body.appendChild(message);
+                document.querySelectorAll(".dont-touch-message")
+                    .forEach(el => el.remove());
 
-            dontTouchTimer = setTimeout(() => {
-                message.remove();
-            }, 2200);
-        }
+                clearTimeout(dontTouchTimer);
+
+                const rect = button.getBoundingClientRect();
+
+                const message = document.createElement("div");
+
+                message.className = "dont-touch-message";
+                message.textContent = "Don't Touch Me!";
+
+                message.style.left =
+                    `${rect.left + rect.width / 2}px`;
+
+                message.style.top =
+                    `${rect.top + rect.height / 2}px`;
+
+                document.body.appendChild(message);
+
+                dontTouchTimer = setTimeout(() => {
+                    message.remove();
+                }, 2200);
+            }
+
+        });
 
     });
-
-});
 
 
     /* =====================================================
@@ -918,36 +914,39 @@ vscodeDots.forEach((button, index) => {
             );
 
             if (nextIndex === -1) return;
+
             // Show/hide navigation arrows according to the current page.
 
-if (leftArrow && rightArrow) {
+            if (leftArrow && rightArrow) {
 
-// First page: only right arrow
-if (nextIndex === 0) {
-    leftArrow.style.display = "none";
-    rightArrow.style.display = "flex";
-}
+                // First page: only right arrow
+                if (nextIndex === 0) {
+                    leftArrow.style.display = "none";
+                    rightArrow.style.display = "flex";
+                }
 
-// Last page: only left arrow
-else if (nextIndex === mobilePanels.length - 1) {
-    leftArrow.style.display = "flex";
-    rightArrow.style.display = "none";
-}
+                // Last page: only left arrow
+                else if (nextIndex === mobilePanels.length - 1) {
+                    leftArrow.style.display = "flex";
+                    rightArrow.style.display = "none";
+                }
 
-// Middle pages: both arrows
-else {
-    leftArrow.style.display = "flex";
-    rightArrow.style.display = "flex";
-}
+                // Middle pages: both arrows
+                else {
+                    leftArrow.style.display = "flex";
+                    rightArrow.style.display = "flex";
+                }
 
-}
+            }
 
             const nextPanel = mobilePanels[nextIndex].getElement();
 
             if (!nextPanel) return;
 
             // Keep the fixed swipe hints in sync with the panel being displayed.
+
             const swipeHint = document.querySelector(".mobile-swipe-hint");
+
             if (swipeHint) {
                 swipeHint.setAttribute("data-active-view", viewName);
             }
@@ -988,6 +987,7 @@ else {
                     if (!element) return;
 
                     element.style.transition = "none";
+
                     element.style.visibility =
                         index === nextIndex ? "visible" : "hidden";
 
@@ -1051,6 +1051,7 @@ else {
                 /* Incoming panel */
 
                 nextPanel.style.transition = transition;
+
                 nextPanel.style.transform =
                     "translate3d(0, 0, 0)";
 
@@ -1138,49 +1139,52 @@ else {
         function showContact() {
             showPanel("contact");
         }
-/* =====================================================
-   MOBILE LEFT / RIGHT NAVIGATION ARROWS
-===================================================== */
 
-const leftArrow = document.createElement("button");
-const rightArrow = document.createElement("button");
 
-leftArrow.className = "vscode-side-arrow vscode-left-arrow";
-rightArrow.className = "vscode-side-arrow vscode-right-arrow";
+        /* =====================================================
+           MOBILE LEFT / RIGHT NAVIGATION ARROWS
+        ===================================================== */
 
-leftArrow.innerHTML = "&#10094;";
-rightArrow.innerHTML = "&#10095;";
+        const leftArrow = document.createElement("button");
+        const rightArrow = document.createElement("button");
 
-leftArrow.setAttribute("aria-label", "Previous panel");
-rightArrow.setAttribute("aria-label", "Next panel");
+        leftArrow.className = "vscode-side-arrow vscode-left-arrow";
+        rightArrow.className = "vscode-side-arrow vscode-right-arrow";
 
-vscode.append(leftArrow, rightArrow);
+        leftArrow.innerHTML = "&#10094;";
+        rightArrow.innerHTML = "&#10095;";
 
-leftArrow.addEventListener("click", () => {
+        leftArrow.setAttribute("aria-label", "Previous panel");
+        rightArrow.setAttribute("aria-label", "Next panel");
 
-    const currentIndex = mobilePanels.findIndex(
-        panel => panel.name === activeView
-    );
+        vscode.append(leftArrow, rightArrow);
 
-    const previousIndex =
-        (currentIndex - 1 + mobilePanels.length) % mobilePanels.length;
+        leftArrow.addEventListener("click", () => {
 
-    showPanel(mobilePanels[previousIndex].name);
+            const currentIndex = mobilePanels.findIndex(
+                panel => panel.name === activeView
+            );
 
-});
+            const previousIndex =
+                (currentIndex - 1 + mobilePanels.length) % mobilePanels.length;
 
-rightArrow.addEventListener("click", () => {
+            showPanel(mobilePanels[previousIndex].name);
 
-    const currentIndex = mobilePanels.findIndex(
-        panel => panel.name === activeView
-    );
+        });
 
-    const nextIndex =
-        (currentIndex + 1) % mobilePanels.length;
+        rightArrow.addEventListener("click", () => {
 
-    showPanel(mobilePanels[nextIndex].name);
+            const currentIndex = mobilePanels.findIndex(
+                panel => panel.name === activeView
+            );
 
-});
+            const nextIndex =
+                (currentIndex + 1) % mobilePanels.length;
+
+            showPanel(mobilePanels[nextIndex].name);
+
+        });
+
 
         /* Show Introduction initially */
 
@@ -1370,7 +1374,6 @@ rightArrow.addEventListener("click", () => {
 
         if (!frame) return;
 
-
         /* Close and remove mobile popup windows */
 
         mobileServiceModals.forEach(modal => {
@@ -1382,13 +1385,11 @@ rightArrow.addEventListener("click", () => {
 
         mobileServiceModals = [];
 
-
         /* Restore original profile position */
 
         if (status) {
             vscode.insertBefore(profile, status);
         }
-
 
         /* Restore original typing animation for desktop */
 
@@ -1401,7 +1402,6 @@ rightArrow.addEventListener("click", () => {
 
         }
 
-
         /* Restore original profile heading */
 
         if (profileHeading) {
@@ -1413,7 +1413,6 @@ rightArrow.addEventListener("click", () => {
 
         }
 
-
         /* Remove mobile profile header */
 
         profileHeader?.remove();
@@ -1421,11 +1420,11 @@ rightArrow.addEventListener("click", () => {
         profileHeader = null;
         profileHeading = null;
 
-
         /* Remove mobile frame */
+
         vscode.querySelectorAll(".vscode-side-arrow").forEach(arrow => {
-    arrow.remove();
-});
+            arrow.remove();
+        });
 
         frame.remove();
 
@@ -1438,7 +1437,6 @@ rightArrow.addEventListener("click", () => {
         servicesPane = null;
         portfolioPane = null;
         contactPane = null;
-
 
         /* Remove mobile-only profile class */
 
@@ -1486,6 +1484,950 @@ rightArrow.addEventListener("click", () => {
 
 
     /* =====================================================
+       DESKTOP SCROLL: INTRODUCTION <-> ABOUT ME
+       Scrolling down inside the full-screen VS Code window opens
+       About Me. Scrolling up returns to Introduction.
+    ===================================================== */
+    /* =====================================================
+       DESKTOP NAVIGATION:
+       INTRODUCTION → ABOUT ME → SKILLS → QUALIFICATION
+    ===================================================== */
+
+    const desktop = window.matchMedia("(min-width: 1025px)");
+
+    let desktopAboutView = null;
+    let desktopSkillsView = null;
+    let desktopQualificationView = null;
+
+    let desktopViewIndex = 0;
+
+    // 0 = Introduction
+    // 1 = About Me
+    // 2 = Skills
+    // 3 = Qualification
+
+    let desktopWheelLocked = false;
+    let desktopProfileHeadingHost = null;
+
+    const originalDesktopProfileHeading =
+        profile.querySelector(".profile-card-heading");
+
+
+    /* =====================================================
+       KEEP PROFILE HEADING PERMANENTLY VISIBLE
+    ===================================================== */
+
+    function setupDesktopProfileHeading() {
+
+        if (
+            !desktop.matches ||
+            !originalDesktopProfileHeading ||
+            desktopProfileHeadingHost
+        ) return;
+
+        desktopProfileHeadingHost = document.createElement("div");
+
+        desktopProfileHeadingHost.className =
+            "vscode-desktop-profile-heading-host";
+
+        desktopProfileHeadingHost.appendChild(
+            originalDesktopProfileHeading
+        );
+
+        vscode.insertBefore(
+            desktopProfileHeadingHost,
+            profile
+        );
+
+    }
+
+
+    function restoreDesktopProfileHeading() {
+
+        if (
+            !desktopProfileHeadingHost ||
+            !originalDesktopProfileHeading
+        ) return;
+
+        profile.insertBefore(
+            originalDesktopProfileHeading,
+            profile.firstChild
+        );
+
+        desktopProfileHeadingHost.remove();
+
+        desktopProfileHeadingHost = null;
+
+    }
+
+
+    /* =====================================================
+       CREATE ABOUT ME VIEW
+    ===================================================== */
+
+    function createDesktopAboutView() {
+
+        if (desktopAboutView) return;
+
+        desktopAboutView = document.createElement("div");
+
+        desktopAboutView.className =
+            "vscode-desktop-about-view";
+
+        const content = about.querySelector(".about__container");
+
+        if (content) {
+
+            const aboutContent = content.cloneNode(true);
+
+            const swiper = aboutContent.querySelector(
+                ".swiper-container-about-me"
+            );
+
+            if (swiper) {
+
+                const sourceImage = swiper.querySelector("img");
+
+                if (sourceImage) {
+
+                    const image = sourceImage.cloneNode(true);
+
+                    image.classList.add("vscode-about-visual");
+
+                    image.removeAttribute("style");
+
+                    swiper.replaceWith(image);
+
+                } else {
+
+                    swiper.remove();
+
+                }
+
+            }
+
+            desktopAboutView.appendChild(aboutContent);
+
+        }
+
+        vscode.insertBefore(
+            desktopAboutView,
+            status
+        );
+
+    }
+
+
+    /* =====================================================
+       CREATE SKILLS VIEW
+    ===================================================== */
+
+    function createDesktopSkillsView() {
+
+        if (desktopSkillsView) return;
+
+        desktopSkillsView = document.createElement("div");
+
+        desktopSkillsView.className =
+            "vscode-desktop-skills-view";
+
+        const sourceContainer = skills.querySelector(
+            ".skills__container"
+        );
+
+        if (sourceContainer) {
+
+            const skillsContent = sourceContainer.cloneNode(true);
+
+            // Add technology logos before every skill name.
+
+            if (!document.querySelector("#devicon-stylesheet")) {
+
+                const iconStyles = document.createElement("link");
+
+                iconStyles.id = "devicon-stylesheet";
+                iconStyles.rel = "stylesheet";
+
+                iconStyles.href =
+                    "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css";
+
+                document.head.appendChild(iconStyles);
+
+            }
+
+            const skillIconMap = {
+                "HTML": "devicon-html5-plain colored",
+                "CSS": "devicon-css3-plain colored",
+                "JavaScript": "devicon-javascript-plain colored",
+                "Flask": "devicon-flask-original",
+                "Python": "devicon-python-plain colored",
+                "CoreJava": "devicon-java-plain colored",
+                "C": "devicon-c-plain colored",
+                "NodeJS": "devicon-nodejs-plain colored",
+                "Machine Learning": "devicon-pytorch-original colored",
+                "Natural Language Processing": "devicon-python-plain colored",
+                "Hadoop": "devicon-hadoop-plain colored"
+            };
+
+            skillsContent.querySelectorAll(".skills__name").forEach(name => {
+
+                const skillName = name.textContent.trim();
+
+                const icon = document.createElement("i");
+
+                if (skillIconMap[skillName]) {
+                    icon.className = skillIconMap[skillName];
+                } else {
+                    icon.className = "uil uil-file-alt";
+                }
+
+                icon.classList.add("skill-tech-icon");
+                icon.setAttribute("aria-hidden", "true");
+
+                name.prepend(icon);
+
+            });
+
+            skillsContent.classList.add(
+                "vscode-desktop-skills-container"
+            );
+
+            // Expand all four skill categories.
+
+            skillsContent.querySelectorAll(".skills__content").forEach(item => {
+
+                item.classList.remove("skills__close");
+                item.classList.add("skills__open");
+
+            });
+
+
+            // Convert percentages into circular indicators.
+
+            skillsContent.querySelectorAll(".skills__data").forEach(item => {
+
+                const number = item.querySelector(".skills__number");
+                const bar = item.querySelector(".skills_bar");
+
+                if (!number || !bar) return;
+
+                const percentage = parseInt(number.textContent, 10);
+
+                bar.setAttribute("data-percent", `${percentage}%`);
+
+                bar.style.setProperty("--skill-percent", percentage);
+
+                // Percentage-based colour: low = red, high = green.
+
+                const hue = Math.round(
+                    Math.max(0, Math.min(100, percentage)) * 1.2
+                );
+
+                const skillColor = `hsl(${hue}, 85%, 58%)`;
+
+                bar.style.setProperty("--skill-color", skillColor);
+
+            });
+
+
+            // Create slider viewport.
+
+            const slider = document.createElement("div");
+
+            slider.className = "desktop-skills-slider";
+
+
+            // Create sliding track.
+
+            const track = document.createElement("div");
+
+            track.className = "desktop-skills-track";
+
+
+            // Move all four skill cards into the track.
+
+            const cards = Array.from(
+                skillsContent.querySelectorAll(".skills__content")
+            );
+
+            cards.forEach(card => {
+
+                track.appendChild(card);
+
+                // Create unique dual-colour neon border for Skills cards.
+
+                const border = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "svg"
+                );
+
+                border.setAttribute("aria-hidden", "true");
+
+                border.classList.add("skills-neon-border");
+
+                const rectClasses = [
+                    "skills-neon-track",
+                    "skills-neon-glow",
+                    "skills-neon-cyan",
+                    "skills-neon-violet"
+                ];
+
+                const rects = [];
+
+                rectClasses.forEach(className => {
+
+                    const rect = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "rect"
+                    );
+
+                    rect.setAttribute("pathLength", "100");
+                    rect.setAttribute("vector-effect", "non-scaling-stroke");
+
+                    rect.classList.add(className);
+
+                    border.appendChild(rect);
+
+                    rects.push(rect);
+
+                });
+
+                card.appendChild(border);
+
+                // Match SVG border to actual card dimensions.
+
+                const updateSkillsBorder = () => {
+
+                    const width = card.clientWidth;
+                    const height = card.clientHeight;
+
+                    if (!width || !height) return;
+
+                    const radius = parseFloat(
+                        getComputedStyle(card).borderTopLeftRadius
+                    ) || 20;
+
+                    border.setAttribute(
+                        "viewBox",
+                        `0 0 ${width} ${height}`
+                    );
+
+                    rects.forEach(rect => {
+
+                        rect.setAttribute("x", "1.5");
+                        rect.setAttribute("y", "1.5");
+
+                        rect.setAttribute("width", width - 3);
+                        rect.setAttribute("height", height - 3);
+
+                        rect.setAttribute(
+                            "rx",
+                            Math.max(0, radius - 1.5)
+                        );
+
+                    });
+
+                };
+
+                const skillsBorderObserver =
+                    new ResizeObserver(updateSkillsBorder);
+
+                skillsBorderObserver.observe(card);
+
+                requestAnimationFrame(updateSkillsBorder);
+
+            });
+
+            slider.appendChild(track);
+
+
+            // Create navigation controls.
+
+            const controls = document.createElement("div");
+
+            controls.className = "desktop-skills-controls";
+
+
+            // Previous button.
+
+            const previous = document.createElement("button");
+
+            previous.className = "desktop-skills-arrow";
+            previous.type = "button";
+            previous.innerHTML = "&#10094;";
+
+            previous.setAttribute(
+                "aria-label",
+                "Previous skills"
+            );
+
+
+            // Pagination dots.
+
+            const pagination = document.createElement("div");
+
+            pagination.className = "desktop-skills-pagination";
+
+
+            // Next button.
+
+            const next = document.createElement("button");
+
+            next.className = "desktop-skills-arrow";
+            next.type = "button";
+            next.innerHTML = "&#10095;";
+
+            next.setAttribute(
+                "aria-label",
+                "Next skills"
+            );
+
+
+            controls.appendChild(previous);
+            controls.appendChild(pagination);
+            controls.appendChild(next);
+
+            slider.appendChild(controls);
+
+
+            // Slider functionality.
+
+            let currentSlide = 0;
+
+            const dots = [];
+
+            cards.forEach((card, index) => {
+
+                const dot = document.createElement("button");
+
+                dot.className = "desktop-skills-dot";
+
+                dot.type = "button";
+
+                dot.setAttribute(
+                    "aria-label",
+                    `Go to skill category ${index + 1}`
+                );
+
+                dot.addEventListener("click", () => {
+
+                    showSlide(index);
+
+                });
+
+                pagination.appendChild(dot);
+
+                dots.push(dot);
+
+            });
+
+
+            function showSlide(index) {
+
+                if (!cards.length) return;
+
+                currentSlide =
+                    (index + cards.length) % cards.length;
+
+                track.style.transform =
+                    `translateX(-${currentSlide * 100}%)`;
+
+                dots.forEach((dot, dotIndex) => {
+
+                    dot.classList.toggle(
+                        "active",
+                        dotIndex === currentSlide
+                    );
+
+                });
+
+                previous.disabled = currentSlide === 0;
+
+                next.disabled = currentSlide === cards.length - 1;
+
+            }
+
+
+            previous.addEventListener("click", () => {
+
+                if (currentSlide > 0) {
+
+                    showSlide(currentSlide - 1);
+
+                }
+
+            });
+
+
+            next.addEventListener("click", () => {
+
+                if (currentSlide < cards.length - 1) {
+
+                    showSlide(currentSlide + 1);
+
+                }
+
+            });
+
+
+            // Mouse drag and touch swipe support.
+
+            let startX = 0;
+            let isDragging = false;
+
+            slider.addEventListener("pointerdown", event => {
+
+                if (event.target.closest("button")) return;
+
+                startX = event.clientX;
+
+                isDragging = true;
+
+            });
+
+            slider.addEventListener("pointerup", event => {
+
+                if (!isDragging) return;
+
+                const difference = event.clientX - startX;
+
+                if (Math.abs(difference) > 50) {
+
+                    if (
+                        difference < 0 &&
+                        currentSlide < cards.length - 1
+                    ) {
+
+                        showSlide(currentSlide + 1);
+
+                    }
+
+                    if (
+                        difference > 0 &&
+                        currentSlide > 0
+                    ) {
+
+                        showSlide(currentSlide - 1);
+
+                    }
+
+                }
+
+                isDragging = false;
+
+            });
+
+            slider.addEventListener("pointercancel", () => {
+
+                isDragging = false;
+
+            });
+
+
+            // Start from the first category.
+
+            showSlide(0);
+
+
+            // Add slider to desktop Skills view.
+
+            desktopSkillsView.appendChild(slider);
+
+        }
+
+        vscode.insertBefore(
+            desktopSkillsView,
+            status
+        );
+
+    }
+
+
+    /* =====================================================
+       CREATE DESKTOP QUALIFICATION VIEW
+    ===================================================== */
+
+/* =====================================================
+   CREATE DESKTOP QUALIFICATION VIEW
+   Education and Work Experience in two horizontal rows
+===================================================== */
+
+function createDesktopQualificationView() {
+
+    if (desktopQualificationView) return;
+
+    const sourceContainer = qualification.querySelector(
+        ".qualification__container"
+    );
+
+    if (!sourceContainer) return;
+
+    const educationSection = sourceContainer.querySelector("#education");
+
+    if (!educationSection) return;
+
+    desktopQualificationView = document.createElement("div");
+    desktopQualificationView.className =
+        "vscode-desktop-qualification-view";
+
+    const layout = document.createElement("div");
+    layout.className = "desktop-qualification-layout";
+
+    /* EDUCATION ROW */
+
+    const row = document.createElement("div");
+    row.className =
+        "desktop-qualification-row desktop-education-row";
+
+    /* LEFT HEADING */
+
+    const heading = document.createElement("div");
+    heading.className = "desktop-qualification-heading";
+
+    heading.innerHTML = `
+        <div class="desktop-qualification-heading-icon">
+            <i class="uil uil-graduation-cap"></i>
+        </div>
+
+        <div class="desktop-qualification-heading-text">
+            <span class="desktop-qualification-eyebrow">
+                MY JOURNEY
+            </span>
+            <h3>Education</h3>
+        </div>
+
+        <span class="desktop-qualification-heading-line"></span>
+    `;
+
+    /* RIGHT CARDS */
+
+    const cardsContainer = document.createElement("div");
+    cardsContainer.className = "desktop-qualification-cards";
+
+    const items = educationSection.querySelectorAll(
+        ".qualification__data"
+    );
+
+    items.forEach((item, index) => {
+
+        const titleElement = item.querySelector(
+            ".qualification__title"
+        );
+
+        if (!titleElement) return;
+
+        const card = document.createElement("article");
+        card.className = "desktop-qualification-card";
+
+        const number = document.createElement("span");
+        number.className = "desktop-qualification-card-number";
+        number.textContent = String(index + 1).padStart(2, "0");
+
+        const cardContent = document.createElement("div");
+        cardContent.className = "desktop-qualification-card-content";
+
+        const title = titleElement.cloneNode(true);
+        title.classList.add("desktop-qualification-card-title");
+        cardContent.appendChild(title);
+
+        const subtitleElement = item.querySelector(
+            ".qualification__subtitle"
+        );
+
+        if (subtitleElement) {
+            const subtitle = subtitleElement.cloneNode(true);
+            subtitle.classList.add(
+                "desktop-qualification-card-subtitle"
+            );
+            cardContent.appendChild(subtitle);
+        }
+
+        const calendarElement = item.querySelector(
+            ".qualification__calendar"
+        );
+
+        if (calendarElement) {
+            const calendar = calendarElement.cloneNode(true);
+            calendar.classList.add(
+                "desktop-qualification-card-date"
+            );
+            cardContent.appendChild(calendar);
+        }
+
+        const accent = document.createElement("span");
+        accent.className = "desktop-qualification-card-accent";
+
+        card.append(number, cardContent, accent);
+        cardsContainer.appendChild(card);
+
+    });
+
+    row.append(heading, cardsContainer);
+    layout.appendChild(row);
+
+    desktopQualificationView.appendChild(layout);
+
+    vscode.insertBefore(
+        desktopQualificationView,
+        status
+    );
+}
+
+
+    /* =====================================================
+       CHANGE DESKTOP VIEW
+    ===================================================== */
+
+    function setDesktopView(nextIndex) {
+
+        if (!desktop.matches || mobile.matches) return;
+
+        // Keep index between 0 and 3.
+
+        nextIndex = Math.max(0, Math.min(3, nextIndex));
+
+        if (nextIndex === desktopViewIndex) return;
+
+        setupDesktopProfileHeading();
+
+
+        // Create views only when needed.
+
+        if (nextIndex >= 1) {
+
+            createDesktopAboutView();
+
+        }
+
+        if (nextIndex >= 2) {
+
+            createDesktopSkillsView();
+
+        }
+
+        if (nextIndex >= 3) {
+
+            createDesktopQualificationView();
+
+        }
+
+
+        /* INTRODUCTION */
+
+        profile.classList.toggle(
+            "vscode-desktop-hidden",
+            nextIndex !== 0
+        );
+
+
+        /* ABOUT ME */
+
+        if (desktopAboutView) {
+
+            desktopAboutView.style.display =
+                nextIndex === 1 ? "block" : "none";
+
+        }
+
+
+        /* SKILLS */
+
+        if (desktopSkillsView) {
+
+            desktopSkillsView.style.display =
+                nextIndex === 2 ? "grid" : "none";
+
+        }
+
+
+        /* QUALIFICATION */
+
+        if (desktopQualificationView) {
+
+            desktopQualificationView.style.display =
+                nextIndex === 3 ? "block" : "none";
+
+        }
+
+
+        /* UPDATE TITLE BAR */
+
+        const desktopTitles = [
+            "Introduction",
+            "About Me",
+            "Skills",
+            "Qualification"
+        ];
+
+        const desktopIcons = [
+            "uil-estate",
+            "uil-user",
+            "uil-brackets-curly",
+            "uil-graduation-cap"
+        ];
+
+        if (titleLabel) {
+
+            titleLabel.textContent =
+                desktopTitles[nextIndex];
+
+        }
+
+        if (titleIcon) {
+
+            titleIcon.className =
+                `vscode-mini-title-icon uil ${desktopIcons[nextIndex]}`;
+
+        }
+
+        desktopViewIndex = nextIndex;
+
+    }
+
+
+    /* =====================================================
+       INITIAL DESKTOP HEADING
+    ===================================================== */
+
+    if (desktop.matches) {
+
+        setupDesktopProfileHeading();
+
+    }
+
+
+    /* =====================================================
+       DESKTOP / TABLET BREAKPOINT CHANGE
+    ===================================================== */
+
+    desktop.addEventListener("change", () => {
+
+        if (desktop.matches) {
+
+            setupDesktopProfileHeading();
+
+        } else {
+
+            restoreDesktopProfileHeading();
+
+            desktopAboutView?.remove();
+            desktopSkillsView?.remove();
+            desktopQualificationView?.remove();
+
+            desktopAboutView = null;
+            desktopSkillsView = null;
+            desktopQualificationView = null;
+
+            desktopViewIndex = 0;
+
+            profile.classList.remove(
+                "vscode-desktop-hidden"
+            );
+
+            if (titleLabel) {
+
+                titleLabel.textContent = "Introduction";
+
+            }
+
+            if (titleIcon) {
+
+                titleIcon.className =
+                    "vscode-mini-title-icon uil uil-estate";
+
+            }
+
+        }
+
+    });
+
+
+    /* =====================================================
+       MOUSE WHEEL NAVIGATION
+    ===================================================== */
+
+    vscode.addEventListener("wheel", event => {
+
+        if (
+            !desktop.matches ||
+            mobile.matches ||
+            Math.abs(event.deltaY) < 8
+        ) return;
+
+        event.preventDefault();
+
+        if (desktopWheelLocked) return;
+
+        const direction = event.deltaY > 0 ? 1 : -1;
+
+        const nextIndex =
+            desktopViewIndex + direction;
+
+        if (nextIndex >= 0 && nextIndex <= 3) {
+
+            setDesktopView(nextIndex);
+
+            desktopWheelLocked = true;
+
+            window.setTimeout(() => {
+
+                desktopWheelLocked = false;
+
+            }, 650);
+
+        }
+
+    }, { passive: false });
+
+
+    /* =====================================================
+       KEYBOARD NAVIGATION
+    ===================================================== */
+
+    window.addEventListener("keydown", event => {
+
+        if (
+            !desktop.matches ||
+            mobile.matches ||
+            event.altKey ||
+            event.ctrlKey ||
+            event.metaKey
+        ) return;
+
+        // Do not intercept keys while typing in a form field.
+
+        if (
+            event.target.matches("input, textarea, select") ||
+            event.target.isContentEditable
+        ) return;
+
+
+        if (
+            event.key === "PageDown" ||
+            event.key === "ArrowDown"
+        ) {
+
+            event.preventDefault();
+
+            setDesktopView(desktopViewIndex + 1);
+
+        }
+
+        else if (
+            event.key === "PageUp" ||
+            event.key === "ArrowUp"
+        ) {
+
+            event.preventDefault();
+
+            setDesktopView(desktopViewIndex - 1);
+
+        }
+
+    });
+
+
+    /* =====================================================
        INITIAL SETUP
     ===================================================== */
 
@@ -1499,6 +2441,7 @@ rightArrow.addEventListener("click", () => {
 ========================================================= */
 
 var mySwiper_about_me = new Swiper('.swiper-container-about-me', {
+
     loop: true,
 
     effect: 'cube',
@@ -1511,6 +2454,7 @@ var mySwiper_about_me = new Swiper('.swiper-container-about-me', {
     autoplay: {
         delay: 3500,
     },
+
 });
 
 
@@ -1544,6 +2488,7 @@ var mySwiper_about_me = new Swiper('.swiper-container-about-me', {
 
     roleElement.textContent = roles[0];
 
+
     function animateRole() {
 
         const currentRole = roles[roleIndex];
@@ -1564,6 +2509,7 @@ var mySwiper_about_me = new Swiper('.swiper-container-about-me', {
                 setTimeout(animateRole, 400);
 
                 return;
+
             }
 
             setTimeout(animateRole, 55);
@@ -1584,6 +2530,7 @@ var mySwiper_about_me = new Swiper('.swiper-container-about-me', {
                 setTimeout(animateRole, 1800);
 
                 return;
+
             }
 
             setTimeout(animateRole, 85);
@@ -1591,6 +2538,7 @@ var mySwiper_about_me = new Swiper('.swiper-container-about-me', {
         }
 
     }
+
 
     setTimeout(animateRole, 1800);
 
