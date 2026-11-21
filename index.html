@@ -23,7 +23,11 @@
         
         <link rel="icon" type="image/x-icon" href="assets/img/mypic.ico">
         <title>Mohiyaddeen's Portfolio</title>
-    </head>
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+</head>
     <body>
         <!--==================== HEADER ====================-->
         <header class="header" id="header">
@@ -137,54 +141,45 @@
         </div>
         
 
-<div class="vscode-open-button profile-card-content">
+<div class="vscode-open-button profile-card-content intro-card-redesigned">
 
-    <div class="profile-card-heading">
-        <div class="profile-avatar">
-            <i class="uil uil-user"></i>
-        </div>
-        <img
-            class="profile-avatar-photo"
-            src="assets/img/portfoliopic2.png"
-            alt="Mohiyaddeen"
-            loading="eager"
-        >
-
-        <div>
-            <h3>Mohiyaddeen</h3>
-            <span>Full Stack Developer</span>
-        </div>
-
-        <span class="profile-online-dot"></span>
+    <div class="intro-card-topline">
+        <span class="intro-card-greeting"><span class="intro-greeting-dot"></span> HELLO, WORLD!</span>
+        <span class="intro-card-index">01 / INTRODUCTION</span>
     </div>
 
-    <p class="profile-card-description"
-   aria-label="Building intelligent solutions through code, creativity and continuous learning.">
-    <span id="vscode-typing-text"></span><span class="typing-cursor">|</span>
-</p>
+    <div class="intro-card-main-layout">
+        <section class="intro-card-copy" aria-label="Introduction">
+            <div class="profile-card-heading">
+                <div class="profile-avatar"><i class="uil uil-user"></i></div>
+                <img class="profile-avatar-photo" src="assets/img/portfoliopic2.png" alt="Mohiyaddeen" loading="eager">
+                <div class="intro-profile-name">
+                    <h3>Mohiyaddeen</h3>
+                    <span>Full Stack Developer</span>
+                </div>
+                <span class="profile-online-dot" aria-label="Available"></span>
+            </div>
 
-    <div class="profile-tech-tags">
-        <span>Python</span>
-        <span>AI / ML</span>
-        <span>Web Development</span>
-        <span>Big Data</span>
-    </div>
+            <div class="intro-card-kicker"><span></span> CODE · CREATE · INNOVATE</div>
+            <div class="intro-card-description-wrap">
+                <span class="intro-card-quote" aria-hidden="true">“</span>
+                <p class="profile-card-description drop-cap1">
+                    I am an Object Oriented Programmer, Highly skilled in Frontend &amp; Backend Development with latest technologies including Data Science, Machine Learning, Artificial Intelligence, Bigdata and Blockchain.
+                </p>
+            </div>
 
-    <div class="profile-card-actions">
-        <a href="#contact" class="profile-contact-btn">
-            <i class="uil uil-message"></i> Contact Me
-        </a>
+            <div class="intro-card-bottomline" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+        </section>
 
-        <a href="products/products.html" class="profile-products-btn">
-            <i class="uil uil-shopping-bag"></i> Products
-            <i class="uil uil-arrow-up-right"></i>
-        </a>
     </div>
 
 </div>
 
         <div class="vscode-mini-status">
-            <span>● Ready</span>
+            <span class="vscode-status-ready">● Ready</span>
+            <canvas id="intro-3d-character" class="intro-3d-character" aria-label="A realistic 3D developer walks across the VS Code bottom status strip, sits down on it and works on a laptop"></canvas>
             <div class="home__social">
                             <a href="https://scholar.google.com/citations?user=2q9Hex0AAAAJ"
    target="_blank"
@@ -1321,11 +1316,57 @@
 })();
 </script>
 
+        <script type="module" src="assets/js/introduction-3d-character.js"></script>
         <script type="module" src="assets/js/home-3d-functionality.js"></script>
         <!-- <script type="module" src="assets/js/home-3d.js"></script> -->
     
         <!-- Floating Products shortcut -->
 
+
+
+        
+        <!-- Original Tech Bubble simulation UI, adapted only for portfolio placement -->
+        <div id="canvas-container" aria-label="3D technology bubbles"></div>
+
+        <header class="tech-bubbles-original-header">
+            <div class="tech-bubbles-original-title">
+                <strong>3D Free Tech Bubbles</strong>
+                <span id="bubble-count-badge">3 Bubbles</span>
+            </div>
+            <form id="add-bubble-form" class="tech-bubbles-original-add">
+                <input id="tech-input" type="text" maxlength="14" placeholder="Add tech (e.g. GPU, Rust)..." autocomplete="off">
+                <button type="submit">+ Add</button>
+            </form>
+        </header>
+
+        <div id="toast-banner" class="tech-bubbles-original-toast">
+            <div><span id="toast-text">Action completed</span></div>
+        </div>
+
+        <footer class="tech-bubbles-original-dock">
+            <div class="tech-bubbles-original-controls">
+                <div class="tech-bubbles-original-actions">
+                    <button id="btn-burst-wave" type="button">✦ Scatter Pulse</button>
+                    <button id="btn-gravity" type="button">
+                        <span id="gravity-dot"></span>
+                        <span id="gravity-label">Drift: Float</span>
+                    </button>
+                    <button id="btn-reset" type="button">Reset</button>
+                </div>
+                <div class="tech-bubbles-original-sliders">
+                    <label>Count
+                        <input id="count-slider" type="range" min="3" max="24" step="1" value="3">
+                        <span id="count-val">3</span>
+                    </label>
+                    <label>Speed
+                        <input id="speed-slider" type="range" min="0.2" max="2.4" step="0.1" value="0.2">
+                        <span id="speed-val">0.2x</span>
+                    </label>
+                </div>
+            </div>
+        </footer>
+
+        <script src="assets/js/floating-tech-bubbles.js"></script>
 
     </body>
 

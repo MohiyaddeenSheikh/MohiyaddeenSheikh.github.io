@@ -1498,6 +1498,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let desktopAboutView = null;
     let desktopSkillsView = null;
     let desktopQualificationView = null;
+    let desktopServicesView = null;
+    let desktopPortfolioView = null;
+    let desktopContactView = null;
 
     let desktopViewIndex = 0;
 
@@ -1505,6 +1508,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1 = About Me
     // 2 = Skills
     // 3 = Qualification
+    // 4 = Services
 
     let desktopWheelLocked = false;
     let desktopProfileHeadingHost = null;
@@ -2175,6 +2179,530 @@ function createDesktopQualificationView() {
 
 
     /* =====================================================
+       CREATE DESKTOP SERVICES VIEW
+       Uses the existing Services content and keeps its popups working.
+    ===================================================== */
+
+    function createDesktopServicesView() {
+
+        if (desktopServicesView) return;
+
+        desktopServicesView = document.createElement("div");
+        desktopServicesView.className = "vscode-desktop-services-view";
+
+        const heading = document.createElement("div");
+        heading.className = "desktop-services-heading";
+
+        const sourceTitle = services.querySelector(".section__title");
+        const sourceSubtitle = services.querySelector(".section__subtitle");
+
+
+
+        if (sourceSubtitle) {
+            const subtitle = sourceSubtitle.cloneNode(true);
+            subtitle.classList.add("desktop-services-subtitle");
+            heading.appendChild(subtitle);
+        }
+
+        desktopServicesView.appendChild(heading);
+
+        const sourceContainer = services.querySelector(".services__container");
+
+        if (sourceContainer) {
+
+            const servicesContent = sourceContainer.cloneNode(true);
+            servicesContent.classList.add("desktop-services-container");
+
+            const serviceCards = Array.from(
+                servicesContent.querySelectorAll(".services__content")
+            );
+
+            serviceCards.forEach((card, index) => {
+
+                card.classList.add("desktop-service-card");
+
+                const modal = card.querySelector(".services__modal");
+                const button = card.querySelector(".services__button");
+
+                if (button && modal) {
+                    button.addEventListener("click", event => {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        servicesContent.querySelectorAll(".services__modal").forEach(item => {
+                            item.classList.remove("active-modal");
+                        });
+
+                        modal.classList.add("active-modal");
+                    });
+                }
+
+                if (modal) {
+                    modal.classList.add("desktop-service-modal");
+
+                    const closeButton = modal.querySelector(
+                        ".services__modal-close"
+                    );
+
+                    closeButton?.addEventListener("click", event => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        modal.classList.remove("active-modal");
+                    });
+
+                    modal.addEventListener("click", event => {
+                        if (event.target === modal) {
+                            modal.classList.remove("active-modal");
+                        }
+                    });
+                }
+
+            });
+
+            // One-card-at-a-time service slider with a slim title tab strip.
+            if (serviceCards.length) {
+                const tabBar = document.createElement("div");
+                tabBar.className = "desktop-services-tabs";
+                tabBar.setAttribute("role", "tablist");
+                tabBar.setAttribute("aria-label", "Services");
+
+                const viewport = document.createElement("div");
+                viewport.className = "desktop-services-slider-viewport";
+
+                const track = document.createElement("div");
+                track.className = "desktop-services-slider-track";
+
+                const controls = document.createElement("div");
+                controls.className = "desktop-services-slider-controls";
+
+                const previous = document.createElement("button");
+                previous.type = "button";
+                previous.className = "desktop-services-arrow";
+                previous.setAttribute("aria-label", "Previous service");
+                previous.innerHTML = '<i class="uil uil-angle-left-b"></i>';
+
+                const counter = document.createElement("span");
+                counter.className = "desktop-services-counter";
+                counter.setAttribute("aria-live", "polite");
+
+                const next = document.createElement("button");
+                next.type = "button";
+                next.className = "desktop-services-arrow";
+                next.setAttribute("aria-label", "Next service");
+                next.innerHTML = '<i class="uil uil-angle-right-b"></i>';
+
+                let activeService = 0;
+                const tabs = serviceCards.map((card, index) => {
+                    const title = card.querySelector(".services__title");
+                    const label = title ? title.textContent.replace(/\s+/g, " ").trim() : `Service ${index + 1}`;
+                    const tab = document.createElement("button");
+                    tab.type = "button";
+                    tab.className = "desktop-services-tab";
+                    tab.textContent = label;
+                    tab.setAttribute("role", "tab");
+                    tab.addEventListener("click", () => showService(index));
+                    tabBar.appendChild(tab);
+                    track.appendChild(card);
+                    return tab;
+                });
+
+                function showService(index) {
+                    activeService = (index + serviceCards.length) % serviceCards.length;
+                    track.style.transform = `translateX(-${activeService * 100}%)`;
+                    tabs.forEach((tab, tabIndex) => {
+                        const selected = tabIndex === activeService;
+                        tab.classList.toggle("active", selected);
+                        tab.setAttribute("aria-selected", String(selected));
+                        tab.tabIndex = selected ? 0 : -1;
+                    });
+                    counter.textContent = `${String(activeService + 1).padStart(2, "0")} / ${String(serviceCards.length).padStart(2, "0")}`;
+                    previous.disabled = serviceCards.length < 2;
+                    next.disabled = serviceCards.length < 2;
+                }
+
+                previous.addEventListener("click", () => showService(activeService - 1));
+                next.addEventListener("click", () => showService(activeService + 1));
+                viewport.appendChild(track);
+                controls.append(previous, counter, next);
+                servicesContent.append(tabBar, viewport, controls);
+                showService(0);
+            }
+
+            desktopServicesView.appendChild(servicesContent);
+
+        }
+
+        vscode.insertBefore(desktopServicesView, status);
+
+    }
+
+
+    /* =====================================================
+       CREATE DESKTOP PORTFOLIO VIEW
+       Professional responsive project showcase
+    ===================================================== */
+
+    function createDesktopPortfolioView() {
+
+        if (desktopPortfolioView) return;
+
+        desktopPortfolioView = document.createElement("div");
+        desktopPortfolioView.className = "vscode-desktop-portfolio-view";
+
+        /* Portfolio heading */
+
+        const heading = document.createElement("div");
+        heading.className = "desktop-portfolio-heading";
+
+        heading.innerHTML = `
+            <span class="desktop-portfolio-eyebrow">
+                MY WORK & ACHIEVEMENTS
+            </span>
+
+            <h2>Portfolio</h2>
+
+            <p>
+                A collection of my projects, research and development work.
+            </p>
+        `;
+
+        desktopPortfolioView.appendChild(heading);
+
+        /* Project grid */
+
+        const grid = document.createElement("div");
+        grid.className = "desktop-portfolio-grid";
+
+        const sourceContainer = portfolio.querySelector(
+            ".portfolio__container"
+        );
+
+        if (sourceContainer) {
+
+            const slides = Array.from(
+                sourceContainer.querySelectorAll(".portfolio__content")
+            ).filter(slide =>
+                !slide.classList.contains("swiper-slide-duplicate")
+            );
+
+            slides.forEach((slide, index) => {
+
+                const card = document.createElement("article");
+                card.className = "desktop-portfolio-card";
+
+                /* Project image */
+
+                const sourceImage = slide.querySelector(".portfolio__img");
+
+                if (sourceImage) {
+
+                    const imageWrapper = document.createElement("div");
+                    imageWrapper.className = "desktop-portfolio-image";
+
+                    const image = sourceImage.cloneNode(true);
+                    image.removeAttribute("style");
+                    image.removeAttribute("target");
+
+                    imageWrapper.appendChild(image);
+                    card.appendChild(imageWrapper);
+
+                }
+
+                /* Project information */
+
+                const data = document.createElement("div");
+                data.className = "desktop-portfolio-data";
+
+                const number = document.createElement("span");
+                number.className = "desktop-portfolio-number";
+                number.textContent = `PROJECT ${String(index + 1).padStart(2, "0")}`;
+                data.appendChild(number);
+
+                const sourceTitle = slide.querySelector(".portfolio__title");
+
+                if (sourceTitle) {
+
+                    const title = sourceTitle.cloneNode(true);
+                    title.className = "desktop-portfolio-title";
+                    data.appendChild(title);
+
+                }
+
+                const sourceDescription = slide.querySelector(
+                    ".portfolio__description"
+                );
+
+                if (sourceDescription) {
+
+                    const description = sourceDescription.cloneNode(true);
+                    description.className = "desktop-portfolio-description";
+                    data.appendChild(description);
+
+                }
+
+                /* Project link */
+
+                const sourceButton = slide.querySelector(".portfolio__button");
+
+                if (sourceButton) {
+
+                    const button = sourceButton.cloneNode(true);
+                    button.className = "desktop-portfolio-button";
+                    button.innerHTML = `
+                        View Project
+                        <i class="uil uil-arrow-up-right"></i>
+                    `;
+                    button.target = "_blank";
+                    button.rel = "noopener noreferrer";
+
+                    data.appendChild(button);
+
+                }
+
+                card.appendChild(data);
+                grid.appendChild(card);
+
+            });
+
+        }
+
+        /* Show two projects per page, with controls for the next pair. */
+        const cards = Array.from(grid.children);
+        const viewport = document.createElement("div");
+        viewport.className = "desktop-portfolio-slider-viewport";
+
+        const track = document.createElement("div");
+        track.className = "desktop-portfolio-slider-track";
+
+        for (let i = 0; i < cards.length; i += 2) {
+            const page = document.createElement("div");
+            page.className = "desktop-portfolio-page";
+            cards.slice(i, i + 2).forEach(card => page.appendChild(card));
+            track.appendChild(page);
+        }
+
+        viewport.appendChild(track);
+        desktopPortfolioView.appendChild(viewport);
+
+        const controls = document.createElement("div");
+        controls.className = "desktop-portfolio-slider-controls";
+        controls.innerHTML = `
+            <span class="desktop-portfolio-counter" aria-live="polite">01 / ${String(Math.max(1, Math.ceil(cards.length / 2))).padStart(2, "0")}</span>
+            <button class="desktop-portfolio-arrow desktop-portfolio-prev" type="button" aria-label="Previous projects">‹</button>
+            <button class="desktop-portfolio-arrow desktop-portfolio-next" type="button" aria-label="Next projects">›</button>
+        `;
+        desktopPortfolioView.appendChild(controls);
+
+        const pages = Array.from(track.children);
+        let currentPage = 0;
+        const counter = controls.querySelector(".desktop-portfolio-counter");
+        const previous = controls.querySelector(".desktop-portfolio-prev");
+        const next = controls.querySelector(".desktop-portfolio-next");
+
+        const updateSlider = () => {
+            track.style.transform = `translateX(-${currentPage * 100}%)`;
+            counter.textContent = `${String(currentPage + 1).padStart(2, "0")} / ${String(Math.max(1, pages.length)).padStart(2, "0")}`;
+            previous.disabled = currentPage === 0;
+            next.disabled = currentPage >= pages.length - 1;
+        };
+
+        previous.addEventListener("click", () => {
+            if (currentPage > 0) { currentPage--; updateSlider(); }
+        });
+        next.addEventListener("click", () => {
+            if (currentPage < pages.length - 1) { currentPage++; updateSlider(); }
+        });
+        updateSlider();
+
+        vscode.insertBefore(desktopPortfolioView, status);
+
+    }
+
+
+    /* =====================================================
+       CREATE DESKTOP CONTACT VIEW
+       Beautiful contact panel with real email submission.
+    ===================================================== */
+
+    function createDesktopContactView() {
+
+        if (desktopContactView) return;
+
+        desktopContactView = document.createElement("div");
+        desktopContactView.className = "vscode-desktop-contact-view";
+
+        const heading = document.createElement("div");
+        heading.className = "desktop-contact-heading";
+        heading.innerHTML = `
+            <span class="desktop-contact-eyebrow">07 / LET'S CONNECT</span>
+  
+            <p>Have an idea, a project, or an opportunity? I would love to hear from you.</p>
+        `;
+        desktopContactView.appendChild(heading);
+
+        const sourceContainer = contact.querySelector(".contact__container");
+
+        if (sourceContainer) {
+
+            const contactCopy = sourceContainer.cloneNode(true);
+            contactCopy.classList.add("desktop-contact-container");
+
+            const details = contactCopy.firstElementChild;
+            if (details) {
+                details.classList.add("desktop-contact-details");
+            }
+
+            // Use the requested receiving address in the contact details.
+            contactCopy.querySelectorAll(".contact__information").forEach(info => {
+                const title = info.querySelector(".contact__title")?.textContent.trim().toLowerCase();
+                const subtitle = info.querySelector(".contact__subtitle");
+                if (!subtitle) return;
+
+                const value = subtitle.textContent.trim();
+
+                if (title === "email") {
+                    subtitle.textContent = "mohiy.social@gmail.com";
+                    const link = document.createElement("a");
+                    link.href = "mailto:mohiy.social@gmail.com";
+                    link.textContent = "mohiy.social@gmail.com";
+                    link.className = "desktop-contact-link";
+                    subtitle.replaceWith(link);
+                } else if (title === "call me") {
+                    const link = document.createElement("a");
+                    link.href = `tel:${value.replace(/[^+\d]/g, "")}`;
+                    link.textContent = value;
+                    link.className = "desktop-contact-link";
+                    subtitle.replaceWith(link);
+                }
+            });
+
+            const form = contactCopy.querySelector(".contact__form");
+
+            if (form) {
+                form.classList.add("desktop-contact-form");
+                form.id = "desktopContactForm";
+                form.action = "https://formsubmit.co/ajax/mohiy.social@gmail.com";
+                form.method = "POST";
+
+                const fields = Array.from(form.querySelectorAll(".contact__content"));
+                const fieldNames = ["name", "email", "project", "message"];
+
+                fields.forEach((field, index) => {
+                    const input = field.querySelector("input, textarea");
+                    const label = field.querySelector("label");
+                    if (!input) return;
+
+                    const fieldId = `desktop-contact-${fieldNames[index] || index}`;
+                    input.id = fieldId;
+                    input.name = fieldNames[index] || `field_${index}`;
+                    input.placeholder = label?.textContent.trim() || "";
+                    input.autocomplete = index === 0 ? "name" : index === 1 ? "email" : "off";
+                    input.required = index !== 2;
+                    if (label) label.htmlFor = fieldId;
+
+                    if (input.tagName === "TEXTAREA") {
+                        input.rows = 4;
+                        input.maxLength = 4000;
+                        input.required = true;
+                        input.placeholder = "Tell me a little about your idea or project...";
+                    } else {
+                        input.maxLength = index === 0 ? 100 : 160;
+                    }
+                });
+
+                const submitLink = form.querySelector("a.button");
+                if (submitLink) {
+                    const button = document.createElement("button");
+                    button.type = "submit";
+                    button.className = "button button--flex desktop-contact-submit";
+                    button.innerHTML = 'Send Message <i class="uil uil-message button__icon"></i>';
+                    submitLink.replaceWith(button);
+                }
+
+                const subject = document.createElement("input");
+                subject.type = "hidden";
+                subject.name = "_subject";
+                subject.value = "New portfolio enquiry";
+
+                const template = document.createElement("input");
+                template.type = "hidden";
+                template.name = "_template";
+                template.value = "table";
+
+                const honeypot = document.createElement("input");
+                honeypot.type = "text";
+                honeypot.name = "_honey";
+                honeypot.className = "desktop-contact-honeypot";
+                honeypot.tabIndex = -1;
+                honeypot.autocomplete = "off";
+                honeypot.setAttribute("aria-hidden", "true");
+
+                form.append(subject, template, honeypot);
+
+                const statusMessage = document.createElement("p");
+                statusMessage.className = "desktop-contact-status";
+                statusMessage.id = "desktopContactStatus";
+                statusMessage.setAttribute("role", "status");
+                statusMessage.setAttribute("aria-live", "polite");
+                statusMessage.textContent = "Your message will be sent directly to my inbox.";
+                form.appendChild(statusMessage);
+
+                form.addEventListener("submit", async event => {
+                    event.preventDefault();
+
+                    if (!form.reportValidity()) return;
+
+                    const submitButton = form.querySelector(".desktop-contact-submit");
+                    const status = form.querySelector(".desktop-contact-status");
+                    const originalButtonText = submitButton.innerHTML;
+
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="uil uil-spinner-alt"></i> Sending...';
+                    status.className = "desktop-contact-status is-sending";
+                    status.textContent = "Sending your message securely...";
+
+                    try {
+                        const payload = Object.fromEntries(new FormData(form).entries());
+                        const response = await fetch(form.action, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json"
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        let result = {};
+                        try { result = await response.json(); } catch (_) {}
+
+                        if (!response.ok || result.success === false || result.success === "false") {
+                            throw new Error(result.message || result.error || "The message could not be sent. Please try again.");
+                        }
+
+                        form.reset();
+                        status.className = "desktop-contact-status is-success";
+                        status.textContent = "Message submitted! If this is your first submission, please confirm the FormSubmit activation email sent to mohiy.social@gmail.com. After activation, new messages will arrive directly in your inbox.";
+
+                    } catch (error) {
+                        status.className = "desktop-contact-status is-error";
+                        status.textContent = error.message || "Something went wrong. Please try again, or email mohiy.social@gmail.com directly.";
+                    } finally {
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalButtonText;
+                    }
+                });
+            }
+
+            desktopContactView.appendChild(contactCopy);
+        }
+
+        vscode.insertBefore(desktopContactView, status);
+
+        
+    }
+
+
+    /* =====================================================
        CHANGE DESKTOP VIEW
     ===================================================== */
 
@@ -2182,9 +2710,9 @@ function createDesktopQualificationView() {
 
         if (!desktop.matches || mobile.matches) return;
 
-        // Keep index between 0 and 3.
+        // Keep index between 0 and 6 (including Contact Me).
 
-        nextIndex = Math.max(0, Math.min(3, nextIndex));
+        nextIndex = Math.max(0, Math.min(6, nextIndex));
 
         if (nextIndex === desktopViewIndex) return;
 
@@ -2208,6 +2736,24 @@ function createDesktopQualificationView() {
         if (nextIndex >= 3) {
 
             createDesktopQualificationView();
+
+        }
+
+        if (nextIndex >= 4) {
+
+            createDesktopServicesView();
+
+        }
+
+        if (nextIndex >= 5) {
+
+            createDesktopPortfolioView();
+
+        }
+
+        if (nextIndex >= 6) {
+
+            createDesktopContactView();
 
         }
 
@@ -2250,20 +2796,54 @@ function createDesktopQualificationView() {
         }
 
 
+        /* SERVICES */
+
+        if (desktopServicesView) {
+
+            desktopServicesView.style.display =
+                nextIndex === 4 ? "block" : "none";
+
+        }
+
+        /* PORTFOLIO */
+
+        if (desktopPortfolioView) {
+
+            desktopPortfolioView.style.display =
+                nextIndex === 5 ? "block" : "none";
+
+        }
+
+        /* CONTACT ME */
+
+        if (desktopContactView) {
+
+            desktopContactView.style.display =
+                nextIndex === 6 ? "block" : "none";
+
+        }
+
+
         /* UPDATE TITLE BAR */
 
         const desktopTitles = [
             "Introduction",
             "About Me",
             "Skills",
-            "Qualification"
+            "Qualification",
+            "Services",
+            "Portfolio",
+            "Contact Me"
         ];
 
         const desktopIcons = [
             "uil-estate",
             "uil-user",
             "uil-brackets-curly",
-            "uil-graduation-cap"
+            "uil-graduation-cap",
+            "uil-briefcase-alt",
+            "uil-folder",
+            "uil-envelope-alt"
         ];
 
         if (titleLabel) {
@@ -2313,10 +2893,16 @@ function createDesktopQualificationView() {
             desktopAboutView?.remove();
             desktopSkillsView?.remove();
             desktopQualificationView?.remove();
+            desktopServicesView?.remove();
+            desktopPortfolioView?.remove();
+            desktopContactView?.remove();
 
             desktopAboutView = null;
             desktopSkillsView = null;
             desktopQualificationView = null;
+            desktopServicesView = null;
+            desktopPortfolioView = null;
+            desktopContactView = null;
 
             desktopViewIndex = 0;
 
@@ -2363,7 +2949,7 @@ function createDesktopQualificationView() {
         const nextIndex =
             desktopViewIndex + direction;
 
-        if (nextIndex >= 0 && nextIndex <= 3) {
+        if (nextIndex >= 0 && nextIndex <= 6) {
 
             setDesktopView(nextIndex);
 
