@@ -13,17 +13,30 @@
             { label: "Cloud",      color: "#06b6d4", accent: "#0e7490" },
             { label: "DevOps",     color: "#6366f1", accent: "#4338ca" },
             { label: "Web3",       color: "#14b8a6", accent: "#0f766e" },
-            { label: "IoT",        color: "#f43f5e", accent: "#be123c" },
+            { label: "Python",        color: "#f43f5e", accent: "#be123c" },
             { label: "NeuralNet",  color: "#22d3ee", accent: "#0891b2" },
-            { label: "Quantum",    color: "#c084fc", accent: "#9333ea" },
+            { label: "FastAPI",    color: "#c084fc", accent: "#9333ea" },
             { label: "VectorDB",   color: "#34d399", accent: "#059669" },
-            { label: "Kubernetes", color: "#60a5fa", accent: "#2563eb" },
+            { label: "Django", color: "#60a5fa", accent: "#2563eb" },
             { label: "PyTorch",    color: "#fb923c", accent: "#ea580c" },
             { label: "GraphQL",    color: "#f472b6", accent: "#db2777" },
             { label: "Docker",     color: "#38bdf8", accent: "#0369a1" },
-            { label: "Rust",       color: "#f59e0b", accent: "#b45309" },
-            { label: "EdgeAI",     color: "#2dd4bf", accent: "#0d9488" },
-            { label: "CUDA",       color: "#4ade80", accent: "#15803d" }
+            { label: "NLP",       color: "#f59e0b", accent: "#b45309" },
+            { label: "LangChain",     color: "#2dd4bf", accent: "#0d9488" },
+            { label: "Claude",       color: "#4ade80", accent: "#15803d" }
+
+             { label: "MongoDB",       color: "#14b8a6", accent: "#0f766e" },
+            { label: "SQLite",        color: "#f43f5e", accent: "#be123c" },
+            { label: "Redis",  color: "#22d3ee", accent: "#0891b2" },
+            { label: "Vercel",    color: "#c084fc", accent: "#9333ea" },
+            { label: "Firebase",   color: "#34d399", accent: "#059669" },
+            { label: "Dart", color: "#60a5fa", accent: "#2563eb" },
+            { label: "Flutter",    color: "#fb923c", accent: "#ea580c" },
+            { label: "GPT",    color: "#f472b6", accent: "#db2777" },
+            { label: "OpenAI",     color: "#38bdf8", accent: "#0369a1" },
+            { label: "NLP",       color: "#f59e0b", accent: "#b45309" },
+            { label: "SQL",     color: "#2dd4bf", accent: "#0d9488" },
+            { label: "Gemini",       color: "#4ade80", accent: "#15803d" }
         ];
 
         const EXTRA_PALETTE = [
