@@ -300,7 +300,85 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         skillsPane.appendChild(skillsCopy);
+/* =================================================
+   MOBILE SKILLS — ANIMATED HORIZONTAL BARS
+================================================= */
 
+skillsPane.querySelectorAll(".skills__data").forEach(item => {
+
+    const number = item.querySelector(".skills__number");
+    const track = item.querySelector(".skills_bar");
+    const fill = item.querySelector(".skills__percentage");
+
+    if (!number || !track || !fill) return;
+
+    const original = Math.max(
+        0,
+        Math.min(100, parseInt(number.textContent, 10) || 0)
+    );
+
+    const minValue = Math.max(0, original - 5);
+    const maxValue = Math.min(100, original + 5);
+
+    let from = original;
+    let to = maxValue;
+    let direction = 1;
+    let startedAt = null;
+
+    // Initial visible state
+    fill.style.setProperty("width", `${original}%`, "important");
+    fill.style.setProperty("background-color", "#22c55e", "important");
+
+    number.textContent = `${original}%`;
+
+    function animateMobileSkill(timestamp) {
+
+        if (startedAt === null) startedAt = timestamp;
+
+        const progress = Math.min(
+            (timestamp - startedAt) / 1800,
+            1
+        );
+
+        const eased = progress < 0.5
+            ? 2 * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+        const value = from + (to - from) * eased;
+
+        fill.style.setProperty(
+            "width",
+            `${value}%`,
+            "important"
+        );
+
+        fill.style.setProperty(
+            "background-color",
+            direction === 1 ? "#22c55e" : "#ef4444",
+            "important"
+        );
+
+        number.textContent = `${Math.round(value)}%`;
+
+        if (progress >= 1) {
+
+            direction *= -1;
+
+            from = to;
+
+            to = direction === 1
+                ? maxValue
+                : minValue;
+
+            startedAt = timestamp;
+        }
+
+        requestAnimationFrame(animateMobileSkill);
+    }
+
+    requestAnimationFrame(animateMobileSkill);
+
+});
 
         /* Skills accordion */
 
@@ -1708,30 +1786,132 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Convert percentages into circular indicators.
 
-            skillsContent.querySelectorAll(".skills__data").forEach(item => {
+           // Convert percentages into animated circular indicators.
 
-                const number = item.querySelector(".skills__number");
-                const bar = item.querySelector(".skills_bar");
+// Convert percentages into animated circular indicators.
+// =========================================================
+// SKILLS — ANIMATED DESKTOP CIRCLES + MOBILE BARS
+// =========================================================
 
-                if (!number || !bar) return;
+const isDesktopSkills = window.matchMedia("(min-width: 1025px)");
 
-                const percentage = parseInt(number.textContent, 10);
+skillsContent.querySelectorAll(".skills__data").forEach(item => {
 
-                bar.setAttribute("data-percent", `${percentage}%`);
+    const number = item.querySelector(".skills__number");
+    const bar = item.querySelector(".skills_bar");
+    const fill = item.querySelector(".skills__percentage");
 
-                bar.style.setProperty("--skill-percent", percentage);
+    if (!number || !bar || !fill) return;
 
-                // Percentage-based colour: low = red, high = green.
+    // Preserve original percentage
+    const originalPercentage = Math.max(
+        0,
+        Math.min(100, parseInt(number.textContent, 10) || 0)
+    );
 
-                const hue = Math.round(
-                    Math.max(0, Math.min(100, percentage)) * 1.2
-                );
+    const minPercentage = Math.max(0, originalPercentage - 5);
+    const maxPercentage = Math.min(100, originalPercentage + 5);
 
-                const skillColor = `hsl(${hue}, 85%, 58%)`;
+    const duration = 1800;
 
-                bar.style.setProperty("--skill-color", skillColor);
+    let startTime = null;
+    let direction = 1;
 
-            });
+    let startPercentage = originalPercentage;
+    let targetPercentage = maxPercentage;
+
+    // Initial values
+    bar.setAttribute("data-percent", `${originalPercentage}%`);
+
+    bar.style.setProperty(
+        "--skill-percent",
+        originalPercentage
+    );
+
+    function animatePercentage(timestamp) {
+
+        if (!startTime) startTime = timestamp;
+
+        const progress = Math.min(
+            (timestamp - startTime) / duration,
+            1
+        );
+
+        // Smooth ease-in-out
+        const eased = progress < 0.5
+            ? 2 * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+        const currentPercentage =
+            startPercentage +
+            (targetPercentage - startPercentage) * eased;
+
+        const displayedPercentage = Math.round(currentPercentage);
+
+        // GREEN while increasing, RED while decreasing
+        const skillColor = direction === 1
+            ? "#22c55e"
+            : "#ef4444";
+
+        if (isDesktopSkills.matches) {
+
+            // DESKTOP: Circular percentage graph
+
+            bar.style.setProperty(
+                "--skill-percent",
+                currentPercentage
+            );
+
+            bar.style.setProperty(
+                "--skill-color",
+                skillColor
+            );
+
+            bar.setAttribute(
+                "data-percent",
+                `${displayedPercentage}%`
+            );
+
+        } else {
+
+            // MOBILE / TABLET: Horizontal percentage bar
+
+            fill.style.setProperty(
+                "width",
+                `${currentPercentage}%`,
+                "important"
+            );
+
+            fill.style.setProperty(
+                "background-color",
+                skillColor,
+                "important"
+            );
+
+            number.textContent = `${displayedPercentage}%`;
+
+        }
+
+        // Reverse direction at the endpoint
+        if (progress >= 1) {
+
+            direction *= -1;
+
+            startPercentage = targetPercentage;
+
+            targetPercentage = direction === 1
+                ? maxPercentage
+                : minPercentage;
+
+            startTime = timestamp;
+        }
+
+        requestAnimationFrame(animatePercentage);
+    }
+
+    requestAnimationFrame(animatePercentage);
+
+});
 
 
             // Create slider viewport.
@@ -2255,6 +2435,8 @@ function createDesktopQualificationView() {
                             modal.classList.remove("active-modal");
                         }
                     });
+                    // Move popup outside the slider so cards cannot cover it.
+document.body.appendChild(modal);
                 }
 
             });
@@ -3016,6 +3198,53 @@ function createDesktopQualificationView() {
     /* =====================================================
        INITIAL SETUP
     ===================================================== */
+    /* =========================================
+   BUBBLE SWITCH RESPONSIVE POSITIONING
+========================================= */
+
+const bubbleSwitch = document.getElementById("bubble-toggle");
+const profileImageBox = home.querySelector(".home__img");
+const statusStrip = vscode.querySelector(".vscode-mini-status");
+
+const desktopBubbleLayout = window.matchMedia("(min-width: 1025px)");
+
+function positionBubbleSwitch() {
+
+   if (desktopBubbleLayout.matches) {
+
+    // Put the switch directly below the profile image
+    profileImageBox.appendChild(bubbleSwitch);
+
+    profileImageBox.style.position = "relative";
+    profileImageBox.style.overflow = "visible";
+    
+
+    bubbleSwitch.style.setProperty("position", "absolute", "important");
+    bubbleSwitch.style.setProperty("left", "50%", "important");
+    bubbleSwitch.style.setProperty("top", "calc(100% + 10px)", "important");
+    bubbleSwitch.style.setProperty("right", "auto", "important");
+    bubbleSwitch.style.setProperty("bottom", "auto", "important");
+    bubbleSwitch.style.setProperty("transform", "translateX(-50%)", "important");
+    bubbleSwitch.style.setProperty("margin", "0", "important");
+
+} else {
+
+        // Tablet/mobile: keep the existing position in the blue strip
+        statusStrip.appendChild(bubbleSwitch);
+
+        bubbleSwitch.style.position = "absolute";
+        bubbleSwitch.style.left = "50%";
+        bubbleSwitch.style.top = "50%";
+        bubbleSwitch.style.right = "auto";
+        bubbleSwitch.style.bottom = "auto";
+        bubbleSwitch.style.transform = "translate(-50%, -50%)";
+        bubbleSwitch.style.margin = "0";
+    }
+}
+
+positionBubbleSwitch();
+
+desktopBubbleLayout.addEventListener("change", positionBubbleSwitch);
 
     modeChange();
 
@@ -3051,9 +3280,6 @@ var mySwiper_about_me = new Swiper('.swiper-container-about-me', {
 
 (() => {
 
-    const mobileView = window.matchMedia("(max-width: 767px)");
-
-    if (!mobileView.matches) return;
 
     const roleElement = document.querySelector(
         "#home .profile-card-heading h3"
@@ -3129,3 +3355,4 @@ var mySwiper_about_me = new Swiper('.swiper-container-about-me', {
     setTimeout(animateRole, 1800);
 
 })();
+

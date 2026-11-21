@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/solid.css">
        
         <!--==================== snow  ====================-->
-        <link rel="stylesheet" type="text/css" href="assets/css/snow.css">
+        <!-- <link rel="stylesheet" type="text/css" href="assets/css/snow.css"> -->
 
         
         <!--==================== SWIPER CSS ====================-->
@@ -179,6 +179,15 @@
 
         <div class="vscode-mini-status">
             <span class="vscode-status-ready">● Ready</span>
+            <button id="bubble-toggle"
+        class="bubble-switch on"
+        type="button"
+        aria-label="Turn bubbles off"
+        aria-pressed="true">
+    <span class="switch-track">
+        <span class="switch-knob"></span>
+    </span>
+</button>
             <canvas id="intro-3d-character" class="intro-3d-character" aria-label="A realistic 3D developer walks across the VS Code bottom status strip, sits down on it and works on a laptop"></canvas>
             <div class="home__social">
                             <a href="https://scholar.google.com/citations?user=2q9Hex0AAAAJ"
@@ -779,127 +788,155 @@
 
 
             <!--==================== SERVICES ====================-->
-            <section class="services section" id="services">
-                <h2 class="section__title">Services</h2>
-                <span class="section__subtitle">What i offer</span>
+<section class="services section" id="services">
 
-                <div class="services__container container grid">
-                    <!--=========Service 1 =======-->
-                    <div class="services__content">
-                        <div>
-                            <i class="uil uil-web-grid services__icon"></i>
-                            <h3 class="services__title">Data Science<br>Projects </h3>
-                        </div>
+    <h2 class="section__title">Services</h2>
+    <span class="section__subtitle">What I can build for you</span>
 
-                        <span class="button button--flex button--small button--link services__button">
-                            View More
-                            <i class="uil uil-arrow-right button__icon"></i>
-                        </span>
+    <div class="services__container container grid">
 
-                        <div class="services__modal">
-                            <div class="services__modal-content">
-                                <h4 class="services__modal-title">Data Science and<br> Machine Learning</h4>
-                                <i class="uil uil-times services__modal-close"></i>
+        <!--========= Service 1: AI & Machine Learning =======-->
+        <div class="services__content">
+            <div>
+                <i class="uil uil-brain services__icon"></i>
+                <h3 class="services__title">AI & Machine<br>Learning</h3>
+            </div>
 
-                                <ul class="services__modal-services grid">
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> Natural Processing Language Projects</p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> Machine Learning projects</p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> Bigdata Projects</p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> Data Analytics Projects</p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!--=========Service 2 =======-->
-                    <div class="services__content">
-                        <div>
-                            <i class="uil uil-arrow services__icon"></i>
-                            <h3 class="services__title">Frontend<br>Developer </h3>
-                        </div>
+            <span class="button button--flex button--small button--link services__button">
+                View More
+                <i class="uil uil-arrow-right button__icon"></i>
+            </span>
 
-                        <span class="button button--flex button--small button--link services__button">
-                            View More
-                            <i class="uil uil-arrow-right button__icon"></i>
-                        </span>
+            <div class="services__modal">
+                <div class="services__modal-content">
+                    <h4 class="services__modal-title">AI & Machine Learning</h4>
+                    <i class="uil uil-times services__modal-close"></i>
 
-                        <div class="services__modal">
-                            <div class="services__modal-content">
-                                <h4 class="services__modal-title">Frontend<br>Developer</h4>
-                                <i class="uil uil-times services__modal-close"></i>
-
-                                <ul class="services__modal-services grid">
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> I develop the user interface</p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> Web page Interface</p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> I created UX element interface</p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> Interactive design</p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!--=========Service 3  =======-->
-                    <div class="services__content">
-                        <div>
-                            <i class="uil uil-pen services__icon"></i>
-                            <h3 class="services__title">Backend<br>Developer </h3>
-                        </div>
-
-                        <span class="button button--flex button--small button--link services__button">
-                            View More
-                            <i class="uil uil-arrow-right button__icon"></i>
-                        </span>
-
-                        <div class="services__modal">
-                            <div class="services__modal-content">
-                                <h4 class="services__modal-title">Backend<br>Developer</h4>
-                                <i class="uil uil-times services__modal-close"></i>
-
-                                <ul class="services__modal-services grid">
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> I develop the websites with complex data Processing</p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> Interactive data fetch</p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> Single page website with data base </p>
-                                    </li>
-                                    <li class="services__modal-service">
-                                        <i class="uil uil-check-circle services__modal-icon"></i>
-                                        <p> cloud computing </p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <ul class="services__modal-services grid">
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Machine learning model development and evaluation</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Deep learning solutions using neural networks</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Computer vision and image classification</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Model training, testing, and performance tuning</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Predictive analytics and intelligent automation</p></li>
+                    </ul>
                 </div>
-            </section>
+            </div>
+        </div>
+
+        <!--========= Service 2: Generative AI & LLM =======-->
+        <div class="services__content">
+            <div>
+                <i class="uil uil-robot services__icon"></i>
+                <h3 class="services__title">Generative AI<br>& LLM</h3>
+            </div>
+
+            <span class="button button--flex button--small button--link services__button">
+                View More
+                <i class="uil uil-arrow-right button__icon"></i>
+            </span>
+
+            <div class="services__modal">
+                <div class="services__modal-content">
+                    <h4 class="services__modal-title">Generative AI & LLM</h4>
+                    <i class="uil uil-times services__modal-close"></i>
+
+                    <ul class="services__modal-services grid">
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>LLM-powered chatbots and AI assistants</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Retrieval-Augmented Generation (RAG) systems</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Document question-answering applications</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>LLM integration with APIs and business workflows</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Vector search and knowledge-base integration</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--========= Service 3: Full-Stack Development =======-->
+        <div class="services__content">
+            <div>
+                <i class="uil uil-window services__icon"></i>
+                <h3 class="services__title">Full-Stack<br>Development</h3>
+            </div>
+
+            <span class="button button--flex button--small button--link services__button">
+                View More
+                <i class="uil uil-arrow-right button__icon"></i>
+            </span>
+
+            <div class="services__modal">
+                <div class="services__modal-content">
+                    <h4 class="services__modal-title">Full-Stack Development</h4>
+                    <i class="uil uil-times services__modal-close"></i>
+
+                    <ul class="services__modal-services grid">
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Responsive and modern website development</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Interactive user interfaces and web experiences</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Frontend and backend integration</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Database-connected web applications</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Deployment-ready application development</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--========= Service 4: Backend & API Development =======-->
+        <div class="services__content">
+            <div>
+                <i class="uil uil-server-network services__icon"></i>
+                <h3 class="services__title">Backend & API<br>Development</h3>
+            </div>
+
+            <span class="button button--flex button--small button--link services__button">
+                View More
+                <i class="uil uil-arrow-right button__icon"></i>
+            </span>
+
+            <div class="services__modal">
+                <div class="services__modal-content">
+                    <h4 class="services__modal-title">Backend & API Development</h4>
+                    <i class="uil uil-times services__modal-close"></i>
+
+                    <ul class="services__modal-services grid">
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>REST API design and development</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Backend logic and server-side development</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Database design and integration</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Authentication and secure data handling</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Cloud deployment and application integration</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--========= Service 5: Data Science & Analytics =======-->
+        <div class="services__content">
+            <div>
+                <i class="uil uil-chart-line services__icon"></i>
+                <h3 class="services__title">Data Science<br>& Analytics</h3>
+            </div>
+
+            <span class="button button--flex button--small button--link services__button">
+                View More
+                <i class="uil uil-arrow-right button__icon"></i>
+            </span>
+
+            <div class="services__modal">
+                <div class="services__modal-content">
+                    <h4 class="services__modal-title">Data Science & Analytics</h4>
+                    <i class="uil uil-times services__modal-close"></i>
+
+                    <ul class="services__modal-services grid">
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Data cleaning, preparation, and exploration</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Exploratory data analysis and visualization</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Statistical analysis and data-driven insights</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Interactive reports and dashboards</p></li>
+                        <li class="services__modal-service"><i class="uil uil-check-circle services__modal-icon"></i><p>Natural language processing solutions</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
 
             <!--==================== PORTFOLIO ====================-->
             <section class="portfolio section" id="portfolio">
@@ -1230,7 +1267,7 @@
         </snowfall>
 
         <!--==================== SNOW JS ====================-->
-        <script src="assets/js/snow.js"></script>
+        <!-- <script src="assets/js/snow.js"></script> -->
         
         
         <!--==================== SWIPER JS ====================-->

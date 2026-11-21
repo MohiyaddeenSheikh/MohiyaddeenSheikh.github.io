@@ -73,7 +73,29 @@
         // =========================================================================
         function init() {
             const container = document.getElementById("canvas-container");
+// Bubble visibility switch
+const bubbleToggle = document.getElementById("bubble-toggle");
 
+if (bubbleToggle) {
+    let bubblesVisible = true;
+
+    bubbleToggle.addEventListener("click", function () {
+        bubblesVisible = !bubblesVisible;
+
+        // Hide or show the actual Three.js canvas
+        renderer.domElement.style.opacity = bubblesVisible ? "1" : "0";
+
+        bubbleToggle.classList.toggle("on", bubblesVisible);
+        bubbleToggle.classList.toggle("off", !bubblesVisible);
+
+        bubbleToggle.setAttribute(
+    "aria-label",
+    bubblesVisible ? "Turn bubbles off" : "Turn bubbles on"
+);
+
+        bubbleToggle.setAttribute("aria-pressed", String(bubblesVisible));
+    });
+}
             // Deep space backdrop
             scene = new THREE.Scene();
             scene.background = null;
